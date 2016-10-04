@@ -11,4 +11,4 @@ In addition it will also setup the system to support the various layers provided
 I have also customized my .spacemacs file so that developing c++ code becomes much more easier i.e. providing a handy autocomplete feature set to "tab" during insert mode
 or automatically cleaning your saved files from whitespace as well as autoformat them.
 
-With this installer and config it should be easy for everyone to start working with spacemacs on a linux box.
+With this installer and config it should be easy for everyone to start working with spacemacs in a linux box.
