@@ -1,5 +1,18 @@
 #!/bin/bash
 
+#Check whether the current repo has changed
+hasCurrentRepoChanged(){
+   git remote update
+   local UPSTREAM=${1:-'@{u}'}
+   local LOCAL=$(git rev-parse @)
+   local REMOTE=$(git rev-parse "$UPSTREAM")
+   if [ $LOCAL = $REMOTE ]; then
+        echo "false"
+	else
+		echo "true"
+   fi
+}
+
 # Set base path
 installBaseDir="${HOME}/.spacemacsInstall"
 
@@ -15,45 +28,57 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 # Install general dependencies
 sudo apt-get install -y libncurses5-dev git silversearcher-ag silversearcher-ag-el curl wget vim build-essential cmake python python-dev python-all python-all-dev libgtk-3-dev libwebkitgtk-3.0-dev libgtk-3-common libgtk-3-0 autoconf automake gdb unzip
 
-# Git config
-git config --global user.name "smile13241324"
-git config --global user.email "smile13241324@gmail.com"
-git config --global credential.helper cache
-
 # Build emacs package
 emacsBaseDir="${installBaseDir}/emacs"
-sudo apt-get build-dep -y emacs24
-sudo apt-get purge -y postfix #Remove stupid dependency on mail server.
-sudo apt-get autoremove -y
-git clone git://git.savannah.gnu.org/emacs.git "${emacsBaseDir}"
+cloned="false"
+hasChanged="false"
+if [ ! -d "${emacsBaseDir}" ]; then {
+	git clone git://git.savannah.gnu.org/emacs.git "${emacsBaseDir}"
+	cloned="true"
+} 
 cd "${emacsBaseDir}" || exit
 git checkout origin/emacs-25 --track
-./autogen.sh
-./configure --with-cairo --with-xwidgets --with-x-toolkit=gtk3 --with-modules
-make
-sudo make install
-make clean
+[cloned=="false"] && hasChanged="${hasCurrentRepoChanged}"
+if [hasChanged=="true" || cloned=="true"]; then {
+   git pull
+   sudo apt-get build-dep -y emacs24
+   sudo apt-get purge -y postfix #Remove stupid dependency on mail server.
+   sudo apt-get autoremove -y
+   ./autogen.sh
+   ./configure --with-cairo --with-xwidgets --with-x-toolkit=gtk3 --with-modules
+   make
+   sudo make install
+   make clean
+}
+fi
 cd "${DIR}" || exit
 
 # Get adobe fonts
 fontsBaseDir="${installBaseDir}/fonts"
+fontsCurrentVersionExtractDir="${fontsBaseDir}/source-code-pro-2.030R-ro-1.050R-it"
 fontsTargetDir="${HOME}/.fonts"
-mkdir "${fontsBaseDir}"
-mkdir "${fontsTargetDir}"
-wget -O "${fontsBaseDir}/fonts.tar.gz" https://github.com/adobe-fonts/source-code-pro/archive/2.030R-ro/1.050R-it.tar.gz
-tar -zxvf "${fontsBaseDir}/fonts.tar.gz" --directory "${fontsBaseDir}"
-cd "${fontsBaseDir}/source-code-pro-2.030R-ro-1.050R-it/OTF" || exit
-cp ./* "${fontsTargetDir}"
-sudo fc-cache
+if [ ! -d "${fontsCurrentVersionExtractDir}" ]; then 
+   mkdir "${fontsBaseDir}"
+   mkdir "${fontsTargetDir}"
+   wget -O "${fontsBaseDir}/fonts.tar.gz" https://github.com/adobe-fonts/source-code-pro/archive/2.030R-ro/1.050R-it.tar.gz
+   tar -zxvf "${fontsBaseDir}/fonts.tar.gz" --directory "${fontsBaseDir}"
+   cd "${fontsCurrentVersionExtractDir}/OTF" || exit
+   cp ./* "${fontsTargetDir}"
+   sudo fc-cache
+fi
 cd "${DIR}" || exit
 
 # Get newest spacemacs
-rm ~/.emacs.d -R
-git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
+spacemacsInstallationDir="${HOME}/.emacs.d"
+[ ! -d "${spacemacsInstallationDir}" ] && git clone https://github.com/syl20bnr/spacemacs "${spacemacsInstallationDir}"
+cd "${spacemacsInstallationDir}" || exit
+git checkout origin/develop --track
+git pull
 cp spacemacs ~/.spacemacs
 
 # Make spacemacs unity icon
-echo "[Desktop Entry] 
+spacemacsUnityDesktopFile="${HOME}/.local/share/applications/spacemacs.desktop"
+[! -f "${spacemacsUnityDesktopFile}"] echo "[Desktop Entry] 
 Name=Spacemacs
 GenericName=Text Editor
 Comment=Edit text
@@ -63,7 +88,7 @@ Icon=${HOME}/.emacs.d/core/banners/img/spacemacs.png
 Type=Application
 Terminal=false
 Categories=Development;TextEditor;
-StartupWMClass=Emacs" >> ~/.local/share/applications/spacemacs.desktop
+StartupWMClass=Emacs" >> "${spacemacsUnityDesktopFile}"
 
 # Install c++ layer dependencies
 sudo apt-get install -y clang clang-format clang-tidy libclang-dev libclang1 libc++1 libc++-dev libc++-helpers libc++abi1 libc++abi-dev libboost-all-dev lldb llvm llvm-dev llvm-runtime
@@ -80,15 +105,25 @@ pip install --upgrade pycscope
 
 # Build gnu global
 globalBaseDir="${installBaseDir}/global"
-mkdir "${globalBaseDir}"
-sudo apt-get install -y exuberant-ctags python-pygments
-wget -O "${globalBaseDir}/global.tar.gz" http://tamacom.com/global/global-6.5.5.tar.gz
-tar -zxvf "${globalBaseDir}/global.tar.gz" --directory "${globalBaseDir}"
-cd "${globalBaseDir}/global-6.5.5" || exit
-./configure --with-exuberant-ctags=/usr/bin/ctags
-make
-sudo make install
-make clean
-cp gtags.conf ~/.globalrc
-echo export GTAGSLABEL=pygments >> ~/.profile
+globalCurrentVersionExtractDir="${globalBaseDir}/global-6.5.5"
+if [ ! -d "${globalCurrentVersionExtractDir}" ]; then
+   mkdir "${globalBaseDir}"
+   sudo apt-get install -y exuberant-ctags python-pygments
+   wget -O "${globalBaseDir}/global.tar.gz" http://tamacom.com/global/global-6.5.5.tar.gz
+   tar -zxvf "${globalBaseDir}/global.tar.gz" --directory "${globalBaseDir}"
+   cd "${globalCurrentVersionExtractDir}" || exit
+   ./configure --with-exuberant-ctags=/usr/bin/ctags
+   make
+   sudo make install
+   make clean
+   cp gtags.conf ~/.globalrc
+
+  #Add gtags config string only if not already existing
+  if grep -Fxq "GTAGSLABEL=pygments" ~/.profile
+   then
+      # do nothing setting has already been done
+   else
+      echo export GTAGSLABEL=pygments >> ~/.profile
+  fi 
+fi
 cd "${DIR}" || exit
