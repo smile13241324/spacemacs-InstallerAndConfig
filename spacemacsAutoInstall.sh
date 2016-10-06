@@ -2,14 +2,14 @@
 
 #Check whether the current repo has changed
 hasCurrentRepoChanged(){
-   git remote update
+   git remote update > /dev/null
    local UPSTREAM=${1:-'@{u}'}
    local LOCAL=$(git rev-parse @)
    local REMOTE=$(git rev-parse "$UPSTREAM")
    if [ $LOCAL = $REMOTE ]; then
-        echo "false"
-	else
-		echo "true"
+        echo 0
+     else
+	echo 1
    fi
 }
 
@@ -26,22 +26,25 @@ done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 # Install general dependencies
-sudo apt-get install -y libncurses5-dev git silversearcher-ag silversearcher-ag-el curl wget vim build-essential cmake python python-dev python-all python-all-dev libgtk-3-dev libwebkitgtk-3.0-dev libgtk-3-common libgtk-3-0 autoconf automake gdb unzip
+sudo apt-get update
+sudo apt-get dist-upgrade -y
+sudo apt-get install -y libncurses5-dev git silversearcher-ag silversearcher-ag-el curl wget vim build-essential cmake python python-dev python-all python-all-dev libgtk-3-dev libwebkitgtk-3.0-dev libgtk-3-common libgtk-3-0 autoconf automake gdb
 
 # Build emacs package
 emacsBaseDir="${installBaseDir}/emacs"
-cloned="false"
-hasChanged="false"
+cloned=0
+hasChanged=0
 if [[ ! -d "${emacsBaseDir}" ]]; then
 	git clone git://git.savannah.gnu.org/emacs.git "${emacsBaseDir}"
-	cloned="true"
+	cloned=1
 fi
 cd "${emacsBaseDir}" || exit
-git checkout origin/emacs-25 --track
-if [[ ${cloned}=="false" ]]; then
-    hasChanged="${hasCurrentRepoChanged}";
+if [[ cloned -eq 0 ]]; then
+    hasChanged="$(hasCurrentRepoChanged)";
 fi
-if [[ ${hasChanged}=="true" || ${cloned}=="true" ]]; then 
+git checkout origin/emacs-25 --track
+git checkout emacs-25
+if [[ hasChanged -eq 1 || cloned -eq 1 ]]; then 
    git pull
    sudo apt-get build-dep -y emacs24
    sudo apt-get purge -y postfix #Remove stupid dependency on mail server.
@@ -74,12 +77,14 @@ spacemacsInstallationDir="${HOME}/.emacs.d"
 [[ ! -d "${spacemacsInstallationDir}" ]] && git clone https://github.com/syl20bnr/spacemacs "${spacemacsInstallationDir}"
 cd "${spacemacsInstallationDir}" || exit
 git checkout origin/develop --track
+git checkout develop
 git pull
+cd "${DIR}" || exit
 cp spacemacs ~/.spacemacs
 
 # Make spacemacs unity icon
 spacemacsUnityDesktopFile="${HOME}/.local/share/applications/spacemacs.desktop"
-[! -f "${spacemacsUnityDesktopFile}"] echo "[Desktop Entry] 
+[[ ! -f "${spacemacsUnityDesktopFile}" ]] && echo "[Desktop Entry] 
 Name=Spacemacs
 GenericName=Text Editor
 Comment=Edit text
@@ -122,7 +127,7 @@ if [[ ! -d "${globalCurrentVersionExtractDir}" ]]; then
   #Add gtags config string only if not already existing
   if grep -Fxq "GTAGSLABEL=pygments" ~/.profile
    then
-      # do nothing setting has already been done
+      echo "nothing to do"
    else
       echo export GTAGSLABEL=pygments >> ~/.profile
   fi 
