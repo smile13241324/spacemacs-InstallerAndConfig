@@ -18,7 +18,7 @@ installBaseDir="${HOME}/.spacemacsInstall"
 
 # Set current path
 SOURCE="${BASH_SOURCE[0]}"
-while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+while [[ -h "$SOURCE" ]]; do # resolve $SOURCE until the file is no longer a symlink
   DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
   SOURCE="$(readlink "$SOURCE")"
   [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
@@ -32,14 +32,16 @@ sudo apt-get install -y libncurses5-dev git silversearcher-ag silversearcher-ag-
 emacsBaseDir="${installBaseDir}/emacs"
 cloned="false"
 hasChanged="false"
-if [ ! -d "${emacsBaseDir}" ]; then {
+if [[ ! -d "${emacsBaseDir}" ]]; then
 	git clone git://git.savannah.gnu.org/emacs.git "${emacsBaseDir}"
 	cloned="true"
-} 
+fi
 cd "${emacsBaseDir}" || exit
 git checkout origin/emacs-25 --track
-[cloned=="false"] && hasChanged="${hasCurrentRepoChanged}"
-if [hasChanged=="true" || cloned=="true"]; then {
+if [[ ${cloned}=="false" ]]; then
+    hasChanged="${hasCurrentRepoChanged}";
+fi
+if [[ ${hasChanged}=="true" || ${cloned}=="true" ]]; then 
    git pull
    sudo apt-get build-dep -y emacs24
    sudo apt-get purge -y postfix #Remove stupid dependency on mail server.
@@ -49,7 +51,6 @@ if [hasChanged=="true" || cloned=="true"]; then {
    make
    sudo make install
    make clean
-}
 fi
 cd "${DIR}" || exit
 
@@ -57,7 +58,7 @@ cd "${DIR}" || exit
 fontsBaseDir="${installBaseDir}/fonts"
 fontsCurrentVersionExtractDir="${fontsBaseDir}/source-code-pro-2.030R-ro-1.050R-it"
 fontsTargetDir="${HOME}/.fonts"
-if [ ! -d "${fontsCurrentVersionExtractDir}" ]; then 
+if [[ ! -d "${fontsCurrentVersionExtractDir}" ]]; then 
    mkdir "${fontsBaseDir}"
    mkdir "${fontsTargetDir}"
    wget -O "${fontsBaseDir}/fonts.tar.gz" https://github.com/adobe-fonts/source-code-pro/archive/2.030R-ro/1.050R-it.tar.gz
@@ -70,7 +71,7 @@ cd "${DIR}" || exit
 
 # Get newest spacemacs
 spacemacsInstallationDir="${HOME}/.emacs.d"
-[ ! -d "${spacemacsInstallationDir}" ] && git clone https://github.com/syl20bnr/spacemacs "${spacemacsInstallationDir}"
+[[ ! -d "${spacemacsInstallationDir}" ]] && git clone https://github.com/syl20bnr/spacemacs "${spacemacsInstallationDir}"
 cd "${spacemacsInstallationDir}" || exit
 git checkout origin/develop --track
 git pull
@@ -106,7 +107,7 @@ pip install --upgrade pycscope
 # Build gnu global
 globalBaseDir="${installBaseDir}/global"
 globalCurrentVersionExtractDir="${globalBaseDir}/global-6.5.5"
-if [ ! -d "${globalCurrentVersionExtractDir}" ]; then
+if [[ ! -d "${globalCurrentVersionExtractDir}" ]]; then
    mkdir "${globalBaseDir}"
    sudo apt-get install -y exuberant-ctags python-pygments
    wget -O "${globalBaseDir}/global.tar.gz" http://tamacom.com/global/global-6.5.5.tar.gz
