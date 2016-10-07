@@ -50,7 +50,7 @@ if [[ hasChanged -eq 1 || cloned -eq 1 ]]; then
    sudo apt-get purge -y postfix #Remove stupid dependency on mail server.
    sudo apt-get autoremove -y
    ./autogen.sh
-   ./configure --with-cairo --with-xwidgets --with-x-toolkit=gtk3 --with-modules
+   ./configure --with-xwidgets --with-x-toolkit=gtk3 --with-modules   
    make
    sudo make install
    make clean
@@ -101,13 +101,13 @@ sudo apt-get install -y clang clang-format clang-tidy libclang-dev libclang1 lib
 
 # Install python layer dependencies
 sudo apt-get install -y python-pytest python-pip python-mock python-setuptools-doc
-pip install pip jedi json-rpc service_factory autoflake hy
-pip install --upgrade pip jedi json-rpc service_factory autoflake hy
+sudo -H pip install pip jedi json-rpc service_factory autoflake hy
+sudo -H pip install --upgrade pip jedi json-rpc service_factory autoflake hy
 
 # Install cscope dependencies
 sudo apt-get install -y cscope cscope-el
-pip install pycscope
-pip install --upgrade pycscope
+sudo -H pip install pycscope
+sudo -H pip install --upgrade pycscope
 
 # Build gnu global
 globalBaseDir="${installBaseDir}/global"
