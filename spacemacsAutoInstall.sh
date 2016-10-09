@@ -3,10 +3,13 @@
 #Check whether the current repo has changed
 hasCurrentRepoChanged(){
    git remote update > /dev/null
-   local UPSTREAM=${1:-'@{u}'}
-   local LOCAL=$(git rev-parse @)
-   local REMOTE=$(git rev-parse "$UPSTREAM")
-   if [ $LOCAL = $REMOTE ]; then
+   local UPSTREAM
+   local LOCAL
+   local REMOTE
+   UPSTREAM=${1:-'@{u}'}
+   LOCAL=$(git rev-parse @)
+   REMOTE=$(git rev-parse "$UPSTREAM")
+   if [ "${LOCAL}" = "${REMOTE}" ]; then
         echo 0
      else
 	echo 1
@@ -26,9 +29,9 @@ done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 # Install general dependencies
-sudo apt-get update
-sudo apt-get dist-upgrade -y
-sudo apt-get install -y libncurses5-dev git silversearcher-ag silversearcher-ag-el curl wget vim build-essential cmake python python-dev python-all python-all-dev libgtk-3-dev libwebkitgtk-3.0-dev libgtk-3-common libgtk-3-0 autoconf automake gdb
+sudo apt update
+sudo apt dist-upgrade -y
+sudo apt install -y libncurses5-dev git silversearcher-ag silversearcher-ag-el curl wget vim build-essential cmake python python-dev python-all python-all-dev libgtk-3-dev libwebkitgtk-3.0-dev libgtk-3-common libgtk-3-0 autoconf automake gdb shellcheck
 
 # Build emacs package
 emacsBaseDir="${installBaseDir}/emacs"
@@ -46,9 +49,9 @@ git checkout origin/emacs-25 --track
 git checkout emacs-25
 if [[ hasChanged -eq 1 || cloned -eq 1 ]]; then 
    git pull
-   sudo apt-get build-dep -y emacs24
-   sudo apt-get purge -y postfix #Remove stupid dependency on mail server.
-   sudo apt-get autoremove -y
+   sudo apt build-dep -y emacs24
+   sudo apt purge -y postfix #Remove stupid dependency on mail server.
+   sudo apt autoremove -y
    ./autogen.sh
    ./configure --with-xwidgets --with-x-toolkit=gtk3 --with-modules   
    make
@@ -97,24 +100,54 @@ Categories=Development;TextEditor;
 StartupWMClass=Emacs" >> "${spacemacsUnityDesktopFile}"
 
 # Install c++ layer dependencies
-sudo apt-get install -y clang clang-format clang-tidy libclang-dev libclang1 libc++1 libc++-dev libc++-helpers libc++abi1 libc++abi-dev libboost-all-dev lldb llvm llvm-dev llvm-runtime
+sudo apt install -y clang clang-format clang-tidy libclang-dev libclang1 libc++1 libc++-dev libc++-helpers libc++abi1 libc++abi-dev libboost-all-dev lldb llvm llvm-dev llvm-runtime
 
 # Install python layer dependencies
-sudo apt-get install -y python-pytest python-pip python-mock python-setuptools-doc
+sudo apt install -y python-pytest python-pip python-mock python-setuptools-doc
 sudo -H pip install pip jedi json-rpc service_factory autoflake hy
 sudo -H pip install --upgrade pip jedi json-rpc service_factory autoflake hy
 
 # Install cscope dependencies
-sudo apt-get install -y cscope cscope-el
+sudo apt install -y cscope cscope-el
 sudo -H pip install pycscope
 sudo -H pip install --upgrade pycscope
+
+# Install java dependencies
+sudo add-apt-repository -y ppa:webupd8team/java
+sudo apt update
+sudo apt install -y oracle-java8-installer ubuntu-make
+umake ide eclipse
+
+# Install java interface server
+javaServerBaseDir="${installBaseDir}/eclim"
+javaServerCurrentVersionExtractDir="${javaServerBaseDir}/2.6.0"
+if [[ ! -d "${javaServerCurrentVersionExtractDir}" ]]; then 
+   mkdir "${javaServerBaseDir}"
+   mkdir "${javaServerCurrentVersionExtractDir}"
+   wget -O "${javaServerCurrentVersionExtractDir}/eclim.jar" https://github.com/ervandew/eclim/releases/download/2.6.0/eclim_2.6.0.jar
+   java -Djava.net.useSystemProxies=true -jar "${javaServerCurrentVersionExtractDir}/eclim.jar"
+fi
+cd "${DIR}" || exit
+
+# Install node-js dependencies
+sudo apt install -y npm nodejs nodejs-dbg nodejs-dev npm2deb node-npmlog nodejs-legacy
+sudo npm install -g tern js-beautify eslint
+
+# Install latex dependencies
+sudo apt install -y latexmk texlive-full fonts-freefont
+sudo npm install -g vmd
+
+# Install lua dependencies
+sudo apt install -y luarocks readline-doc
+sudo luarocks install luacheck 
+sudo luarocks install lanes
 
 # Build gnu global
 globalBaseDir="${installBaseDir}/global"
 globalCurrentVersionExtractDir="${globalBaseDir}/global-6.5.5"
 if [[ ! -d "${globalCurrentVersionExtractDir}" ]]; then
    mkdir "${globalBaseDir}"
-   sudo apt-get install -y exuberant-ctags python-pygments
+   sudo apt install -y exuberant-ctags python-pygments
    wget -O "${globalBaseDir}/global.tar.gz" http://tamacom.com/global/global-6.5.5.tar.gz
    tar -zxvf "${globalBaseDir}/global.tar.gz" --directory "${globalBaseDir}"
    cd "${globalCurrentVersionExtractDir}" || exit

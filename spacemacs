@@ -37,6 +37,7 @@ values."
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      helm
+     ;; ivy
      (auto-completion :variables
                       auto-completion-return-key-behavior 'complete
                       auto-completion-tab-key-behavior 'cycle
@@ -74,7 +75,25 @@ values."
              python-test-runner 'pytest
              python-enable-yapf-format-on-save t
              )
-     )
+     java
+     windows-scripts
+     shell-scripts
+     emoji     
+     (markdown :variables 
+               markdown-live-preview-engine 'vmd
+               )
+     bibtex
+     (latex :variables
+            latex-enable-auto-fill t
+	    latex-enable-folding t
+            )
+     lua
+     html
+     ansible
+     (javascript :variables 
+                 javascript-disable-tern-port-files nil)
+     yaml
+   )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
@@ -115,7 +134,7 @@ values."
    ;; when the current branch is not `develop'. Note that checking for
    ;; new versions works via git commands, thus it calls GitHub services
    ;; whenever you start Emacs. (default nil)
-   dotspacemacs-check-for-update t
+   dotspacemacs-check-for-update nil
    ;; If non-nil, a form that evaluates to a package directory. For example, to
    ;; use different package directories for different Emacs versions, set this
    ;; to `emacs-version'.
@@ -330,6 +349,14 @@ you should place your code here."
 
   ;; Activate key for specific buffer
   (spacemacs/set-leader-keys-for-major-mode 'c++-mode "h" 'company-show-location)
+
+;; Set java environment variables
+(setq eclim-eclipse-dirs "~/.local/share/umake/ide/eclipse"
+      eclim-executable "~/.local/share/umake/ide/eclipse/eclim"
+      eclimd-wait-for-process t)
+
+;; Activate latex document preview
+(add-hook 'doc-view-mode-hook 'auto-revert-mode)
 
   ;; This snippet allows you to run the format tool of the current main mode before saving
   ;; given the current file as the correct filetype.
