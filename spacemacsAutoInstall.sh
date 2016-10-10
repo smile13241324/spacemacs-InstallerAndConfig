@@ -2,18 +2,18 @@
 
 #Check whether the current repo has changed
 hasCurrentRepoChanged(){
-   git remote update > /dev/null
-   local UPSTREAM
-   local LOCAL
-   local REMOTE
-   UPSTREAM=${1:-'@{u}'}
-   LOCAL=$(git rev-parse @)
-   REMOTE=$(git rev-parse "$UPSTREAM")
-   if [ "${LOCAL}" = "${REMOTE}" ]; then
+    git remote update > /dev/null
+    local UPSTREAM
+    local LOCAL
+    local REMOTE
+    UPSTREAM=${1:-'@{u}'}
+    LOCAL=$(git rev-parse @)
+    REMOTE=$(git rev-parse "$UPSTREAM")
+    if [ "${LOCAL}" = "${REMOTE}" ]; then
         echo 0
-     else
-	echo 1
-   fi
+    else
+        echo 1
+    fi
 }
 
 # Set base path
@@ -22,9 +22,9 @@ installBaseDir="${HOME}/.spacemacsInstall"
 # Set current path
 SOURCE="${BASH_SOURCE[0]}"
 while [[ -h "$SOURCE" ]]; do # resolve $SOURCE until the file is no longer a symlink
-  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-  SOURCE="$(readlink "$SOURCE")"
-  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+    DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+    SOURCE="$(readlink "$SOURCE")"
+    [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
@@ -38,8 +38,8 @@ emacsBaseDir="${installBaseDir}/emacs"
 cloned=0
 hasChanged=0
 if [[ ! -d "${emacsBaseDir}" ]]; then
-	git clone git://git.savannah.gnu.org/emacs.git "${emacsBaseDir}"
-	cloned=1
+    git clone git://git.savannah.gnu.org/emacs.git "${emacsBaseDir}"
+    cloned=1
 fi
 cd "${emacsBaseDir}" || exit
 if [[ cloned -eq 0 ]]; then
@@ -47,16 +47,16 @@ if [[ cloned -eq 0 ]]; then
 fi
 git checkout origin/emacs-25 --track
 git checkout emacs-25
-if [[ hasChanged -eq 1 || cloned -eq 1 ]]; then 
-   git pull
-   sudo apt build-dep -y emacs24
-   sudo apt purge -y postfix #Remove stupid dependency on mail server.
-   sudo apt autoremove -y
-   ./autogen.sh
-   ./configure --with-xwidgets --with-x-toolkit=gtk3 --with-modules   
-   make
-   sudo make install
-   make clean
+if [[ hasChanged -eq 1 || cloned -eq 1 ]]; then
+    git pull
+    sudo apt build-dep -y emacs24
+    sudo apt purge -y postfix #Remove stupid dependency on mail server.
+    sudo apt autoremove -y
+    ./autogen.sh
+    ./configure --with-xwidgets --with-x-toolkit=gtk3 --with-modules
+    make
+    sudo make install
+    make clean
 fi
 cd "${DIR}" || exit
 
@@ -64,14 +64,14 @@ cd "${DIR}" || exit
 fontsBaseDir="${installBaseDir}/fonts"
 fontsCurrentVersionExtractDir="${fontsBaseDir}/source-code-pro-2.030R-ro-1.050R-it"
 fontsTargetDir="${HOME}/.fonts"
-if [[ ! -d "${fontsCurrentVersionExtractDir}" ]]; then 
-   mkdir "${fontsBaseDir}"
-   mkdir "${fontsTargetDir}"
-   wget -O "${fontsBaseDir}/fonts.tar.gz" https://github.com/adobe-fonts/source-code-pro/archive/2.030R-ro/1.050R-it.tar.gz
-   tar -zxvf "${fontsBaseDir}/fonts.tar.gz" --directory "${fontsBaseDir}"
-   cd "${fontsCurrentVersionExtractDir}/OTF" || exit
-   cp ./* "${fontsTargetDir}"
-   sudo fc-cache
+if [[ ! -d "${fontsCurrentVersionExtractDir}" ]]; then
+    mkdir "${fontsBaseDir}"
+    mkdir "${fontsTargetDir}"
+    wget -O "${fontsBaseDir}/fonts.tar.gz" https://github.com/adobe-fonts/source-code-pro/archive/2.030R-ro/1.050R-it.tar.gz
+    tar -zxvf "${fontsBaseDir}/fonts.tar.gz" --directory "${fontsBaseDir}"
+    cd "${fontsCurrentVersionExtractDir}/OTF" || exit
+    cp ./* "${fontsTargetDir}"
+    sudo fc-cache
 fi
 cd "${DIR}" || exit
 
@@ -87,7 +87,7 @@ cp spacemacs ~/.spacemacs
 
 # Make spacemacs unity icon
 spacemacsUnityDesktopFile="${HOME}/.local/share/applications/spacemacs.desktop"
-[[ ! -f "${spacemacsUnityDesktopFile}" ]] && echo "[Desktop Entry] 
+[[ ! -f "${spacemacsUnityDesktopFile}" ]] && echo "[Desktop Entry]
 Name=Spacemacs
 GenericName=Text Editor
 Comment=Edit text
@@ -121,11 +121,11 @@ umake ide eclipse
 # Install java interface server
 javaServerBaseDir="${installBaseDir}/eclim"
 javaServerCurrentVersionExtractDir="${javaServerBaseDir}/2.6.0"
-if [[ ! -d "${javaServerCurrentVersionExtractDir}" ]]; then 
-   mkdir "${javaServerBaseDir}"
-   mkdir "${javaServerCurrentVersionExtractDir}"
-   wget -O "${javaServerCurrentVersionExtractDir}/eclim.jar" https://github.com/ervandew/eclim/releases/download/2.6.0/eclim_2.6.0.jar
-   java -Djava.net.useSystemProxies=true -jar "${javaServerCurrentVersionExtractDir}/eclim.jar"
+if [[ ! -d "${javaServerCurrentVersionExtractDir}" ]]; then
+    mkdir "${javaServerBaseDir}"
+    mkdir "${javaServerCurrentVersionExtractDir}"
+    wget -O "${javaServerCurrentVersionExtractDir}/eclim.jar" https://github.com/ervandew/eclim/releases/download/2.6.0/eclim_2.6.0.jar
+    java -Djava.net.useSystemProxies=true -jar "${javaServerCurrentVersionExtractDir}/eclim.jar"
 fi
 cd "${DIR}" || exit
 
@@ -139,30 +139,33 @@ sudo npm install -g vmd
 
 # Install lua dependencies
 sudo apt install -y luarocks readline-doc
-sudo luarocks install luacheck 
+sudo luarocks install luacheck
 sudo luarocks install lanes
+
+# Install docker dependencies
+sudo apt install -y docker docker.io
 
 # Build gnu global
 globalBaseDir="${installBaseDir}/global"
 globalCurrentVersionExtractDir="${globalBaseDir}/global-6.5.5"
 if [[ ! -d "${globalCurrentVersionExtractDir}" ]]; then
-   mkdir "${globalBaseDir}"
-   sudo apt install -y exuberant-ctags python-pygments
-   wget -O "${globalBaseDir}/global.tar.gz" http://tamacom.com/global/global-6.5.5.tar.gz
-   tar -zxvf "${globalBaseDir}/global.tar.gz" --directory "${globalBaseDir}"
-   cd "${globalCurrentVersionExtractDir}" || exit
-   ./configure --with-exuberant-ctags=/usr/bin/ctags
-   make
-   sudo make install
-   make clean
-   cp gtags.conf ~/.globalrc
+    mkdir "${globalBaseDir}"
+    sudo apt install -y exuberant-ctags python-pygments
+    wget -O "${globalBaseDir}/global.tar.gz" http://tamacom.com/global/global-6.5.5.tar.gz
+    tar -zxvf "${globalBaseDir}/global.tar.gz" --directory "${globalBaseDir}"
+    cd "${globalCurrentVersionExtractDir}" || exit
+    ./configure --with-exuberant-ctags=/usr/bin/ctags
+    make
+    sudo make install
+    make clean
+    cp gtags.conf ~/.globalrc
 
-  #Add gtags config string only if not already existing
-  if grep -Fxq "GTAGSLABEL=pygments" ~/.profile
-   then
-      echo "nothing to do"
-   else
-      echo export GTAGSLABEL=pygments >> ~/.profile
-  fi 
+    #Add gtags config string only if not already existing
+    if grep -Fxq "GTAGSLABEL=pygments" ~/.profile
+    then
+        echo "nothing to do"
+    else
+        echo export GTAGSLABEL=pygments >> ~/.profile
+    fi
 fi
 cd "${DIR}" || exit
