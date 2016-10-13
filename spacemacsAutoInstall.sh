@@ -31,7 +31,8 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 # Install general dependencies
 sudo apt update
 sudo apt dist-upgrade -y
-sudo apt install -y libncurses5-dev git silversearcher-ag silversearcher-ag-el curl wget vim build-essential cmake python python-dev python-all python-all-dev libgtk-3-dev libwebkitgtk-3.0-dev libgtk-3-common libgtk-3-0 autoconf automake gdb shellcheck
+sudo apt install -y libncurses5-dev git silversearcher-ag silversearcher-ag-el curl wget vim build-essential cmake python python-dev python-all python-all-dev libgtk-3-dev libwebkitgtk-3.0-dev libgtk-3-common libgtk-3-0 autoconf automake gdb shellcheck python3-dev cmake-qt-gui cmake-doc
+
 
 # Build emacs package
 emacsBaseDir="${installBaseDir}/emacs"
@@ -167,5 +168,30 @@ if [[ ! -d "${globalCurrentVersionExtractDir}" ]]; then
     else
         echo export GTAGSLABEL=pygments >> ~/.profile
     fi
+fi
+cd "${DIR}" || exit
+
+# Build ycmd server
+ycmdBaseDir="${installBaseDir}/ycmd"
+ycmdCppDir="${ycmdBaseDir}/cpp"
+cloned=0
+hasChanged=0
+if [[ ! -d "${ycmdBaseDir}" ]]; then
+    git clone https://github.com/Valloric/ycmd.git "${ycmdBaseDir}"
+    cloned=1
+fi
+cd "${ycmdBaseDir}" || exit
+if [[ cloned -eq 0 ]]; then
+    hasChanged="$(hasCurrentRepoChanged)";
+fi
+git checkout origin/auto --track
+git checkout auto
+if [[ hasChanged -eq 1 || cloned -eq 1 ]]; then
+    git pull
+    git submodule update --init --recursive
+    cd "${ycmdCppDir}" || exit
+    #cmake -G "Unix Makefiles" ../ -DPATH_TO_LLVM_ROOT=~/ycm_temp/llvm_root_dir
+    cmake -G "Unix Makefiles" . -DUSE_SYSTEM_LIBCLANG=ON
+    cmake --build . --target ycm_core --config Release
 fi
 cd "${DIR}" || exit
