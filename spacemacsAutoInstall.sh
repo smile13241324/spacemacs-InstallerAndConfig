@@ -31,8 +31,7 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 # Install general dependencies
 sudo apt update
 sudo apt dist-upgrade -y
-sudo apt install -y libncurses5-dev git silversearcher-ag silversearcher-ag-el curl wget vim build-essential cmake python python-dev python-all python-all-dev libgtk-3-dev libwebkitgtk-3.0-dev libgtk-3-common libgtk-3-0 autoconf automake gdb shellcheck python3-dev cmake-qt-gui cmake-doc
-
+sudo apt install -y libncurses5-dev git silversearcher-ag silversearcher-ag-el curl wget vim build-essential cmake python python-dev python-all python-all-dev libgtk-3-dev libwebkitgtk-3.0-dev libgtk-3-common libgtk-3-0 autoconf automake gdb shellcheck python3-dev cmake-qt-gui cmake-doc git-flow lxd criu lxd-tools
 
 # Build emacs package
 emacsBaseDir="${installBaseDir}/emacs"
@@ -116,7 +115,7 @@ sudo -H pip install --upgrade pycscope
 # Install java dependencies
 sudo add-apt-repository -y ppa:webupd8team/java
 sudo apt update
-sudo apt install -y oracle-java8-installer ubuntu-make
+sudo apt install -y oracle-java8-installer ubuntu-make maven
 umake ide eclipse
 
 # Install java interface server
@@ -174,6 +173,7 @@ cd "${DIR}" || exit
 # Build ycmd server
 ycmdBaseDir="${installBaseDir}/ycmd"
 ycmdCppDir="${ycmdBaseDir}/cpp"
+ycmdClangDir="${ycmdBaseDir}/libClang"
 cloned=0
 hasChanged=0
 if [[ ! -d "${ycmdBaseDir}" ]]; then
@@ -189,9 +189,12 @@ git checkout auto
 if [[ hasChanged -eq 1 || cloned -eq 1 ]]; then
     git pull
     git submodule update --init --recursive
+    if [[ ! -d ${ycmdClangDir} ]]; then
+        wget -O "${ycmdBaseDir}/libClang.tar.xz" http://llvm.org/releases/3.9.0/clang+llvm-3.9.0-x86_64-linux-gnu-ubuntu-16.04.tar.xz
+        tar -zxvf "${ycmdBaseDir}/libClang.tar.xz" --directory "${ycmdClangDir}"
+    fi
     cd "${ycmdCppDir}" || exit
-    #cmake -G "Unix Makefiles" ../ -DPATH_TO_LLVM_ROOT=~/ycm_temp/llvm_root_dir
-    cmake -G "Unix Makefiles" . -DUSE_SYSTEM_LIBCLANG=ON
+    cmake -G "Unix Makefiles" . -DPATH_TO_LLVM_ROOT="${ycmdClangDir}"
     cmake --build . --target ycm_core --config Release
 fi
 cd "${DIR}" || exit
