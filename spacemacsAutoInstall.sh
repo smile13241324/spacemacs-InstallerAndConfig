@@ -198,3 +198,18 @@ if [[ hasChanged -eq 1 || cloned -eq 1 ]]; then
     cmake --build . --target ycm_core --config Release
 fi
 cd "${DIR}" || exit
+
+# Install fish terminal
+fishConfigFile="${HOME}/.config/fish/config.fish"
+sudo apt install -y fish
+TERMINFO="$(find /usr/local -name eterm-color.ti)"
+tic -o ~/.terminfo ${TERMINFO}/e/eterm-color.ti
+[[ ! -f "${fishConfigFile}" ]] && echo "# emacs ansi-term support
+if test -n \"$EMACS\"
+  set -x TERM eterm-color
+end
+
+# this function may be required
+function fish_title
+  true
+end" >> "${fishConfigFile}"
