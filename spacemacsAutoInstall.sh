@@ -31,7 +31,8 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 # Install general dependencies
 sudo apt update
 sudo apt dist-upgrade -y
-sudo apt install -y libncurses5-dev git silversearcher-ag silversearcher-ag-el curl wget vim build-essential cmake python python-dev python-all python-all-dev libgtk-3-dev libwebkitgtk-3.0-dev libgtk-3-common libgtk-3-0 autoconf automake gdb shellcheck python3-dev cmake-qt-gui cmake-doc git-flow lxd criu lxd-tools
+sudo apt install -y libncurses5-dev git silversearcher-ag silversearcher-ag-el curl wget vim build-essential cmake python python-dev python-all python-all-dev libgtk-3-dev libwebkitgtk-3.0-dev libgtk-3-common libgtk-3-0 autoconf automake gdb shellcheck python3-dev cmake-qt-gui cmake-doc git-flow lxd criu lxd-tools sbcl sbcl-doc sbcl-source
+
 
 # Build emacs package
 emacsBaseDir="${installBaseDir}/emacs"
@@ -131,7 +132,8 @@ cd "${DIR}" || exit
 
 # Install node-js dependencies
 sudo apt install -y npm nodejs nodejs-dbg nodejs-dev npm2deb node-npmlog nodejs-legacy
-sudo npm install -g tern js-beautify eslint
+sudo npm install -g tern js-beautify eslint babel-eslint eslint-plugin-react
+
 
 # Install latex dependencies
 sudo apt install -y latexmk texlive-full fonts-freefont
