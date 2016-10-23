@@ -31,8 +31,7 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 # Install general dependencies
 sudo apt update
 sudo apt dist-upgrade -y
-sudo apt install -y libncurses5-dev git silversearcher-ag silversearcher-ag-el curl wget vim build-essential cmake python python-dev python-all python-all-dev libgtk-3-dev libwebkitgtk-3.0-dev libgtk-3-common libgtk-3-0 autoconf automake gdb shellcheck python3-dev cmake-qt-gui cmake-doc git-flow lxd criu lxd-tools sbcl sbcl-doc sbcl-source
-
+sudo apt install -y libncurses5-dev git silversearcher-ag silversearcher-ag-el curl wget vim build-essential cmake python python-dev python-all python-all-dev libgtk-3-dev libwebkitgtk-3.0-dev libgtk-3-common libgtk-3-0 autoconf automake gdb shellcheck python3-dev cmake-qt-gui cmake-doc git-flow lxd criu lxd-tools sbcl sbcl-doc sbcl-source fonts-freefont-otf
 
 # Build emacs package
 emacsBaseDir="${installBaseDir}/emacs"
@@ -134,7 +133,6 @@ cd "${DIR}" || exit
 sudo apt install -y npm nodejs nodejs-dbg nodejs-dev npm2deb node-npmlog nodejs-legacy
 sudo npm install -g tern js-beautify eslint babel-eslint eslint-plugin-react
 
-
 # Install latex dependencies
 sudo apt install -y latexmk texlive-full fonts-freefont
 sudo npm install -g vmd
@@ -186,8 +184,7 @@ cd "${ycmdBaseDir}" || exit
 if [[ cloned -eq 0 ]]; then
     hasChanged="$(hasCurrentRepoChanged)";
 fi
-git checkout origin/auto --track
-git checkout auto
+git checkout master
 if [[ hasChanged -eq 1 || cloned -eq 1 ]]; then
     git pull
     git submodule update --init --recursive
@@ -197,7 +194,7 @@ if [[ hasChanged -eq 1 || cloned -eq 1 ]]; then
     fi
     cd "${ycmdCppDir}" || exit
     cmake -G "Unix Makefiles" . -DPATH_TO_LLVM_ROOT="${ycmdClangDir}"
-    cmake --build . --target ycm_core --config Release
+    cmake --build . --target ycm_core --config Release --clean-first
 fi
 cd "${DIR}" || exit
 
@@ -205,7 +202,7 @@ cd "${DIR}" || exit
 fishConfigFile="${HOME}/.config/fish/config.fish"
 sudo apt install -y fish
 TERMINFO="$(find /usr/local -name eterm-color.ti)"
-tic -o ~/.terminfo ${TERMINFO}/e/eterm-color.ti
+tic -o ~/.terminfo ${TERMINFO}
 [[ ! -f "${fishConfigFile}" ]] && echo "# emacs ansi-term support
 if test -n \"$EMACS\"
   set -x TERM eterm-color
