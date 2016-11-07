@@ -68,7 +68,7 @@ if [[ ! -d "${fontsCurrentVersionExtractDir}" ]]; then
     mkdir "${fontsBaseDir}"
     mkdir "${fontsTargetDir}"
     wget -O "${fontsBaseDir}/fonts.tar.gz" https://github.com/adobe-fonts/source-code-pro/archive/2.030R-ro/1.050R-it.tar.gz
-    tar -zxvf "${fontsBaseDir}/fonts.tar.gz" --directory "${fontsBaseDir}"
+    tar -xpvf "${fontsBaseDir}/fonts.tar.gz" --directory "${fontsBaseDir}"
     cd "${fontsCurrentVersionExtractDir}/OTF" || exit
     cp ./* "${fontsTargetDir}"
     sudo fc-cache
@@ -83,7 +83,7 @@ git checkout origin/develop --track
 git checkout develop
 git pull
 cd "${DIR}" || exit
-cp spacemacs ~/.spacemacs
+cp .spacemacs ~/.spacemacs
 
 # Make spacemacs unity icon
 spacemacsUnityDesktopFile="${HOME}/.local/share/applications/spacemacs.desktop"
@@ -112,22 +112,22 @@ sudo apt install -y cscope cscope-el
 sudo -H pip install pycscope
 sudo -H pip install --upgrade pycscope
 
-# Install java dependencies
-sudo add-apt-repository -y ppa:webupd8team/java
-sudo apt update
-sudo apt install -y oracle-java8-installer ubuntu-make maven
-umake ide eclipse
+# # Install java dependencies
+# sudo add-apt-repository -y ppa:webupd8team/java
+# sudo apt update
+# sudo apt install -y oracle-java8-installer ubuntu-make maven
+# umake ide eclipse
 
-# Install java interface server
-javaServerBaseDir="${installBaseDir}/eclim"
-javaServerCurrentVersionExtractDir="${javaServerBaseDir}/2.6.0"
-if [[ ! -d "${javaServerCurrentVersionExtractDir}" ]]; then
-    mkdir "${javaServerBaseDir}"
-    mkdir "${javaServerCurrentVersionExtractDir}"
-    wget -O "${javaServerCurrentVersionExtractDir}/eclim.jar" https://github.com/ervandew/eclim/releases/download/2.6.0/eclim_2.6.0.jar
-    java -Djava.net.useSystemProxies=true -jar "${javaServerCurrentVersionExtractDir}/eclim.jar"
-fi
-cd "${DIR}" || exit
+# # Install java interface server
+# javaServerBaseDir="${installBaseDir}/eclim"
+# javaServerCurrentVersionExtractDir="${javaServerBaseDir}/2.6.0"
+# if [[ ! -d "${javaServerCurrentVersionExtractDir}" ]]; then
+#     mkdir "${javaServerBaseDir}"
+#     mkdir "${javaServerCurrentVersionExtractDir}"
+#     wget -O "${javaServerCurrentVersionExtractDir}/eclim.jar" https://github.com/ervandew/eclim/releases/download/2.6.0/eclim_2.6.0.jar
+#     java -Djava.net.useSystemProxies=true -jar "${javaServerCurrentVersionExtractDir}/eclim.jar"
+# fi
+# cd "${DIR}" || exit
 
 # Install node-js dependencies
 sudo apt install -y npm nodejs nodejs-dbg nodejs-dev npm2deb node-npmlog nodejs-legacy
@@ -152,7 +152,7 @@ if [[ ! -d "${globalCurrentVersionExtractDir}" ]]; then
     mkdir "${globalBaseDir}"
     sudo apt install -y exuberant-ctags python-pygments
     wget -O "${globalBaseDir}/global.tar.gz" http://tamacom.com/global/global-6.5.5.tar.gz
-    tar -zxvf "${globalBaseDir}/global.tar.gz" --directory "${globalBaseDir}"
+    tar -xpvf  "${globalBaseDir}/global.tar.gz" --directory "${globalBaseDir}"
     cd "${globalCurrentVersionExtractDir}" || exit
     ./configure --with-exuberant-ctags=/usr/bin/ctags
     make
@@ -171,40 +171,43 @@ fi
 cd "${DIR}" || exit
 
 # Build ycmd server
-ycmdBaseDir="${installBaseDir}/ycmd"
-ycmdCppDir="${ycmdBaseDir}/cpp"
-ycmdClangDir="${ycmdBaseDir}/libClang"
-cloned=0
-hasChanged=0
-if [[ ! -d "${ycmdBaseDir}" ]]; then
-    git clone https://github.com/Valloric/ycmd.git "${ycmdBaseDir}"
-    cloned=1
-fi
-cd "${ycmdBaseDir}" || exit
-if [[ cloned -eq 0 ]]; then
-    hasChanged="$(hasCurrentRepoChanged)";
-fi
-git checkout master
-if [[ hasChanged -eq 1 || cloned -eq 1 ]]; then
-    git pull
-    git submodule update --init --recursive
-    if [[ ! -d ${ycmdClangDir} ]]; then
-        wget -O "${ycmdBaseDir}/libClang.tar.xz" http://llvm.org/releases/3.9.0/clang+llvm-3.9.0-x86_64-linux-gnu-ubuntu-16.04.tar.xz
-        tar -zxvf "${ycmdBaseDir}/libClang.tar.xz" --directory "${ycmdClangDir}"
-    fi
-    cd "${ycmdCppDir}" || exit
-    cmake -G "Unix Makefiles" . -DPATH_TO_LLVM_ROOT="${ycmdClangDir}"
-    cmake --build . --target ycm_core --config Release --clean-first
-fi
-cd "${DIR}" || exit
+# ycmdBaseDir="${installBaseDir}/ycmd"
+# ycmdCppDir="${ycmdBaseDir}/cpp"
+# ycmdClangDir="${ycmdBaseDir}/clang+llvm-3.9.0-x86_64-linux-gnu-ubuntu-16.04"
+# cloned=0
+# hasChanged=0
+# if [[ ! -d "${ycmdBaseDir}" ]]; then
+#     git clone https://github.com/Valloric/ycmd.git "${ycmdBaseDir}"
+#     cloned=1
+# fi
+# cd "${ycmdBaseDir}" || exit
+# if [[ cloned -eq 0 ]]; then
+#     hasChanged="$(hasCurrentRepoChanged)";
+# fi
+# git checkout master
+# if [[ hasChanged -eq 1 || cloned -eq 1 ]]; then
+#     git pull
+#     git submodule update --init --recursive
+#     if [[ ! -d ${ycmdClangDir} ]]; then
+#         mkdir "${ycmdClangDir}"
+#         wget -O "${ycmdBaseDir}/libClang.tar.xz" http://llvm.org/releases/3.9.0/clang+llvm-3.9.0-x86_64-linux-gnu-ubuntu-16.04.tar.xz
+#         tar -xpvf "${ycmdBaseDir}/libClang.tar.xz" --directory "${ycmdBaseDir}"
+#     fi
+#     cd "${ycmdCppDir}" || exit
+#     cmake -G "Unix Makefiles" . -DPATH_TO_LLVM_ROOT="${ycmdClangDir}"
+#     cmake --build . --target ycm_core --config Release --clean-first
+# fi
+# cd "${DIR}" || exit
 
 # Install fish terminal
-fishConfigFile="${HOME}/.config/fish/config.fish"
+fishConfigDir="${HOME}/.config/fish"
+fishConfigFile="${fishConfigDir}/config.fish"
 sudo apt install -y fish
+mkdir "${fishConfigDir}"
 TERMINFO="$(find /usr/local -name eterm-color.ti)"
 tic -o ~/.terminfo ${TERMINFO}
 [[ ! -f "${fishConfigFile}" ]] && echo "# emacs ansi-term support
-if test -n \"$EMACS\"
+if test -n \"\$EMACS\"
   set -x TERM eterm-color
 end
 
@@ -212,3 +215,8 @@ end
 function fish_title
   true
 end" >> "${fishConfigFile}"
+
+# Install plantuml
+plantUmlBaseDir="${installBaseDir}/plantuml"
+mkdir "${plantUmlBaseDir}"
+wget -O "${plantUmlBaseDir}/plantuml.jar" http://downloads.sourceforge.net/project/plantuml/plantuml.jar?r=&ts=1477860059&use_mirror=netix

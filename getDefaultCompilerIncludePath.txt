@@ -1,0 +1,3 @@
+clang -v -E -x c++ -
+clang++-libc++ -v -E -x c++ -
+gcc -v -E -x c++ -
