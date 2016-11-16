@@ -217,6 +217,6 @@ function fish_title
 end" >> "${fishConfigFile}"
 
 # Install plantuml
-plantUmlBaseDir="${installBaseDir}/plantuml"
-mkdir "${plantUmlBaseDir}"
-wget -O "${plantUmlBaseDir}/plantuml.jar" http://downloads.sourceforge.net/project/plantuml/plantuml.jar?r=&ts=1477860059&use_mirror=netix
+# plantUmlBaseDir="${installBaseDir}/plantuml"
+# mkdir "${plantUmlBaseDir}"
+# wget -O "${plantUmlBaseDir}/plantuml.jar" http://downloads.sourceforge.net/project/plantuml/plantuml.jar?r=&ts=1477860059&use_mirror=netix
