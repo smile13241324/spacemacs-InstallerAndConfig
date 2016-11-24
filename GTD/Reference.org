@@ -1,0 +1,3 @@
+#+SEQ_TODO: OPEN(o) IN_PROGRESS(p) | FINISHED(f) DELEGATED(d)
+#+CATEGORY: Reference
+#+TAGS: outcome(o) reading(r) programming(p) homework(h) calling(c) mailing(m) organizing(z)

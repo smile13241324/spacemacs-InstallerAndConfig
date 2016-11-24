@@ -1,0 +1,5 @@
+#+SEQ_TODO: OPEN(o) IN_PROGRESS(p) | FINISHED(f) DELEGATED(d)
+#+CATEGORY: Waiting for
+#+TAGS: outcome(o) reading(r) programming(p) homework(h) calling(c) mailing(m) organizing(z)
+
+* Waiting for
