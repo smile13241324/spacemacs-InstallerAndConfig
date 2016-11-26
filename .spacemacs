@@ -420,9 +420,8 @@ you should place your code here."
 
   ;; Configure org mode
   (with-eval-after-load 'org
-    (setq org-agenda-files (quote ("~/Documents/GTD/")))
-    (setq org-refile-targets (quote (
-                                     ("~/Documents/GTD/CalendarActionList.org" :maxlevel . 1)
+    (setq org-agenda-files (quote ("~/Documents/GTD/Inbox.org" "~/Documents/GTD/CalendarActionList.org" "~/Documents/GTD/NextActionList.org" "~/Documents/GTD/ProjectList.org" "~/Documents/GTD/WaitingFor.org")))
+    (setq org-refile-targets (quote (("~/Documents/GTD/CalendarActionList.org" :maxlevel . 1)
                                      ("~/Documents/GTD/NextActionList.org" :maxlevel . 1)
                                      ("~/Documents/GTD/ProjectList.org" :maxlevel . 1)
                                      ("~/Documents/GTD/Reference.org" :maxlevel . 1)
@@ -432,7 +431,7 @@ you should place your code here."
     (setq org-enforce-todo-dependencies 1)
     (setq org-enforce-todo-checkbox-dependencies 1)
     (setq org-default-notes-file "~/Documents/GTD/Inbox.org")
-    (setq org-archive-location "~/Documents/GTD/Reference.org::* From %s")
+    (setq org-archive-location "~/Documents/GTD/Reference.org::* Archived from %s")
     (setq spaceline-org-clock-p t)
     (setq org-capture-templates
           '(("i" "Input" entry (file "")

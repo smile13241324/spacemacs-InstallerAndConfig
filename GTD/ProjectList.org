@@ -1,5 +1,5 @@
 #+SEQ_TODO: OPEN(o) IN_PROGRESS(p) DELEGATED(d) | FINISHED(f) WAITING_FOR(w)
 #+CATEGORY: Projects
-#+TAGS: outcome(o) reading(r) programming(p) homework(h) calling(c) mailing(m) organizing(z)
+#+TAGS: outcome(o) reading(r) programming(p) homework(h) calling(c) mailing(m) organizing(z) errand(e) workout(w) talking(t) searching(s) goal(g) information(i)
 
 * Projects
