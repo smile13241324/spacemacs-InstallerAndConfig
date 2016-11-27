@@ -370,7 +370,7 @@ you should place your code here."
   (define-key evil-insert-state-map (kbd "TAB") 'company-complete)
   (define-key evil-insert-state-map (kbd "C-y") 'company-yasnippet)
   (spacemacs/toggle-mode-line-minor-modes-off)
-  (spacemacs/set-leader-keys-for-major-mode 'org-mode "i a" 'org-attach)  
+  (spacemacs/set-leader-keys-for-major-mode 'org-mode "i a" 'org-attach)
 
   ;; Add pretty fonts for company
   (custom-set-faces
@@ -429,10 +429,21 @@ you should place your code here."
           '(("i" "Input" entry (file "")
              "* %? %i"))
           )
-    (setq org-agenda-todo-ignore-with-date t)
     (setq org-agenda-skip-scheduled-if-done t)
     (setq org-agenda-skip-deadline-if-done t)
+    (setq org-agenda-skip-timestamp-if-done t)
     (setq org-agenda-todo-list-sublevels t)
+    (setq org-agenda-todo-ignore-with-date t)
+    (setq org-agenda-todo-ignore-deadlines 'all)
+    (setq org-agenda-todo-ignore-scheduled 'all)
+    (setq org-agenda-todo-ignore-timestamp 'all)
+    )
+
+  ;; org mode sexp to schedule only on work days
+  (defun diary-on-working-days ()
+    (let ((dayname (calendar-day-of-week date))
+          (day (cadr date)))
+      (memq dayname '(1 2 3 4 5)))
     )
 
   ;; This snippet allows you to run the format tool of the current main mode before saving
