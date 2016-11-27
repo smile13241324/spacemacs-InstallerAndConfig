@@ -102,9 +102,6 @@ values."
      search-engine
      restclient
      selectric
-     ;; (evil-snipe :variables
-     ;;             evil-snipe-enable-alternate-f-and-t-behaviors t
-     ;;             )
      octave
      systemd
      imenu-list
@@ -373,6 +370,7 @@ you should place your code here."
   (define-key evil-insert-state-map (kbd "TAB") 'company-complete)
   (define-key evil-insert-state-map (kbd "C-y") 'company-yasnippet)
   (spacemacs/toggle-mode-line-minor-modes-off)
+  (spacemacs/set-leader-keys-for-major-mode 'org-mode "i a" 'org-attach)  
 
   ;; Add pretty fonts for company
   (custom-set-faces
@@ -389,12 +387,6 @@ you should place your code here."
 
   ;; Activate latex document preview
   (add-hook 'doc-view-mode-hook 'auto-revert-mode)
-
-  ;; Configure evil snipe mode
-  (setq-default
-   evil-snipe-scope 'buffer
-   evil-snipe-repeat 'buffer
-   )
 
   ;; set config variables for java layer
   (setq eclim-eclipse-dirs '("~/opt/eclipse")
