@@ -1,7 +1,10 @@
-#+SEQ_TODO: OPEN(o) IN_PROGRESS(p) DELEGATED(d) | FINISHED(f) WAITING_FOR(w)
+#+SEQ_TODO: OPEN(o) IN_PROGRESS(p) DELEGATED(d) | FINISHED(f) WAITING_FOR(w) NEWLY_PLANNED(a)
 #+CATEGORY: Calendar Action
-#+TAGS: { outcome(o) reading(r) programming(p) homework(h) calling(c) mailing(m) organizing(z) errand(e) workout(w) talking(t) searching(s) goal(g) information(i) } { easy(1) intermediate(2) difficult(3) }
+#+TAGS: { outcome(o) reading(r) programming(p) homework(h) calling(c) mailing(m) organizing(z) errand(e) workout(w) talking(t) searching(s) purpose(u) principle(n) information(i) installing(l) } { easy(1) intermediate(2) difficult(3) }
 
 * Scheduled
-** OPEN Make Weekly Review                                       :organizing:
-   SCHEDULED: <2016-12-02 Fr ++1w>
+* Recurring
+** OPEN Make Weekly Review Of Horizon 1-2                        :organizing:
+   SCHEDULED: <2016-12-23 Fr ++1w>
+** OPEN Make Monthly Review Of Horizon 3-5                       :organizing:
+   SCHEDULED: <2016-12-31 Sa .+1m>

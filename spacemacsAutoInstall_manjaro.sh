@@ -2,7 +2,7 @@
 
 # Install external packages
 sudo pacman -Syyu
-sudo pacman -S git emacs the_silver_searcher vim cmake extra-cmake-modules python autoconf automake gdb gdb-common lldb shellcheck sbcl adobe-source-code-pro-fonts clang clang-tools-extra libc++ libc++abi boost boost-libs llvm llvm-libs python-pytest python-pip python-mock python-setuptools cscope npm nodejs nodejs-less npm-check-updates luarocks docker ctags python-pygments fish fisherman maven eclipse-java visualvm openjdk8-doc jdk8-openjdk gnuplot
+sudo pacman -S git emacs the_silver_searcher vim cmake extra-cmake-modules python autoconf automake gdb gdb-common lldb shellcheck sbcl adobe-source-code-pro-fonts clang clang-tools-extra libc++ libc++abi boost boost-libs llvm llvm-libs python-pytest python-pip python-mock python-setuptools cscope npm nodejs nodejs-less npm-check-updates luarocks docker ctags python-pygments fish fisherman maven eclipse-java visualvm openjdk8-doc jdk8-openjdk gnuplot go go-tools
 sudo pacman -S $(pacman -Ssq texlive*)
 
 # Install python packages
