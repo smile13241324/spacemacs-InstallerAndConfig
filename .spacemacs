@@ -370,7 +370,6 @@ you should place your code here."
   (define-key evil-insert-state-map (kbd "TAB") 'company-complete)
   (define-key evil-insert-state-map (kbd "C-y") 'company-yasnippet)
   (spacemacs/toggle-mode-line-minor-modes-off)
-  (spacemacs/set-leader-keys-for-major-mode 'org-mode "i a" 'org-attach)
 
   ;; Add pretty fonts for company
   (custom-set-faces
@@ -442,6 +441,8 @@ you should place your code here."
     (setq org-agenda-todo-ignore-timestamp 'all)
     (setq org-hierarchical-todo-statistics nil)
     ;; (setq org-todo-keyword-faces '(("IN_PROGRESS" . (:background "yellow" :weight bold))))
+    (setq org-startup-align-all-tables t)
+    (setq org-agenda-restore-windows-after-quit nil)
     )
 
   ;; org mode sexp to schedule only on work days
@@ -467,4 +468,13 @@ you should place your code here."
   (add-hook 'before-save-hook 'clang-format-for-filetype)
   ;; Add temporary fix for missing flycheck mode in elisp mode
   (add-hook 'emacs-lisp-mode-hook 'flycheck-mode)
+  )
+
+;; Do not write anything past this comment. This is where Emacs will
+;; auto-generate custom variable definitions.
+(defun dotspacemacs/emacs-custom-settings ()
+  "Emacs custom settings.
+This is an auto-generated function, do not modify its content directly, use
+Emacs customize menu instead.
+This function is called at the very end of Spacemacs initialization."
   )
