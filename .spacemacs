@@ -78,6 +78,7 @@ values."
      (python :variables
              python-test-runner 'pytest
              python-enable-yapf-format-on-save t
+             python-sort-imports-on-save t
              )
      windows-scripts
      shell-scripts
@@ -106,6 +107,12 @@ values."
      systemd
      imenu-list
      java
+     (go :variables
+         go-use-gometalinter t
+         gofmt-command "goimports"
+         go-tab-width 4
+         go-use-gocheck-for-testing t
+         )
      )
 
    ;; List of additional packages that will be installed without being
@@ -443,6 +450,7 @@ you should place your code here."
     ;; (setq org-todo-keyword-faces '(("IN_PROGRESS" . (:background "yellow" :weight bold))))
     (setq org-startup-align-all-tables t)
     (setq org-agenda-restore-windows-after-quit nil)
+    (setq org-use-property-inheritance t)
     )
 
   ;; org mode sexp to schedule only on work days
@@ -469,9 +477,6 @@ you should place your code here."
   ;; Add temporary fix for missing flycheck mode in elisp mode
   (add-hook 'emacs-lisp-mode-hook 'flycheck-mode)
   )
-
-;; Do not write anything past this comment. This is where Emacs will
-;; auto-generate custom variable definitions.
 (defun dotspacemacs/emacs-custom-settings ()
   "Emacs custom settings.
 This is an auto-generated function, do not modify its content directly, use
