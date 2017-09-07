@@ -76,7 +76,7 @@ This function should only modify configuration layer settings."
      syntax-checking
      version-control
      semantic
-     semweb
+     ;; semweb
      themes-megapack
      (c-c++ :variables
             c-c++-default-mode-for-headers 'c++-mode
@@ -134,8 +134,8 @@ This function should only modify configuration layer settings."
      (elm :variables
           elm-sort-imports-on-save t
           elm-format-on-save t)
-     (ess :variables
-          ess-enable-smart-equals t)
+     ;; (ess :variables
+     ;;      ess-enable-smart-equals t)
      idris
      (haskell :variables
               haskell-enable-hindent-style "fundamental"
@@ -184,6 +184,7 @@ This function should only modify configuration layer settings."
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
    dotspacemacs-excluded-packages '()
+
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
    ;; `used-only' installs only explicitly used packages and deletes any unused
@@ -552,7 +553,22 @@ before packages are loaded."
     (setq org-hierarchical-todo-statistics nil)
     (setq org-startup-align-all-tables t)
     (setq org-agenda-restore-windows-after-quit nil)
-    (setq org-use-property-inheritance nil))
+    (setq org-use-property-inheritance nil)
+
+    ;; Workaround for evil-org missing additional keybindings in insert mode
+    (evil-define-key '(normal visual insert) evil-org-mode-map
+      (kbd "M-h") 'org-metaleft
+      (kbd "M-l") 'org-metaright
+      (kbd "M-j") 'org-metaup
+      (kbd "M-k") 'org-metadown
+      (kbd "M-H") 'org-shiftmetaleft
+      (kbd "M-L") 'org-shiftmetaright
+      (kbd "M-J") 'org-shiftmetaup
+      (kbd "M-K") 'org-shiftmetadown
+      (kbd "C-S-h") 'org-shiftcontrolleft
+      (kbd "C-S-l") 'org-shiftcontrolright
+      (kbd "C-S-j") 'org-shiftcontrolup
+      (kbd "C-S-k") 'org-shiftcontroldown))
 
   ;; org mode sexp to schedule only on work days
   (defun diary-on-working-days ()
