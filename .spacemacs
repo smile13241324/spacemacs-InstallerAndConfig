@@ -122,6 +122,7 @@ This function should only modify configuration layer settings."
      imenu-list
      (java :variables
            java-backend 'Meghanada)
+     groovy
      (go :variables
          go-use-gometalinter t
          gofmt-command "goimports"
@@ -305,7 +306,7 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-display-default-layout nil
    ;; If non-nil then the last auto saved layouts are resumed automatically upon
    ;; start. (default nil)
-   dotspacemacs-auto-resume-layouts t
+   dotspacemacs-auto-resume-layouts nil
    ;; If non-nil, auto-generate layout name when creating new layouts. Only has
    ;; effect when using the "jump to layout by number" commands. (default nil)
    dotspacemacs-auto-generate-layout-names nil

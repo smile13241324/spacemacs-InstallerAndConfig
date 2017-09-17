@@ -15,7 +15,7 @@ sudo pacman -S git tcl tk emacs ripgrep the_silver_searcher vim wget curl cmake 
      texlive-music texlive-pictures texlive-plainextra texlive-pstricks              \
      texlive-publishers texlive-science texlive-bibtexextra lua coq memcached        \
      ttf-symbola pandoc ruby opam llvm-ocaml ocaml-compiler-libs ocaml-ctypes        \
-     ocaml-findlib ocamlbuild racket rust-racer rustfmt rust cargo r gcc-fortran     \
+     ocaml-findlib ocamlbuild racket rust-racer rustfmt rust cargo r gcc-fortran-multilib     \
      purescript ansible ansible-lint puppet vagrant vagrant-substrate agda           \
      agda-stdlib elixir clojure nim nimble chicken smlnj sbcl pass
 sudo pacman -S ghc ghc-mod ghc-static happy haskell-abstract-deque                \
@@ -156,7 +156,8 @@ sudo pacman -S ghc ghc-mod ghc-static happy haskell-abstract-deque              
      haskell-xss-sanitize haskell-yaml haskell-yesod haskell-yesod-auth                \
      haskell-yesod-core haskell-yesod-default haskell-yesod-form                       \
      haskell-yesod-persistent haskell-yesod-static haskell-zip-archive haskell-zlib    \
-     haskell-zlib-bindings hasktags hindent hoogle stylish-haskell idris
+     haskell-zlib-bindings hasktags hindent hoogle stylish-haskell idris gradle \
+     gradle-doc groovy groovy-docs
 
 # Install python packages
 sudo -H pip install pip jedi json-rpc service_factory autoflake hy pycscope \
