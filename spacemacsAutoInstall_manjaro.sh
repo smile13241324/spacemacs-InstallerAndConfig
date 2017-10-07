@@ -157,7 +157,7 @@ sudo pacman -S ghc ghc-mod ghc-static happy haskell-abstract-deque              
      haskell-yesod-core haskell-yesod-default haskell-yesod-form                       \
      haskell-yesod-persistent haskell-yesod-static haskell-zip-archive haskell-zlib    \
      haskell-zlib-bindings hasktags hindent hoogle stylish-haskell idris gradle \
-     gradle-doc groovy groovy-docs
+     gradle-doc groovy groovy-docs geckodriver
 
 # Install python packages
 sudo -H pip install pip jedi json-rpc service_factory autoflake hy pycscope \
@@ -166,12 +166,13 @@ sudo -H pip install pip jedi json-rpc service_factory autoflake hy pycscope \
 sudo -H pip install --upgrade pip jedi json-rpc service_factory autoflake hy  \
      pycscope flake8 robot Django fabric python-binary-memcached Pygments sphinx   \
      pycscope bashate
+sudo -H pip install --pre --upgrade robotframework-seleniumlibrary
 
 # Install nodejs dependencies
 sudo npm config set unsafe-perm true
 sudo npm install -g tern js-beautify babel-eslint eslint-plugin-react vmd elm \
      elm-oracle elm-format tslint typescript-formatter webpack pulp eslint bower   \
-     grunt typescript yarn
+     grunt typescript yarn js-yaml
 
 # Install lua dependencies
 sudo luarocks install luacheck
