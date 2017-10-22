@@ -16,9 +16,10 @@ sudo pacman -S git tcl tk emacs ripgrep the_silver_searcher vim wget curl cmake 
      texlive-publishers texlive-science texlive-bibtexextra lua coq memcached        \
      ttf-symbola pandoc ruby opam llvm-ocaml ocaml-compiler-libs ocaml-ctypes        \
      ocaml-findlib ocamlbuild racket rust-racer rustfmt rust cargo r gcc-fortran-multilib     \
-     purescript ansible ansible-lint puppet vagrant vagrant-substrate agda           \
-     agda-stdlib elixir clojure nim nimble chicken smlnj sbcl pass
-sudo pacman -S ghc ghc-mod ghc-static happy haskell-abstract-deque                \
+     ansible ansible-lint puppet vagrant vagrant-substrate agda           \
+     agda-stdlib elixir clojure nim nimble chicken smlnj sbcl pass idris gradle \
+     gradle-doc groovy groovy-docs geckodriver
+sudo pacman -S cabal-install alex ghc ghc-static happy haskell-abstract-deque                \
      haskell-abstract-par haskell-adjunctions haskell-aeson                            \
      haskell-aeson-better-errors haskell-aeson-compat haskell-aeson-pretty             \
      haskell-annotated-wl-pprint haskell-ansi-terminal haskell-ansi-wl-pprint          \
@@ -68,7 +69,7 @@ sudo pacman -S ghc ghc-mod ghc-static happy haskell-abstract-deque              
      haskell-ghc-paths haskell-ghc-syb-utils haskell-gitrev haskell-glib haskell-glob  \
      haskell-gnuidn haskell-gnutls haskell-graphscc haskell-graphviz haskell-gsasl     \
      haskell-gtk haskell-gtk2hs-buildtools haskell-hackage-security                    \
-     haskell-haddock-api haskell-haddock-library haskell-hakyll haskell-hashable       \
+     haskell-haddock-library haskell-hakyll haskell-hashable       \
      haskell-hashtables haskell-hasql haskell-hasql-pool haskell-hasql-transaction     \
      haskell-hastache haskell-here haskell-heredoc haskell-hex haskell-hinotify        \
      haskell-hit haskell-hjsmin haskell-hledger-lib haskell-hopenpgp haskell-hostname  \
@@ -156,23 +157,26 @@ sudo pacman -S ghc ghc-mod ghc-static happy haskell-abstract-deque              
      haskell-xss-sanitize haskell-yaml haskell-yesod haskell-yesod-auth                \
      haskell-yesod-core haskell-yesod-default haskell-yesod-form                       \
      haskell-yesod-persistent haskell-yesod-static haskell-zip-archive haskell-zlib    \
-     haskell-zlib-bindings hasktags hindent hoogle stylish-haskell idris gradle \
-     gradle-doc groovy groovy-docs geckodriver
+     haskell-zlib-bindings hasktags hindent hoogle stylish-haskell
+
+# Install haskell dependencies with cabal
+sudo cabal update
+sudo cabal install ghc-mod haddock
 
 # Install python packages
 sudo -H pip install pip jedi json-rpc service_factory autoflake hy pycscope \
      flake8 robot Django fabric python-binary-memcached Pygments sphinx \
-     pycscope bashate
+     pycscope bashate yapf isort
 sudo -H pip install --upgrade pip jedi json-rpc service_factory autoflake hy  \
      pycscope flake8 robot Django fabric python-binary-memcached Pygments sphinx   \
-     pycscope bashate
+     pycscope bashate yapf isort
 sudo -H pip install --pre --upgrade robotframework-seleniumlibrary
 
 # Install nodejs dependencies
 sudo npm config set unsafe-perm true
-sudo npm install -g tern js-beautify babel-eslint eslint-plugin-react vmd elm \
+sudo npm install -g npm tern js-beautify babel-eslint eslint-plugin-react vmd elm \
      elm-oracle elm-format tslint typescript-formatter webpack pulp eslint bower   \
-     grunt typescript yarn js-yaml
+     grunt typescript yarn js-yaml purescript
 
 # Install lua dependencies
 sudo luarocks install luacheck
@@ -191,7 +195,7 @@ sudo opam config setup -a
 sudo opam install merlin utop ocp-indent
 
 # Install nim dependecies
-sudo nim install nimsuggest
+sudo nimble install nimsuggest
 
 # Set current path
 SOURCE="${BASH_SOURCE[0]}"
