@@ -121,7 +121,7 @@ This function should only modify configuration layer settings."
      systemd
      imenu-list
      (java :variables
-           java-backend 'Meghanada)
+           java-backend 'meghanada)
      groovy
      (go :variables
          go-use-gometalinter t
