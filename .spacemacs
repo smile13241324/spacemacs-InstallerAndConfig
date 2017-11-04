@@ -42,7 +42,7 @@ This function should only modify configuration layer settings."
                       auto-completion-return-key-behavior 'complete
                       auto-completion-tab-key-behavior 'cycle
                       auto-completion-complete-with-key-sequence nil
-                      auto-completion-complete-with-key-sequence-delay 0.0
+                      auto-completion-complete-with-key-sequence-delay 0.1
                       auto-completion-private-snippets-directory nil
                       auto-completion-enable-snippets-in-popup t
                       auto-completion-enable-help-tooltip t
@@ -65,7 +65,8 @@ This function should only modify configuration layer settings."
           org-want-todo-bindings t
           org-enable-github-support t
           org-enable-bootstrap-support t
-          org-enable-reveal-js-support t)
+          org-enable-reveal-js-support t
+          org-enable-hugo-support t)
      (shell :variables
             shell-enable-smart-eshell t
             shell-default-shell 'ansi-term
@@ -102,7 +103,7 @@ This function should only modify configuration layer settings."
      bibtex
      (latex :variables
             latex-enable-auto-fill t
-            latex-enable-magic t
+            latex-enable-magic nil
             latex-enable-folding t)
      lua
      html
@@ -129,7 +130,7 @@ This function should only modify configuration layer settings."
          go-tab-width 4
          go-use-gocheck-for-testing t
          go-use-test-args "-race -timeout 10s")
-     major-modes
+     ;; major-modes
      coq
      django
      (elm :variables
@@ -146,7 +147,7 @@ This function should only modify configuration layer settings."
      parinfer
      asciidoc
      ansible
-     cfengine
+     ;; cfengine
      puppet
      rebox
      rust
@@ -172,8 +173,8 @@ This function should only modify configuration layer settings."
      protobuf
      php
      racket
-	 (colors :variables 
-			  colors-colorize-identifiers 'all)
+     (colors :variables
+             colors-colorize-identifiers 'all)
      (typescript :variables
                  typescript-fmt-tool 'typescript-formatter
                  typescript-fmt-on-save t))
@@ -256,17 +257,17 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(leuven)
+   dotspacemacs-themes '(spacemacs-dark spacemacs-light leuven)
 
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 17
+                               :size 15
                                :weight normal
                                :width normal
-                               :powerline-scale 1.5)
+                               :powerline-scale 1.1)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The key used for Emacs commands `M-x' (after pressing on the leader key).
@@ -308,7 +309,7 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-display-default-layout nil
    ;; If non-nil then the last auto saved layouts are resumed automatically upon
    ;; start. (default nil)
-   dotspacemacs-auto-resume-layouts nil
+   dotspacemacs-auto-resume-layouts t
    ;; If non-nil, auto-generate layout name when creating new layouts. Only has
    ;; effect when using the "jump to layout by number" commands. (default nil)
    dotspacemacs-auto-generate-layout-names nil
@@ -581,8 +582,7 @@ before packages are loaded."
 
   ;; Format file on save
   (defun format-for-filetype ()
-    "Run clang-format if the current file has a file extensions
-   in the filetypes list."
+    "Run generic format function if not a mode specific one is available"
     (let ((filetypes '("c" "cpp" "h" "hpp" "py" "pyc" "robot" "tf")))
       (if (not (member (file-name-extension (buffer-file-name)) filetypes))
           (save-excursion
