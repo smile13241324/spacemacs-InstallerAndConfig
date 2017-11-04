@@ -172,6 +172,8 @@ This function should only modify configuration layer settings."
      protobuf
      php
      racket
+	 (colors :variables 
+			  colors-colorize-identifiers 'all)
      (typescript :variables
                  typescript-fmt-tool 'typescript-formatter
                  typescript-fmt-on-save t))
