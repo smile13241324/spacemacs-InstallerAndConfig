@@ -1,6 +1,6 @@
 #+SEQ_TODO: OPEN(o) IN_PROGRESS(p) DELEGATED(d) | FINISHED(f) WAITING_FOR(w) NEWLY_PLANNED(a)
 #+CATEGORY: Projects
-#+TAGS: { outcome(o) reading(r) programming(p) testing(g) homework(h) calling(c) mailing(m) organizing(z) errand(e) workout(w) talking(t) searching(s) purpose(u) principle(n) information(i) installing(l) } { pisanzapra(1) unpisanzapra(2) hoyotojokomeshi(3) }
+#+TAGS: { outcome(o) reading(r) programming(p) testing(g) homework(h) calling(c) mailing(m) organizing(z) errand(e) writing(w) workout(k) talking(t) searching(s) purpose(u) principle(n) information(i) installing(l) } { pisanzapra(1) unpisanzapra(2) hoyotojokomeshi(3) }
 #+REVEAL_ROOT: http://cdn.jsdelivr.net/reveal.js/3.0.0/
 
 * Projects
