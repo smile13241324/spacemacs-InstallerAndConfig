@@ -481,14 +481,20 @@ before packages are loaded."
   ;; (load-file "~/Documents/robot-mode/robot-mode.el")
   ;; (add-to-list 'auto-mode-alist '("\\.robot\\'" . robot-mode))
 
+  (purpose-mode -1)
   (global-company-mode 1)
   (global-flycheck-mode 1)
-  (purpose-mode -1)
+  (setq company-idle-delay nil)
+  (setq company-minimum-prefix-length nil)
+  (setq company-quickhelp-delay 2.0)
+  (setq company-statistics-size 4000)
+  (add-to-list 'flycheck-global-modes 'emacs-lisp-mode)
+  (add-to-list 'completion-styles 'substring)
   (define-key evil-insert-state-map (kbd "TAB") 'company-complete)
-  (define-key evil-insert-state-map (kbd "C-y") 'company-yasnippet)
+  (define-key evil-insert-state-map (kbd "M-j") 'company-yasnippet)
+  (define-key evil-normal-state-map (kbd "M-j") 'company-yasnippet)
   (spacemacs/toggle-mode-line-minor-modes-off)
 
-  ;; Add pretty fonts for company
   (custom-set-faces
    '(company-tooltip-common
      ((t (:inherit company-tooltip :weight bold :underline nil))))
