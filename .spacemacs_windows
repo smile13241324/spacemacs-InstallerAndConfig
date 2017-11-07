@@ -74,7 +74,6 @@ This function should only modify configuration layer settings."
      syntax-checking
      version-control
      semantic
-     ;; semweb
      themes-megapack
      (c-c++ :variables
             c-c++-default-mode-for-headers 'c++-mode
@@ -121,8 +120,6 @@ This function should only modify configuration layer settings."
      (elm :variables
           elm-sort-imports-on-save t
           elm-format-on-save t)
-     ;; (ess :variables
-     ;;      ess-enable-smart-equals t)
      idris
      (haskell :variables
               haskell-enable-hindent-style "fundamental"
@@ -131,7 +128,6 @@ This function should only modify configuration layer settings."
      parinfer
      asciidoc
      ansible
-     cfengine
      puppet
      rebox
      rust
@@ -151,8 +147,8 @@ This function should only modify configuration layer settings."
      autohotkey
      (elixir :variables
              flycheck-elixir-credo-strict t)
-	 ;;(colors :variables 
-	 ;;		  colors-colorize-identifiers 'all)
+	 (colors :variables 
+	 		  colors-colorize-identifiers 'all)
      (typescript :variables
                  typescript-fmt-tool 'typescript-formatter
                  typescript-fmt-on-save t))
@@ -459,14 +455,20 @@ before packages are loaded."
   ;; (load-file "~/Documents/robot-mode/robot-mode.el")
   ;; (add-to-list 'auto-mode-alist '("\\.robot\\'" . robot-mode))
 
+  (purpose-mode -1)
   (global-company-mode 1)
   (global-flycheck-mode 1)
-  (purpose-mode -1)
+  (setq company-idle-delay nil)
+  (setq company-minimum-prefix-length nil)
+  (setq company-quickhelp-delay 2.0)
+  (setq company-statistics-size 4000)
+  (add-to-list 'flycheck-global-modes 'emacs-lisp-mode)
+  (add-to-list 'completion-styles 'substring)
   (define-key evil-insert-state-map (kbd "TAB") 'company-complete)
-  (define-key evil-insert-state-map (kbd "C-y") 'company-yasnippet)
+  (define-key evil-insert-state-map (kbd "M-j") 'company-yasnippet)
+  (define-key evil-normal-state-map (kbd "M-j") 'company-yasnippet)
   (spacemacs/toggle-mode-line-minor-modes-off)
 
-  ;; Add pretty fonts for company
   (custom-set-faces
    '(company-tooltip-common
      ((t (:inherit company-tooltip :weight bold :underline nil))))
@@ -560,8 +562,7 @@ before packages are loaded."
 
   ;; Format file on save
   (defun format-for-filetype ()
-    "Run clang-format if the current file has a file extensions
-   in the filetypes list."
+    "Run generic format function if not a mode specific one is available"
     (let ((filetypes '("c" "cpp" "h" "hpp" "py" "pyc" "robot" "tf")))
       (if (not (member (file-name-extension (buffer-file-name)) filetypes))
           (save-excursion
