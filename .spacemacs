@@ -42,7 +42,7 @@ This function should only modify configuration layer settings."
                       auto-completion-return-key-behavior 'complete
                       auto-completion-tab-key-behavior 'cycle
                       auto-completion-complete-with-key-sequence nil
-                      auto-completion-complete-with-key-sequence-delay 0.1
+                      auto-completion-complete-with-key-sequence-delay 0.0
                       auto-completion-private-snippets-directory nil
                       auto-completion-enable-snippets-in-popup t
                       auto-completion-enable-help-tooltip t
@@ -58,7 +58,7 @@ This function should only modify configuration layer settings."
      salt
      ibuffer
      emacs-lisp
-     pdf-tools
+     ;; pdf-tools
      cscope
      gtags
      (org :variables
@@ -77,7 +77,7 @@ This function should only modify configuration layer settings."
      syntax-checking
      version-control
      semantic
-     semweb
+     ;; semweb
      themes-megapack
      (c-c++ :variables
             c-c++-default-mode-for-headers 'c++-mode
@@ -114,10 +114,13 @@ This function should only modify configuration layer settings."
      docker
      csv
      search-engine
-     restclient
+     (restclient :variables
+                 restclient-use-org nil)
      restructuredtext
      selectric
      octave
+     purescript
+     speed-reading
      systemd
      imenu-list
      (java :variables
@@ -146,7 +149,7 @@ This function should only modify configuration layer settings."
      parinfer
      asciidoc
      ansible
-     cfengine
+     ;; cfengine
      puppet
      rebox
      rust
@@ -272,10 +275,10 @@ It should only modify the values of Spacemacs settings."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 15
+                               :size 13
                                :weight normal
                                :width normal
-                               :powerline-scale 1.1)
+                               :powerline-scale 1.2)
    ;; The leader key (default "SPC")
    dotspacemacs-leader-key "SPC"
    ;; The key used for Emacs commands `M-x' (after pressing on the leader key).
@@ -376,7 +379,7 @@ It should only modify the values of Spacemacs settings."
    ;; If non-nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
    ;; (default nil) (Emacs 24.4+ only)
-   dotspacemacs-maximized-at-startup t
+   dotspacemacs-maximized-at-startup nil
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's active or selected.
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
@@ -493,7 +496,7 @@ before packages are loaded."
   (global-company-mode 1)
   (global-flycheck-mode 1)
   (setq company-idle-delay nil)
-  (setq company-minimum-prefix-length nil)
+  (setq company-minimum-prefix-length 0)
   (setq company-quickhelp-delay 2.0)
   (setq company-statistics-size 4000)
   (add-to-list 'flycheck-global-modes 'emacs-lisp-mode)
@@ -572,6 +575,10 @@ before packages are loaded."
     (setq org-startup-align-all-tables t)
     (setq org-agenda-restore-windows-after-quit nil)
     (setq org-use-property-inheritance nil)
+    (setq org-agenda-sorting-strategy (quote ((agenda habit-down time-up priority-down category-keep)
+                                              (todo tag-up priority-down todo-state-up category-keep)
+                                              (tags priority-down category-keep)
+                                              (search category-keep))))
 
     ;; Workaround for evil-org missing additional keybindings in insert mode
     (evil-define-key '(normal visual insert) evil-org-mode-map

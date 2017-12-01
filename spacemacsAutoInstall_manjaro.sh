@@ -167,14 +167,14 @@ sudo cabal install ghc-mod haddock
 sudo -H pip install pip jedi json-rpc service_factory autoflake hy pycscope \
      flake8 robot Django fabric python-binary-memcached Pygments sphinx \
      pycscope bashate yapf isort
-sudo -H pip install --upgrade pip jedi json-rpc service_factory autoflake hy  \
+sudo -H pip install --upgrade jedi json-rpc service_factory autoflake hy  \
      pycscope flake8 robot Django fabric python-binary-memcached Pygments sphinx   \
      pycscope bashate yapf isort
 sudo -H pip install --pre --upgrade robotframework-seleniumlibrary
 
 # Install nodejs dependencies
 sudo npm config set unsafe-perm true
-sudo npm install -g npm tern js-beautify babel-eslint eslint-plugin-react vmd elm \
+sudo npm install -g tern js-beautify babel-eslint eslint-plugin-react vmd elm \
      elm-oracle elm-format tslint typescript-formatter webpack pulp eslint bower   \
      grunt typescript yarn js-yaml purescript
 
