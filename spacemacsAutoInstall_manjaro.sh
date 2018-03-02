@@ -16,9 +16,9 @@ sudo pacman -S git tcl tk emacs ripgrep the_silver_searcher vim wget curl cmake 
      texlive-publishers texlive-science texlive-bibtexextra lua coq memcached        \
      ttf-symbola pandoc ruby opam llvm-ocaml ocaml-compiler-libs ocaml-ctypes        \
      ocaml-findlib ocamlbuild racket rust-racer rustfmt rust cargo r gcc-fortran-multilib     \
-     ansible ansible-lint puppet vagrant vagrant-substrate agda           \
+     ansible ansible-lint puppet vagrant agda           \
      agda-stdlib elixir clojure nim nimble chicken smlnj sbcl pass idris gradle \
-     gradle-doc groovy groovy-docs geckodriver terraform zeal graphviz
+     gradle-doc groovy groovy-docs geckodriver terraform zeal graphviz cowsay --noconfirm
 sudo pacman -S cabal-install alex ghc ghc-static happy haskell-abstract-deque                \
      haskell-abstract-par haskell-adjunctions haskell-aeson                            \
      haskell-aeson-better-errors haskell-aeson-compat haskell-aeson-pretty             \
@@ -157,19 +157,10 @@ sudo pacman -S cabal-install alex ghc ghc-static happy haskell-abstract-deque   
      haskell-xss-sanitize haskell-yaml haskell-yesod haskell-yesod-auth                \
      haskell-yesod-core haskell-yesod-default haskell-yesod-form                       \
      haskell-yesod-persistent haskell-yesod-static haskell-zip-archive haskell-zlib    \
-     haskell-zlib-bindings hasktags hindent hoogle stylish-haskell
-
-
-
-# Install haskell dependencies with cabal
-# TODO: Has problems with fetching his depedencies
-# TODO: Install packages without sudo rights
-# sudo cabal update
-# sudo cabal install ghc-mod haddock
+     haskell-zlib-bindings hasktags hindent hoogle stylish-haskell --noconfirm
 
 # Install python packages
-# TODO: Install packages without sudo rights
-sudo -H pip install pip jedi json-rpc service_factory autoflake hy pycscope \
+sudo -H pip install jedi json-rpc service_factory autoflake hy pycscope \
      flake8 robot Django fabric python-binary-memcached Pygments sphinx \
      pycscope bashate yapf isort
 sudo -H pip install --upgrade jedi json-rpc service_factory autoflake hy  \
@@ -177,35 +168,23 @@ sudo -H pip install --upgrade jedi json-rpc service_factory autoflake hy  \
      pycscope bashate yapf isort
 sudo -H pip install --pre --upgrade robotframework-seleniumlibrary
 
-# Install nodejs dependencies
-# TODO: Fix npm install of purescript
-# TODO: Install packages without sudo rights
-sudo npm config set unsafe-perm true
-sudo npm install -g tern js-beautify babel-eslint eslint-plugin-react vmd elm \
-     elm-oracle elm-format tslint typescript-formatter webpack pulp eslint bower   \
-     grunt typescript yarn js-yaml
-
 # Install lua dependencies
 sudo luarocks install luacheck
 sudo luarocks install lanes
 
 # Install Ruby dependencies
-# TODO: Install packages without sudo rights
-sudo gem install pry pry-doc ruby_parser rubocop ruby_test rVM rails  \
+sudo gem install rdoc pry pry-doc ruby_parser rubocop ruby_test rVM rails \
      specific_install puppet-lint sqlint
 sudo gem specific_install https://github.com/brigade/scss-lint.git
 sudo gem specific_install                                       \
      https://github.com/Sweetchuck/scss_lint_reporter_checkstyle.git
 
 # Install Ocam dependencies
-# TODO: Install packages without sudo rights
-sudo opam init
-sudo opam config setup -a
-sudo opam install merlin utop ocp-indent
+# sudo opam init
+# sudo opam config setup -a
+# sudo opam install merlin utop ocp-indent
 
 # Install nim dependecies
-# TODO: Does not build
-# TODO: Install packages without sudo rights
 # sudo nimble install nimsuggest
 
 # Set current path
@@ -257,10 +236,10 @@ end" >> "${fishConfigFile}"
 
 # Build gnu global
 globalBaseDir="${installBaseDir}/global"
-globalCurrentVersionExtractDir="${globalBaseDir}/global-6.5.7"
+globalCurrentVersionExtractDir="${globalBaseDir}/global-6.6.2"
 if [[ ! -d "${globalCurrentVersionExtractDir}" ]]; then
     mkdir "${globalBaseDir}"
-    wget -O "${globalBaseDir}/global.tar.gz" http://tamacom.com/global/global-6.5.7.tar.gz
+    wget -O "${globalBaseDir}/global.tar.gz" http://tamacom.com/global/global-6.6.2.tar.gz
     tar -xpvf  "${globalBaseDir}/global.tar.gz" --directory "${globalBaseDir}"
     cd "${globalCurrentVersionExtractDir}" || exit
     ./configure --with-exuberant-ctags=/usr/bin/ctags
@@ -347,29 +326,40 @@ if [[ ! -d "${plantUmlInstallDir}" ]]; then
 fi
 
 # Install Rust environment
-rustBasePath="$(rustc --print sysroot)/lib/rustlib/src"
-rustSourcePath="${rustBasePath}"/rust/src
-sudo mkdir "${rustBasePath}" -p
-sudo chown "${USER}":"${USER}" "${rustBasePath}" -R
-[[ ! -d "${rustSourcePath}" ]] && git clone https://github.com/rust-lang/rust.git "${rustBasePath}"/rust
-cd "${rustSourcePath}" || exit
-git pull
-cd "${DIR}" || exit
-if grep -Fxq "export RUST_SRC_PATH=${rustSourcePath}" ~/.profile
-then
-    echo "nothing to do"
-else
-    echo "export RUST_SRC_PATH=${rustSourcePath}" >> ~/.profile
-fi
-if grep -Fxq "set -x RUST_SRC_PATH ${rustSourcePath}" "${fishConfigFile}"
-then
-    echo "nothing to do"
-else
-    echo "set -x RUST_SRC_PATH ${rustSourcePath}" >> "${fishConfigFile}"
-fi
+# rustBasePath="$(rustc --print sysroot)/lib/rustlib/src"
+# rustSourcePath="${rustBasePath}"/rust/src
+# sudo mkdir "${rustBasePath}" -p
+# sudo chown "${USER}":"${USER}" "${rustBasePath}" -R
+# [[ ! -d "${rustSourcePath}" ]] && git clone https://github.com/rust-lang/rust.git "${rustBasePath}"/rust
+# cd "${rustSourcePath}" || exit
+# git pull
+# cd "${DIR}" || exit
+# if grep -Fxq "export RUST_SRC_PATH=${rustSourcePath}" ~/.profile
+# then
+#     echo "nothing to do"
+# else
+#     echo "export RUST_SRC_PATH=${rustSourcePath}" >> ~/.profile
+# fi
+# if grep -Fxq "set -x RUST_SRC_PATH ${rustSourcePath}" "${fishConfigFile}"
+# then
+#     echo "nothing to do"
+# else
+#     echo "set -x RUST_SRC_PATH ${rustSourcePath}" >> "${fishConfigFile}"
+# fi
 
 # Setup chicken properly
 sudo chicken-install -s apropos chicken-doc
 cd `csi -p '(chicken-home)'`
 sudo curl https://3e8.org/pub/chicken-doc/chicken-doc-repo.tgz | sudo tar zx
 cd "${DIR}" || exit
+
+# Install nodejs dependencies
+npm config set prefix "${goPath}"
+npm install -g tern js-beautify babel-eslint eslint-plugin-react vmd elm \
+    elm-oracle elm-format tslint typescript-formatter webpack pulp eslint bower   \
+    grunt typescript yarn js-yaml
+
+# Install haskell dependencies with cabal
+cabal update
+cabal install ghc-paths --bindir="${goPathBin}" --reinstall
+cabal install haddock haddock-api --bindir="${goPathBin}"
