@@ -157,7 +157,7 @@ sudo pacman -S cabal-install alex ghc ghc-static happy haskell-abstract-deque   
      haskell-xss-sanitize haskell-yaml haskell-yesod haskell-yesod-auth                \
      haskell-yesod-core haskell-yesod-default haskell-yesod-form                       \
      haskell-yesod-persistent haskell-yesod-static haskell-zip-archive haskell-zlib    \
-     haskell-zlib-bindings hasktags hindent hoogle stylish-haskell --noconfirm
+     haskell-zlib-bindings hasktags hindent hoogle stylish-haskell hlint --noconfirm
 
 # Install python packages
 sudo -H pip install jedi json-rpc service_factory autoflake hy pycscope \
@@ -362,4 +362,4 @@ npm install -g tern js-beautify babel-eslint eslint-plugin-react vmd elm \
 # Install haskell dependencies with cabal
 cabal update
 cabal install ghc-paths --bindir="${goPathBin}" --reinstall
-cabal install haddock haddock-api --bindir="${goPathBin}"
+cabal install haddock haddock-api --bindir="${goPathBin}" --reinstall

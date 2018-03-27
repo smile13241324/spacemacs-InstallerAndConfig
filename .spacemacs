@@ -152,7 +152,8 @@ This function should only modify configuration layer settings."
      idris
      (haskell :variables
               haskell-enable-hindent-style "fundamental"
-              haskell-completion-backend 'dante)
+              haskell-completion-backend 'dante
+              haskell-enable-hindent t)
      pandoc
      sphinx
      parinfer
