@@ -18,7 +18,8 @@ sudo pacman -S git tcl tk emacs ripgrep the_silver_searcher vim wget curl cmake 
      ocaml-findlib ocamlbuild racket rust-racer rustfmt rust cargo r gcc-fortran-multilib     \
      ansible ansible-lint puppet vagrant agda           \
      agda-stdlib elixir clojure nim nimble chicken smlnj sbcl pass idris gradle \
-     gradle-doc groovy groovy-docs geckodriver terraform zeal graphviz cowsay --noconfirm
+     gradle-doc groovy groovy-docs geckodriver terraform zeal graphviz cowsay \
+     gsl lld --noconfirm
 sudo pacman -S cabal-install alex ghc ghc-static happy haskell-abstract-deque                \
      haskell-abstract-par haskell-adjunctions haskell-aeson                            \
      haskell-aeson-better-errors haskell-aeson-compat haskell-aeson-pretty             \
@@ -162,10 +163,10 @@ sudo pacman -S cabal-install alex ghc ghc-static happy haskell-abstract-deque   
 # Install python packages
 sudo -H pip install jedi json-rpc service_factory autoflake hy pycscope \
      flake8 robot Django fabric python-binary-memcached Pygments sphinx \
-     pycscope bashate yapf isort
+     pycscope bashate yapf isort conan
 sudo -H pip install --upgrade jedi json-rpc service_factory autoflake hy  \
      pycscope flake8 robot Django fabric python-binary-memcached Pygments sphinx   \
-     pycscope bashate yapf isort
+     pycscope bashate yapf isort conan
 sudo -H pip install --pre --upgrade robotframework-seleniumlibrary
 
 # Install lua dependencies
