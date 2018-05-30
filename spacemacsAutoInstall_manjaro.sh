@@ -162,12 +162,11 @@ sudo pacman -S cabal-install alex ghc ghc-static happy haskell-abstract-deque   
 
 # Install python packages
 sudo -H pip install jedi json-rpc service_factory autoflake hy pycscope \
-     flake8 robot Django fabric python-binary-memcached Pygments sphinx \
+     flake8 Django fabric python-binary-memcached Pygments sphinx \
      pycscope bashate yapf isort conan
-sudo -H pip install --upgrade jedi json-rpc service_factory autoflake hy  \
-     pycscope flake8 robot Django fabric python-binary-memcached Pygments sphinx   \
+sudo -H pip install --upgrade pip jedi json-rpc service_factory autoflake hy  \
+     pycscope flake8 Django fabric python-binary-memcached Pygments sphinx   \
      pycscope bashate yapf isort conan
-sudo -H pip install --pre --upgrade robotframework-seleniumlibrary
 
 # Install lua dependencies
 sudo luarocks install luacheck
@@ -179,14 +178,6 @@ sudo gem install rdoc pry pry-doc ruby_parser rubocop ruby_test rVM rails \
 sudo gem specific_install https://github.com/brigade/scss-lint.git
 sudo gem specific_install                                       \
      https://github.com/Sweetchuck/scss_lint_reporter_checkstyle.git
-
-# Install Ocam dependencies
-# sudo opam init
-# sudo opam config setup -a
-# sudo opam install merlin utop ocp-indent
-
-# Install nim dependecies
-# sudo nimble install nimsuggest
 
 # Set current path
 SOURCE="${BASH_SOURCE[0]}"
@@ -325,28 +316,6 @@ if [[ ! -d "${plantUmlInstallDir}" ]]; then
     mkdir "${plantUmlInstallDir}"
     wget -O "${plantUmlInstallDir}/plantUml.jar" https://10gbps-io.dl.sourceforge.net/project/plantuml/plantuml.jar
 fi
-
-# Install Rust environment
-# rustBasePath="$(rustc --print sysroot)/lib/rustlib/src"
-# rustSourcePath="${rustBasePath}"/rust/src
-# sudo mkdir "${rustBasePath}" -p
-# sudo chown "${USER}":"${USER}" "${rustBasePath}" -R
-# [[ ! -d "${rustSourcePath}" ]] && git clone https://github.com/rust-lang/rust.git "${rustBasePath}"/rust
-# cd "${rustSourcePath}" || exit
-# git pull
-# cd "${DIR}" || exit
-# if grep -Fxq "export RUST_SRC_PATH=${rustSourcePath}" ~/.profile
-# then
-#     echo "nothing to do"
-# else
-#     echo "export RUST_SRC_PATH=${rustSourcePath}" >> ~/.profile
-# fi
-# if grep -Fxq "set -x RUST_SRC_PATH ${rustSourcePath}" "${fishConfigFile}"
-# then
-#     echo "nothing to do"
-# else
-#     echo "set -x RUST_SRC_PATH ${rustSourcePath}" >> "${fishConfigFile}"
-# fi
 
 # Setup chicken properly
 sudo chicken-install -s apropos chicken-doc

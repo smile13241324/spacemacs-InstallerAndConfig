@@ -42,6 +42,7 @@ This function should only modify configuration layer settings."
      (helm :variables
            helm-enable-auto-resize t)
      nim
+     ocaml
      scheme
      (auto-completion :variables
                       auto-completion-return-key-behavior 'complete
@@ -82,6 +83,7 @@ This function should only modify configuration layer settings."
             syntax-checking)
      version-control
      semantic
+     templates
      ;; semweb
      themes-megapack
      (c-c++ :variables
@@ -580,26 +582,15 @@ configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first.")
 
-
 (defun dotspacemacs/user-config ()
   "Configuration for user code:
 This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
-
-  ;; Setup robot mode
-  ;; (load-file "~/Documents/robot-mode/robot-mode.el")
-  ;; (add-to-list 'auto-mode-alist '("\\.robot\\'" . robot-mode))
-
-  (purpose-mode -1)
   (global-company-mode 1)
   (global-flycheck-mode 1)
-  (setq company-idle-delay nil)
-  (setq company-minimum-prefix-length 0)
-  (setq company-quickhelp-delay 2.0)
   (setq company-statistics-size 4000)
-  (add-to-list 'completion-styles 'substring)
   (define-key evil-insert-state-map (kbd "TAB") 'company-complete)
   (define-key evil-insert-state-map (kbd "M-j") 'company-yasnippet)
   (define-key evil-normal-state-map (kbd "M-j") 'company-yasnippet)
@@ -678,12 +669,6 @@ before packages are loaded."
                                               (todo tag-up priority-down todo-state-up category-keep)
                                               (tags priority-down category-keep)
                                               (search category-keep)))))
-
-  ;; org mode sexp to schedule only on work days
-  (defun diary-on-working-days ()
-    (let ((dayname (calendar-day-of-week date))
-          (day (cadr date)))
-      (memq dayname '(1 2 3 4 5))))
 
   ;; Format file on save
   (defun format-for-filetype ()
