@@ -163,10 +163,12 @@ sudo pacman -S cabal-install alex ghc ghc-static happy haskell-abstract-deque   
 # Install python packages
 sudo -H pip install jedi json-rpc service_factory autoflake hy pycscope \
      flake8 Django fabric python-binary-memcached Pygments sphinx \
-     pycscope bashate yapf isort conan
+     pycscope bashate yapf isort conan python-language-server pyls-isort \
+     pyls-mypy importmagic isort epc autopep8 pydocstyle rope
 sudo -H pip install --upgrade pip jedi json-rpc service_factory autoflake hy  \
      pycscope flake8 Django fabric python-binary-memcached Pygments sphinx   \
-     pycscope bashate yapf isort conan
+     pycscope bashate yapf isort conan python-language-server pyls-isort \
+     pyls-mypy importmagic isort epc autopep8 pydocstyle rope
 
 # Install lua dependencies
 sudo luarocks install luacheck

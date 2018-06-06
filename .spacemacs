@@ -50,8 +50,8 @@ This function should only modify configuration layer settings."
                       auto-completion-complete-with-key-sequence nil
                       auto-completion-complete-with-key-sequence-delay 0.0
                       auto-completion-private-snippets-directory nil
-                      auto-completion-enable-snippets-in-popup t
-                      auto-completion-enable-help-tooltip t
+                      auto-completion-enable-snippets-in-popup nil
+                      auto-completion-enable-help-tooltip nil
                       auto-completion-enable-sort-by-usage t)
      better-defaults
      (clojure :variables
@@ -84,7 +84,6 @@ This function should only modify configuration layer settings."
      version-control
      semantic
      templates
-     ;; semweb
      themes-megapack
      (c-c++ :variables
             c-c++-default-mode-for-headers 'c++-mode
@@ -98,6 +97,7 @@ This function should only modify configuration layer settings."
      pass
      common-lisp
      (python :variables
+             python-backend 'lsp
              python-test-runner 'pytest
              python-enable-yapf-format-on-save t
              python-sort-imports-on-save t)
@@ -110,6 +110,8 @@ This function should only modify configuration layer settings."
      (markdown :variables
                markdown-live-preview-engine 'vmd)
      bibtex
+     json
+     debug
      (latex :variables
             latex-enable-auto-fill t
             latex-enable-magic nil
@@ -120,6 +122,7 @@ This function should only modify configuration layer settings."
                  javascript-disable-tern-port-files nil)
      react
      yaml
+     web-beautify
      nginx
      docker
      csv
@@ -158,14 +161,11 @@ This function should only modify configuration layer settings."
               haskell-enable-hindent t)
      pandoc
      sphinx
+     lsp
      parinfer
      asciidoc
-     ;;(treemacs :variables
-     ;;          treemacs-use-follow-mode t
-     ;;          treemacs-use-filewatch-mode t
-     ;;          treemacs-use-collapsed-directories 10)
+     neotree
      ansible
-     ;; cfengine
      puppet
      rebox
      rust
@@ -233,6 +233,25 @@ It should only modify the values of Spacemacs settings."
   ;; This setq-default sexp is an exhaustive list of all the supported
   ;; spacemacs settings.
   (setq-default
+   ;; If non-nil then enable support for the portable dumper. You'll need
+   ;; to compile Emacs 27 from source following the instructions in file
+   ;; EXPERIMENTAL.org at to root of the git repository.
+   ;; (default nil)
+   dotspacemacs-enable-emacs-pdumper nil
+
+   ;; File path pointing to emacs 27.1 executable compiled with support
+   ;; for the portable dumper (this is currently the branch pdumper).
+   ;; (default "emacs-27.0.50")
+   dotspacemacs-emacs-pdumper-executable-file "emacs-27.0.50"
+
+   ;; Name of the Spacemacs dump file. This is the file will be created by the
+   ;; portable dumper in the cache directory under dumps sub-directory.
+   ;; To load it when starting Emacs add the parameter `--dump-file'
+   ;; when invoking Emacs 27.1 executable on the command line, for instance:
+   ;;   ./emacs --dump-file=~/.emacs.d/.cache/dumps/spacemacs.pdmp
+   ;; (default spacemacs.pdmp)
+   dotspacemacs-emacs-dumper-dump-file "spacemacs.pdmp"
+
    ;; If non-nil ELPA repositories are contacted via HTTPS whenever it's
    ;; possible. Set it to nil if you have no way to use HTTPS in your
    ;; environment, otherwise it is strongly recommended to let it set to t.
@@ -525,7 +544,8 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-highlight-delimiters 'all
 
    ;; If non-nil, start an Emacs server if one is not already running.
-   dotspacemacs-enable-server t
+   ;; (default nil)
+   dotspacemacs-enable-server nil
 
    ;; If non-nil, advise quit functions to keep server open when quitting.
    ;; (default nil)
@@ -580,7 +600,15 @@ It should only modify the values of Spacemacs settings."
 This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
-If you are unsure, try setting them in `dotspacemacs/user-config' first.")
+If you are unsure, try setting them in `dotspacemacs/user-config' first."
+  )
+
+(defun dotspacemacs/user-load ()
+  "Library to load while dumping.
+This function is called while dumping Spacemacs configuration. You can
+`require' or `load' the libraries of your choice that will be included
+in the dump."
+  )
 
 (defun dotspacemacs/user-config ()
   "Configuration for user code:
@@ -591,6 +619,9 @@ before packages are loaded."
   (global-company-mode 1)
   (global-flycheck-mode 1)
   (setq company-statistics-size 4000)
+  (setq company-minimum-prefix-length 0)
+  (setq company-idle-delay nil)
+  (setq-default lalala "snipdiptip")
   (define-key evil-insert-state-map (kbd "TAB") 'company-complete)
   (define-key evil-insert-state-map (kbd "M-j") 'company-yasnippet)
   (define-key evil-normal-state-map (kbd "M-j") 'company-yasnippet)
