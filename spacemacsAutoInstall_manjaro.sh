@@ -158,7 +158,7 @@ sudo pacman -S cabal-install alex ghc ghc-static happy haskell-abstract-deque   
      haskell-xss-sanitize haskell-yaml haskell-yesod haskell-yesod-auth                \
      haskell-yesod-core haskell-yesod-default haskell-yesod-form                       \
      haskell-yesod-persistent haskell-yesod-static haskell-zip-archive haskell-zlib    \
-     haskell-zlib-bindings hasktags hindent hoogle stylish-haskell hlint --noconfirm
+     haskell-zlib-bindings hasktags hindent hoogle stylish-haskell hlint rlwrap --noconfirm
 
 # Install python packages
 sudo -H pip install jedi json-rpc service_factory autoflake hy pycscope \
