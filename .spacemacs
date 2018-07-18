@@ -84,6 +84,7 @@ This function should only modify configuration layer settings."
      version-control
      semantic
      templates
+     epub
      themes-megapack
      (c-c++ :variables
             c-c++-default-mode-for-headers 'c++-mode
@@ -572,6 +573,14 @@ It should only modify the values of Spacemacs settings."
    ;; (default nil)
    dotspacemacs-pretty-docs nil))
 
+(defun dotspacemacs/user-env ()
+  "Environment variables setup.
+This function defines the environment variables for your Emacs session. By
+default it calls `spacemacs/load-spacemacs-env' which loads the environment
+variables declared in `~/.spacemacs.env' or `~/.spacemacs.d/.spacemacs.env'.
+See the header of this file for more information."
+  (spacemacs/load-spacemacs-env))
+
 (defun dotspacemacs/user-init ()
   "Initialization for user code:
 This function is called immediately after `dotspacemacs/init', before layer
@@ -582,9 +591,9 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
 
 (defun dotspacemacs/user-load ()
   "Library to load while dumping.
-This function is called while dumping Spacemacs configuration. You can
-`require' or `load' the libraries of your choice that will be included
-in the dump."
+This function is called only while dumping Spacemacs configuration. You can
+`require' or `load' the libraries of your choice that will be included in the
+dump."
   )
 
 (defun dotspacemacs/user-config ()
@@ -596,9 +605,9 @@ before packages are loaded."
   (global-company-mode 1)
   (global-flycheck-mode 1)
   (add-to-list 'flycheck-global-modes 'emacs-lisp-mode)
-  ;; (setq company-statistics-size 4000)
-  ;; (setq company-minimum-prefix-length 0)
-  ;; (setq company-idle-delay nil)
+  (setq company-statistics-size 4000)
+  (setq company-minimum-prefix-length 0)
+  (setq company-idle-delay nil)
   (define-key evil-insert-state-map (kbd "TAB") 'company-complete-common-or-cycle)
   (define-key evil-insert-state-map (kbd "M-j") 'company-yasnippet)
   (define-key evil-normal-state-map (kbd "M-j") 'company-yasnippet)
