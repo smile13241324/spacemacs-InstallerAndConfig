@@ -235,9 +235,8 @@ else
     fishConfigDir="${HOME}/.config/fish"
     fishConfigFile="${fishConfigDir}/config.fish"
     mkdir -p "${fishConfigDir}"
-    # TODO Reactivate when spacemacs-package is updated
-    # TERMINFO="$(locate eterm-color.ti)"
-    # tic -o ${HOME}/.terminfo ${TERMINFO}
+    TERMINFO="$(locate eterm-color.ti)"
+    tic -o ${HOME}/.terminfo ${TERMINFO}
     [[ ! -f "${fishConfigFile}" ]] && echo "# emacs ansi-term support
 if test -n \"\$EMACS\"
 set -x TERM eterm-color
