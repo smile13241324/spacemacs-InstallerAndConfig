@@ -5,7 +5,8 @@ WORKDIR /installRepo
 RUN ./spacemacsAutoInstall_manjaro.sh "sudoRun" \
 && useradd -m spacemacs -U
 USER spacemacs:spacemacs
-RUN ./spacemacsAutoInstall_manjaro.sh
+RUN ./spacemacsAutoInstall_manjaro.sh \
+&& cp ./GTD /home/spacemacs/Documents/GTD -R
 
 # Persist the home dir where spacemacs resides
 VOLUME /home/spacemacs

@@ -1,14 +1,27 @@
 # spacemacs-InstallerAndConfig
 
-This project contains an easy to use installer for the first class development environment spacemacs.
-I have migrated from Netbeans, 2 Months ago and found installing all those little dependencies like sourceCodePro fonts or gnu global quite tedious.
+This project contains an easy to use installer for the first class development environment Spacemacs.
+In contrast to most of the other Spacemacs installer solutions this one is based on Manjaro Linux an Arch based distribution.
+This results in much more up-to-date system packages due to Arch's great Pacman package network.
 
-So I have started to create a handy bash script that will install all the necessary dependencies to the system as well as build locally the newest
-emacs, gnu global and sourceCodePro fonts.
+Many of these packages are required to run Spacemacs properly like the adobe fonts, which must be manually build
+on most debian based systems.
 
-In addition it will also setup the system to support the various layers provided. Currently this includes the "c/c++ layer, python layer, autocomplete layer, git layer as well as the shell layer".
+The above mentioned installer script can setup your programming environment in no time.
+Currently the external dependencies for most of the more popular layers are installed including:
+* go
+* python
+* clojure
+* haskell
+* docker
+* C++ with Clang
+* common-lisp
+* bash-script
+* org, with presetuped GTD environment
+* ansi-term configured to use fish
+* and many more
 
-I have also customized my .spacemacs file so that developing c++ code becomes much more easier i.e. providing a handy autocomplete feature set to "tab" during insert mode
-or automatically cleaning your saved files from whitespace as well as autoformat them.
-
-With this installer and config it should be easy for everyone to start working with spacemacs in a linux box.
+In addition to the installer script you can also find:
+* GTD templates for all mentioned file types from "Getting things done second edition", including a projectFile, inbox, calendar, reference, Next task.... Just change the destination folder in the provided .spacemacs file to point to your favorite storage place and start working with it in Org-mode.
+* CMake default template including the "Iso CPP core project" GSL standard library as well as clang-tidy and clang-format integration for C++.
+* A preconfigured Spacemacs Docker container based on Manjaro Linux. It contains only Spacemacs running as a separate user and the packages installed by the installer script. The Spacemacs user's home is persisted in a Docker volume to allow local package installation and caching to work as expected. To run Spacemacs execute the provided startEmacsDocker<OS>.sh. Per default the start script will try to run Spacemacs in your X server session if this does not work the terminal version will be started. For this to work some additional config on the host may be necessary please see [here](http://develop.spacemacs.org/layers/+distributions/spacemacs-docker/README.html) for details.
