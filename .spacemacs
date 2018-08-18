@@ -49,9 +49,10 @@ This function should only modify configuration layer settings."
                       auto-completion-tab-key-behavior 'cycle
                       auto-completion-complete-with-key-sequence nil
                       auto-completion-complete-with-key-sequence-delay 0.0
+                      auto-completion-idle-delay nil
                       auto-completion-private-snippets-directory nil
                       auto-completion-enable-snippets-in-popup nil
-                      auto-completion-enable-help-tooltip t
+                      auto-completion-enable-help-tooltip 'manual
                       auto-completion-enable-sort-by-usage t)
      better-defaults
      (clojure :variables
@@ -65,8 +66,6 @@ This function should only modify configuration layer settings."
      ibuffer
      emacs-lisp
      pdf
-     cscope
-     gtags
      (org :variables
           org-want-todo-bindings t
           org-enable-github-support t
@@ -89,7 +88,8 @@ This function should only modify configuration layer settings."
      (c-c++ :variables
             c-c++-default-mode-for-headers 'c++-mode
             c-c++-enable-clang-support t
-            c-c++-enable-clang-format-on-save t)
+            c-c++-enable-clang-format-on-save t
+            c-c++-enable-auto-newline t)
      (cmake :variables
             cmake-enable-cmake-ide-support t)
      git
@@ -137,8 +137,10 @@ This function should only modify configuration layer settings."
      speed-reading
      systemd
      imenu-list
-     (java :variables
-           java-backend 'meghanada)
+     ;; (java :variables
+     ;;       java-backend 'lsp
+     ;;       lsp-java--workspace-folders '("~/NetBeansProjects/mavenTest"
+     ;;                                     "~/NetBeansProjects/gradleTest"))
      groovy
      (go :variables
          go-use-gometalinter t
@@ -334,6 +336,7 @@ It should only modify the values of Spacemacs settings."
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(spacemacs-dark
+                         spacemacs-light
                          leuven)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
@@ -352,7 +355,7 @@ It should only modify the values of Spacemacs settings."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 13
+                               :size 12
                                :weight normal
                                :width normal
                                :powerline-scale 1.2)
@@ -607,12 +610,10 @@ before packages are loaded."
   (add-to-list 'flycheck-global-modes 'emacs-lisp-mode)
   (setq company-statistics-size 4000)
   (setq company-minimum-prefix-length 0)
-  (setq company-idle-delay nil)
   (define-key evil-insert-state-map (kbd "TAB") 'company-complete-common-or-cycle)
   (define-key evil-insert-state-map (kbd "M-j") 'company-yasnippet)
   (define-key evil-normal-state-map (kbd "M-j") 'company-yasnippet)
   (spacemacs/toggle-mode-line-minor-modes-off)
-
   (custom-set-faces
    '(company-tooltip-common
      ((t (:inherit company-tooltip :weight bold :underline nil))))
@@ -621,6 +622,7 @@ before packages are loaded."
 
   ;; Set variables for search-engine layer
   (spacemacs/set-leader-keys "s w s" 'engine/search-stack-overflow)
+  (spacemacs/set-leader-keys "s w e" 'engine/search-ecosia)
   (spacemacs/set-leader-keys "s w d" 'engine/search-duck-duck-go)
   (spacemacs/set-leader-keys "s w g" 'engine/search-github)
   (spacemacs/set-leader-keys "s w i" 'engine/search-spacemacs-issues)
@@ -695,6 +697,59 @@ before packages are loaded."
           (save-excursion
             (evil-indent (point-min) (point-max))))))
   (add-hook 'before-save-hook 'format-for-filetype)
+
+  ;;   (defun smile/semantic-analyze-completion-at-point-function ()
+  ;;     (interactive)
+  ;;     "Return possible analysis completions at point.
+  ;; The completions provided are via `semantic-analyze-possible-completions'.
+  ;; This function can be used by `completion-at-point-functions'."
+  ;;     (when (semantic-active-p)
+  ;;       (message "%S" (point))
+  ;;       (let* ((x (semantic-analyze-current-context))
+  ;;              (p (semantic-analyze-possible-completions x)))
+
+  ;;         ;; The return from this is either:
+  ;;         ;; nil - not applicable here.
+  ;;         ;; A list: (START END COLLECTION . PROPS)
+  ;;         (message "%S" (when p
+  ;;                         (list (car (oref x bounds))
+  ;;                               (cdr (oref x bounds))
+  ;;                               p)))
+  ;;         (when p
+  ;;           (list (car (oref x bounds))
+  ;;                 (cdr (oref x bounds))
+  ;;                 p))
+  ;;         )))
+
+  ;;   (defun smile/sayPoint()
+  ;;     (interactive)
+  ;;     (message "%S" (point)))
+
+  ;;   (defun smile/semantic-callInteractively ()
+  ;;     (interactive)
+  ;;     (smile/semantic-analyze-completion-at-point-function)
+  ;;     )
+
+  ;;   (defun smile/semantic-remove-hooks ()
+  ;;     (interactive)
+  ;;     (remove-hook 'completion-at-point-functions
+  ;;                  'semantic-analyze-completion-at-point-function)
+  ;;     (remove-hook 'completion-at-point-functions
+  ;;                  'semantic-analyze-notc-completion-at-point-function)
+  ;;     (remove-hook 'completion-at-point-functions
+  ;;                  'semantic-analyze-nolongprefix-completion-at-point-function)
+  ;;     (add-hook 'completion-at-point-functions
+  ;;               'smile/semantic-analyze-completion-at-point-function)
+  ;;     (remove-hook 'completion-at-point-functions
+  ;;                  'elisp-completion-at-point t)
+  ;;     (remove-hook 'completion-at-point-functions
+  ;;                  'ggtags-completion-at-point t)
+  ;;     (remove-hook 'completion-at-point-functions
+  ;;                  't t)
+  ;;     )
+
+  ;;   (remove-hook 'semantic-mode-hook #'smile/semantic-remove-hooks)
+  ;;   (add-hook 'semantic-mode-hook #'smile/semantic-remove-hooks)
 
   ;; Activate line wrap for all text modes
   (add-hook 'text-mode-hook 'spacemacs/toggle-truncate-lines-off)
