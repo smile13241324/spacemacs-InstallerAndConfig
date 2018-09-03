@@ -751,6 +751,18 @@ before packages are loaded."
   ;;   (remove-hook 'semantic-mode-hook #'smile/semantic-remove-hooks)
   ;;   (add-hook 'semantic-mode-hook #'smile/semantic-remove-hooks)
 
+  (defmacro smile13241324|define-purpose-config-p (mode)
+    (read (format "(defvar %s-configure-purposes-p t
+              \"If non-nil, the layer will configure relevant purposes.
+The layer's purpose configuration is stored as a `purpose extension' with
+keyword `:%s-layer', and thus can be modified by:
+  (purpose-add-extension-purposes :%s-layer ...)
+  (purpose-remove-extension-purposes :%s-layer ...)
+  (purpose-get-extension-configuration :%s-layer)
+  (purpose-set-extension-configuration :%s-layer ...)
+  (purpose-del-extension-configuration :%s-layer)\")" mode mode mode mode mode mode mode)))
+
+
   ;; Activate line wrap for all text modes
   (add-hook 'text-mode-hook 'spacemacs/toggle-truncate-lines-off)
   (add-hook 'text-mode-hook 'spacemacs/toggle-visual-line-navigation-off))
