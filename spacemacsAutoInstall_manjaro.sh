@@ -23,7 +23,7 @@ if [[ $1 ]]; then
            ansible ansible-lint puppet vagrant agda           \
            agda-stdlib elixir clojure nim nimble chicken smlnj sbcl pass idris gradle \
            gradle-doc groovy groovy-docs geckodriver terraform zeal graphviz cowsay \
-           gsl lld mlocate firefox --noconfirm
+           gsl lld mlocate firefox openssh sed xorg-xauth --noconfirm
     pacman -S cabal-install alex ghc ghc-static happy haskell-abstract-deque                \
            haskell-abstract-par haskell-adjunctions haskell-aeson                            \
            haskell-aeson-better-errors haskell-aeson-compat haskell-aeson-pretty             \
