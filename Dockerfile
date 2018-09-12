@@ -6,6 +6,7 @@ RUN ./spacemacsAutoInstall_manjaro.sh "sudoRun" \
 && sed -i 's/#X11Forwarding.*/X11Forwarding yes/' /etc/ssh/sshd_config \
 && sed -i 's/#PubkeyAuthentication.*/PubkeyAuthentication yes/' /etc/ssh/sshd_config \
 && sed -i 's/UsePAM.*/#UsePAM yes/' /etc/ssh/sshd_config \
+&& /usr/bin/ssh-keygen -A \
 && useradd -m spacemacs -U
 USER spacemacs:spacemacs
 RUN ./spacemacsAutoInstall_manjaro.sh \
@@ -14,5 +15,7 @@ RUN ./spacemacsAutoInstall_manjaro.sh \
 
 # Persist the home dir where spacemacs resides
 VOLUME /home/spacemacs
+
+# Expose the default ssh port, only forward when you want to connect via ssh for X forwarding
 EXPOSE 22
 CMD emacs
