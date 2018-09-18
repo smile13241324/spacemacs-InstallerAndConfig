@@ -3,10 +3,16 @@ LABEL Description="This image creates a dockerized version of spacemacs with all
 COPY . /installRepo
 WORKDIR /installRepo
 RUN ./spacemacsAutoInstall_manjaro.sh "sudoRun" \
-&& sed -i 's/#X11Forwarding.*/X11Forwarding yes/' /etc/ssh/sshd_config \
-&& sed -i 's/#PubkeyAuthentication.*/PubkeyAuthentication yes/' /etc/ssh/sshd_config \
-&& sed -i 's/UsePAM.*/#UsePAM yes/' /etc/ssh/sshd_config \
-&& /usr/bin/ssh-keygen -A \
+# RUN pacman -Syyu --noconfirm \
+# && pacman -S base-devel --noconfirm \
+# && pacman -S openssh sed xorg-xauth pam --noconfirm \
+# && sed -i 's/#X11Forwarding.*/X11Forwarding yes/' /etc/ssh/sshd_config \
+# && sed -i 's/#X11UseLocalhost.*/X11UseLocalhost no/' /etc/ssh/sshd_config \
+# && sed -i 's/#PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config \
+# && sed -i 's/#PubkeyAuthentication.*/PubkeyAuthentication yes/' /etc/ssh/sshd_config \
+# && sed -i 's/UsePAM.*/UsePAM no/' /etc/ssh/sshd_config \
+# && sed -i 's/#PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config \
+# && ssh-keygen -A \
 && useradd -m spacemacs -U
 USER spacemacs:spacemacs
 RUN ./spacemacsAutoInstall_manjaro.sh \
@@ -17,5 +23,5 @@ RUN ./spacemacsAutoInstall_manjaro.sh \
 VOLUME /home/spacemacs
 
 # Expose the default ssh port, only forward when you want to connect via ssh for X forwarding
-EXPOSE 22
+# EXPOSE 22
 CMD emacs
