@@ -9,4 +9,4 @@ startxwin -- -listen tcp &
 xhost + ${IP}
 
 # Run this as admin
-docker run -e DISPLAY="$DISPLAY" --mount type=volume,source=spacemacs-home-vol,target=/home/spacemacs smile13241324/spacemacs-InstallerAndConfig emacs
+docker run -e DISPLAY="$DISPLAY" --mount type=volume,source=spacemacs-home-vol,target=/home/spacemacs smile13241324/spacemacs-installerandconfig emacs
