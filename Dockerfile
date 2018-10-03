@@ -7,7 +7,7 @@ RUN ./spacemacsAutoInstall_manjaro.sh "sudoRun" \
 && sed -i 's/#X11UseLocalhost.*/X11UseLocalhost no/' /etc/ssh/sshd_config \
 && sed -i 's/#PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config \
 && sed -i 's/#PubkeyAuthentication.*/PubkeyAuthentication yes/' /etc/ssh/sshd_config \
-&& sed -i 's/UsePAM.*/UsePAM no/' /etc/ssh/sshd_config \
+&& sed -i 's/UsePAM.*/UsePAM yes/' /etc/ssh/sshd_config \
 && sed -i 's/#PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config \
 && ssh-keygen -A \
 && useradd -m spacemacs -U
