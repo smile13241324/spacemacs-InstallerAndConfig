@@ -18,6 +18,8 @@ RUN ./spacemacsAutoInstall_manjaro.sh \
 
 # Persist the home dir where spacemacs resides
 VOLUME /home/spacemacs
+# Persist the host key directory for easy replacement of standard container keys
+VOLUME /etc/ssh
 
 # Expose the default ssh port, only forward when you want to connect via ssh for X forwarding
 EXPOSE 22
