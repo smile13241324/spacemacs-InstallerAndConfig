@@ -39,9 +39,9 @@ This function should only modify configuration layer settings."
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     (helm :variables
-           helm-enable-auto-resize t)
+     helm
      nim
+     spacemacs-purpose
      ocaml
      scheme
      (auto-completion :variables
@@ -98,7 +98,7 @@ This function should only modify configuration layer settings."
      pass
      common-lisp
      (python :variables
-             python-backend 'lsp
+             python-backend 'anaconda
              python-test-runner 'pytest
              python-enable-yapf-format-on-save t
              python-sort-imports-on-save t)
@@ -340,13 +340,13 @@ It should only modify the values of Spacemacs settings."
                          leuven)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
-   ;; `all-the-icons', `custom', `vim-powerline' and `vanilla'. The first three
-   ;; are spaceline themes. `vanilla' is default Emacs mode-line. `custom' is a
-   ;; user defined themes, refer to the DOCUMENTATION.org for more info on how
-   ;; to create your own spaceline theme. Value can be a symbol or list with\
-   ;; additional properties.
+   ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
+   ;; first three are spaceline themes. `doom' is the doom-emacs mode-line.
+   ;; `vanilla' is default Emacs mode-line. `custom' is a user defined themes,
+   ;; refer to the DOCUMENTATION.org for more info on how to create your own
+   ;; spaceline theme. Value can be a symbol or list with additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
-   dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.5)
+   dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.2)
 
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
@@ -357,8 +357,8 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-default-font '("Source Code Pro"
                                :size 12
                                :weight normal
-                               :width normal
-                               :powerline-scale 1.2)
+                               :width normal)
+
    ;; The leader key (default "SPC")
    dotspacemacs-leader-key "SPC"
 
@@ -418,9 +418,9 @@ It should only modify the values of Spacemacs settings."
    ;; Maximum number of rollback slots to keep in the cache. (default 5)
    dotspacemacs-max-rollback-slots 500
 
-   ;; If non-nil, the paste transient-state is enabled. While enabled, pressing
-   ;; `p' several times cycles through the elements in the `kill-ring'.
-   ;; (default nil)
+   ;; If non-nil, the paste transient-state is enabled. While enabled, after you
+   ;; paste something, pressing `C-j' and `C-k' several times cycles through the
+   ;; elements in the `kill-ring'. (default nil)
    dotspacemacs-enable-paste-transient-state t
 
    ;; Which-key delay in seconds. The which-key buffer is the popup listing
@@ -510,7 +510,7 @@ It should only modify the values of Spacemacs settings."
    ;; If non-nil pressing the closing parenthesis `)' key in insert mode passes
    ;; over any automatically added closing parenthesis, bracket, quote, etc…
    ;; This can be temporary disabled by pressing `C-q' before `)'. (default nil)
-   dotspacemacs-smart-closing-parenthesis t
+   dotspacemacs-smart-closing-parenthesis nil
 
    ;; Select a scope to highlight delimiters. Possible values are `any',
    ;; `current', `all' or `nil'. Default is `all' (highlight any scope and
@@ -589,15 +589,15 @@ See the header of this file for more information."
 This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
-If you are unsure, try setting them in `dotspacemacs/user-config' first."
-  )
+If you are unsure, try setting them in `dotspacemacs/user-config' first.")
+
 
 (defun dotspacemacs/user-load ()
   "Library to load while dumping.
 This function is called only while dumping Spacemacs configuration. You can
 `require' or `load' the libraries of your choice that will be included in the
-dump."
-  )
+dump.")
+
 
 (defun dotspacemacs/user-config ()
   "Configuration for user code:
@@ -697,71 +697,6 @@ before packages are loaded."
           (save-excursion
             (evil-indent (point-min) (point-max))))))
   (add-hook 'before-save-hook 'format-for-filetype)
-
-  ;;   (defun smile/semantic-analyze-completion-at-point-function ()
-  ;;     (interactive)
-  ;;     "Return possible analysis completions at point.
-  ;; The completions provided are via `semantic-analyze-possible-completions'.
-  ;; This function can be used by `completion-at-point-functions'."
-  ;;     (when (semantic-active-p)
-  ;;       (message "%S" (point))
-  ;;       (let* ((x (semantic-analyze-current-context))
-  ;;              (p (semantic-analyze-possible-completions x)))
-
-  ;;         ;; The return from this is either:
-  ;;         ;; nil - not applicable here.
-  ;;         ;; A list: (START END COLLECTION . PROPS)
-  ;;         (message "%S" (when p
-  ;;                         (list (car (oref x bounds))
-  ;;                               (cdr (oref x bounds))
-  ;;                               p)))
-  ;;         (when p
-  ;;           (list (car (oref x bounds))
-  ;;                 (cdr (oref x bounds))
-  ;;                 p))
-  ;;         )))
-
-  ;;   (defun smile/sayPoint()
-  ;;     (interactive)
-  ;;     (message "%S" (point)))
-
-  ;;   (defun smile/semantic-callInteractively ()
-  ;;     (interactive)
-  ;;     (smile/semantic-analyze-completion-at-point-function)
-  ;;     )
-
-  ;;   (defun smile/semantic-remove-hooks ()
-  ;;     (interactive)
-  ;;     (remove-hook 'completion-at-point-functions
-  ;;                  'semantic-analyze-completion-at-point-function)
-  ;;     (remove-hook 'completion-at-point-functions
-  ;;                  'semantic-analyze-notc-completion-at-point-function)
-  ;;     (remove-hook 'completion-at-point-functions
-  ;;                  'semantic-analyze-nolongprefix-completion-at-point-function)
-  ;;     (add-hook 'completion-at-point-functions
-  ;;               'smile/semantic-analyze-completion-at-point-function)
-  ;;     (remove-hook 'completion-at-point-functions
-  ;;                  'elisp-completion-at-point t)
-  ;;     (remove-hook 'completion-at-point-functions
-  ;;                  'ggtags-completion-at-point t)
-  ;;     (remove-hook 'completion-at-point-functions
-  ;;                  't t)
-  ;;     )
-
-  ;;   (remove-hook 'semantic-mode-hook #'smile/semantic-remove-hooks)
-  ;;   (add-hook 'semantic-mode-hook #'smile/semantic-remove-hooks)
-
-  (defmacro smile13241324|define-purpose-config-p (mode)
-    (read (format "(defvar %s-configure-purposes-p t
-              \"If non-nil, the layer will configure relevant purposes.
-The layer's purpose configuration is stored as a `purpose extension' with
-keyword `:%s-layer', and thus can be modified by:
-  (purpose-add-extension-purposes :%s-layer ...)
-  (purpose-remove-extension-purposes :%s-layer ...)
-  (purpose-get-extension-configuration :%s-layer)
-  (purpose-set-extension-configuration :%s-layer ...)
-  (purpose-del-extension-configuration :%s-layer)\")" mode mode mode mode mode mode mode)))
-
 
   ;; Activate line wrap for all text modes
   (add-hook 'text-mode-hook 'spacemacs/toggle-truncate-lines-off)
