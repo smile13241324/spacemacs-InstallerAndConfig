@@ -9,9 +9,12 @@ sleep 360s # Wait till the server is ready
 
 # Part to run as admin in powershell, will start the docker container's sshd service and expose it on port 22 using default server keys in /etc/ssh
 # if required these keys can be overwritten in a root session in the container by means of the docker deamon or by adding a customised version of host certs by means of a lokal bind
-# It is also possible to give the container access to your docker deamon allowing to control docker from within a container. To do so use the alternative command 
+
+# It is also possible to give the container access to your docker deamon
+# allowing to control docker on the host from within this container.
+# To do so use the alternative command:
 # docker run -u root -d --rm -p "22:22" --hostname spacemacsBox --name spacemacsBox --mount type=volume,source=spacemacs-home-vol,target=/home/spacemacs --mount type=volume,source=spacemacs-hostCert-vol,target=/etc/ssh -v /var/run/docker.sock:/var/run/docker.sock smile13241324/spacemacs-installerandconfig /usr/bin/sshd -D
-# To start the container and connect with docker exec -u root spacemacsBox bash
+# To start the container and connect with "docker exec -u root spacemacsBox bash"
 docker run -u root -d --rm -p "22:22" --hostname spacemacsBox --name spacemacsBox --mount type=volume,source=spacemacs-home-vol,target=/home/spacemacs --mount type=volume,source=spacemacs-hostCert-vol,target=/etc/ssh smile13241324/spacemacs-installerandconfig /usr/bin/sshd -D
 
 # Second part to run as local user in cygwin
