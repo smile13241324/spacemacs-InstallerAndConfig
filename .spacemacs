@@ -1,4 +1,4 @@
-;; -*- mode: emacs-lisp -*-
+;; -*- mode: emacs-lisp; lexical-binding: t -*-
 ;; This file is loaded by Spacemacs at startup.
 ;; It must be stored in your home directory.
 
@@ -48,11 +48,11 @@ This function should only modify configuration layer settings."
                       auto-completion-return-key-behavior 'complete
                       auto-completion-tab-key-behavior 'cycle
                       auto-completion-complete-with-key-sequence nil
-                      auto-completion-complete-with-key-sequence-delay 0.0
-                      auto-completion-idle-delay nil
+                      auto-completion-complete-with-key-sequence-delay 0.1
+                      auto-completion-idle-delay 0.2
                       auto-completion-private-snippets-directory nil
                       auto-completion-enable-snippets-in-popup nil
-                      auto-completion-enable-help-tooltip 'manual
+                      auto-completion-enable-help-tooltip t
                       auto-completion-enable-sort-by-usage t)
      better-defaults
      (clojure :variables
@@ -95,6 +95,9 @@ This function should only modify configuration layer settings."
      git
      github
      sml
+     (copy-as-format :variables
+                     copy-as-format-default
+                     copy-as-format-asciidoc-include-file-name)
      pass
      common-lisp
      (python :variables
@@ -123,7 +126,7 @@ This function should only modify configuration layer settings."
                  javascript-disable-tern-port-files nil)
      react
      yaml
-     web-beautify
+     prettier
      nginx
      docker
      csv
@@ -146,6 +149,7 @@ This function should only modify configuration layer settings."
          go-use-gometalinter t
          gofmt-command "goimports"
          go-tab-width 4
+         go-format-before-save t
          go-use-gocheck-for-testing t
          go-use-test-args "-race -timeout 10s"
          godoc-at-point-function 'godoc-gogetdoc)
@@ -227,6 +231,7 @@ This function should only modify configuration layer settings."
    ;; installs *all* packages supported by Spacemacs and never uninstalls them.
    ;; (default is `used-only')
    dotspacemacs-install-packages 'used-only))
+
 
 (defun dotspacemacs/init ()
   "Initialization:
@@ -336,7 +341,6 @@ It should only modify the values of Spacemacs settings."
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(spacemacs-dark
-                         spacemacs-light
                          leuven)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
@@ -425,7 +429,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; Which-key delay in seconds. The which-key buffer is the popup listing
    ;; the commands bound to the current keystroke sequence. (default 0.4)
-   dotspacemacs-which-key-delay 0.0
+   dotspacemacs-which-key-delay 0.4
 
    ;; Which-key frame position. Possible values are `right', `bottom' and
    ;; `right-then-bottom'. right-then-bottom tries to display the frame to the
@@ -589,8 +593,8 @@ See the header of this file for more information."
 This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
-If you are unsure, try setting them in `dotspacemacs/user-config' first.")
-
+If you are unsure, try setting them in `dotspacemacs/user-config' first."
+  )
 
 (defun dotspacemacs/user-load ()
   "Library to load while dumping.
@@ -614,6 +618,8 @@ before packages are loaded."
   (define-key evil-insert-state-map (kbd "M-j") 'company-yasnippet)
   (define-key evil-normal-state-map (kbd "M-j") 'company-yasnippet)
   (spacemacs/toggle-mode-line-minor-modes-off)
+
+  ;; Set special fonts for company completion window
   (custom-set-faces
    '(company-tooltip-common
      ((t (:inherit company-tooltip :weight bold :underline nil))))
@@ -692,7 +698,7 @@ before packages are loaded."
   ;; Format file on save
   (defun format-for-filetype ()
     "Run generic format function if not a mode specific one is available"
-    (let ((filetypes '("c" "cpp" "h" "hpp" "py" "pyc" "robot" "tf")))
+    (let ((filetypes '("c" "cpp" "h" "hpp" "py" "pyc" "robot" "tf" "go" "yml" "yaml")))
       (if (not (member (file-name-extension (buffer-file-name)) filetypes))
           (save-excursion
             (evil-indent (point-min) (point-max))))))

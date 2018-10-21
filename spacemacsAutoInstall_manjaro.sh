@@ -329,6 +329,7 @@ end" >> "${fishConfigFile}"
     go get -u -v golang.org/x/tools/cmd/goimports
     go get -u -v github.com/zmb3/gogetdoc
     go get -u -v github.com/alecthomas/gometalinter
+    go get -u -v github.com/golangci/golangci-lint/cmd/golangci-lint
     gometalinter --install --update
     go get -u -v github.com/godoctor/godoctor
     go install github.com/godoctor/godoctor
@@ -342,9 +343,9 @@ end" >> "${fishConfigFile}"
 
     # Install nodejs dependencies
     npm config set prefix "${goPath}"
-    npm install -g tern js-beautify babel-eslint eslint-plugin-react vmd elm \
+    npm install -g tern babel-eslint eslint-plugin-react vmd elm \
         elm-oracle elm-format tslint typescript-formatter webpack pulp eslint bower   \
-        grunt typescript yarn js-yaml
+        grunt typescript yarn js-yaml prettier
 
     # Install haskell dependencies with cabal
     # TODO Reactivate spacemacs-home is build and haskel is stable enough
