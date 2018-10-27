@@ -45,9 +45,9 @@ This function should only modify configuration layer settings."
      ocaml
      scheme
      (auto-completion :variables
-                      auto-completion-return-key-behavior 'complete
+                      auto-completion-return-key-behavior nil
                       auto-completion-tab-key-behavior 'cycle
-                      auto-completion-complete-with-key-sequence nil
+                      auto-completion-complete-with-key-sequence "jk"
                       auto-completion-complete-with-key-sequence-delay 0.1
                       auto-completion-idle-delay 0.2
                       auto-completion-private-snippets-directory nil
@@ -96,12 +96,13 @@ This function should only modify configuration layer settings."
      github
      sml
      (copy-as-format :variables
-                     copy-as-format-default
-                     copy-as-format-asciidoc-include-file-name)
+                     copy-as-format-default "markdown"
+                     copy-as-format-asciidoc-include-file-name t)
      pass
      common-lisp
      (python :variables
              python-backend 'anaconda
+             ;; python-backend 'lsp
              python-test-runner 'pytest
              python-enable-yapf-format-on-save t
              python-sort-imports-on-save t)
@@ -146,13 +147,16 @@ This function should only modify configuration layer settings."
      ;;                                     "~/NetBeansProjects/gradleTest"))
      groovy
      (go :variables
-         go-use-gometalinter t
+         ;; go-backend 'lsp
+         ;; go-use-gometalinter t
+         go-use-golangci-lint t
          gofmt-command "goimports"
          go-tab-width 4
          go-format-before-save t
          go-use-gocheck-for-testing t
          go-use-test-args "-race -timeout 10s"
-         godoc-at-point-function 'godoc-gogetdoc)
+         godoc-at-point-function 'godoc-gogetdoc
+         )
      ;; major-modes
      coq
      django
