@@ -193,6 +193,11 @@ if [[ $1 ]]; then
     curl https://3e8.org/pub/chicken-doc/chicken-doc-repo.tgz | tar zx
     cd "${DIR}" || exit
 
+    # Fetch kubectl for kubernetes development
+    curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+    chmod +x ./kubectl
+    mv ./kubectl /usr/local/bin/kubectl
+
     # Take care that locate is up-to-date for later searching
     updatedb
 else
