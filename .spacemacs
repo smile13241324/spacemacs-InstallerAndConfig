@@ -46,8 +46,8 @@ This function should only modify configuration layer settings."
      scheme
      (auto-completion :variables
                       auto-completion-return-key-behavior nil
-                      auto-completion-tab-key-behavior 'cycle
-                      auto-completion-complete-with-key-sequence "jk"
+                      auto-completion-tab-key-behavior 'complete
+                      auto-completion-complete-with-key-sequence nil
                       auto-completion-complete-with-key-sequence-delay 0.1
                       auto-completion-idle-delay 0.2
                       auto-completion-private-snippets-directory nil
@@ -101,8 +101,7 @@ This function should only modify configuration layer settings."
      pass
      common-lisp
      (python :variables
-             python-backend 'anaconda
-             ;; python-backend 'lsp
+             python-backend 'lsp
              python-test-runner 'pytest
              python-enable-yapf-format-on-save t
              python-sort-imports-on-save t)
@@ -141,14 +140,12 @@ This function should only modify configuration layer settings."
      speed-reading
      systemd
      imenu-list
-     ;; (java :variables
-     ;;       java-backend 'lsp
-     ;;       lsp-java--workspace-folders '("~/NetBeansProjects/mavenTest"
-     ;;                                     "~/NetBeansProjects/gradleTest"))
+     dap
+     (java :variables
+           java-backend 'lsp)
      groovy
      (go :variables
          ;; go-backend 'lsp
-         ;; go-use-gometalinter t
          go-use-golangci-lint t
          gofmt-command "goimports"
          go-tab-width 4
@@ -235,7 +232,6 @@ This function should only modify configuration layer settings."
    ;; installs *all* packages supported by Spacemacs and never uninstalls them.
    ;; (default is `used-only')
    dotspacemacs-install-packages 'used-only))
-
 
 (defun dotspacemacs/init ()
   "Initialization:
@@ -344,8 +340,7 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(spacemacs-dark
-                         leuven)
+   dotspacemacs-themes '(spacemacs-dark, spacemacs-light, leuven)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
@@ -604,8 +599,8 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
   "Library to load while dumping.
 This function is called only while dumping Spacemacs configuration. You can
 `require' or `load' the libraries of your choice that will be included in the
-dump.")
-
+dump."
+  )
 
 (defun dotspacemacs/user-config ()
   "Configuration for user code:
@@ -620,6 +615,7 @@ before packages are loaded."
   (setq company-minimum-prefix-length 0)
   (define-key evil-insert-state-map (kbd "TAB") 'company-complete-common-or-cycle)
   (define-key evil-insert-state-map (kbd "M-j") 'company-yasnippet)
+  (define-key evil-insert-state-map (kbd "C-k") nil)
   (define-key evil-normal-state-map (kbd "M-j") 'company-yasnippet)
   (spacemacs/toggle-mode-line-minor-modes-off)
 

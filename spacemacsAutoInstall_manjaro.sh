@@ -167,11 +167,11 @@ if [[ $1 ]]; then
     # Install python packages, removed conan from list as this has a conflict
     # with dists pyyaml package
     pip install --upgrade pip
-    pip install jedi json-rpc service_factory autoflake hy \
+    pip install jedi json-rpc service_factory ipython autoflake hy \
         flake8 Django fabric python-binary-memcached Pygments sphinx \
         pycscope bashate yapf isort python-language-server pyls-isort \
         pyls-mypy importmagic isort epc autopep8 pydocstyle rope
-    pip install --upgrade jedi json-rpc service_factory autoflake hy  \
+    pip install --upgrade jedi json-rpc service_factory ipython autoflake hy  \
         pycscope flake8 Django fabric python-binary-memcached Pygments sphinx   \
         pycscope bashate yapf isort python-language-server pyls-isort \
         pyls-mypy importmagic isort epc autopep8 pydocstyle rope
@@ -358,7 +358,7 @@ end" >> "${fishConfigFile}"
 
     # Install haskell dependencies with cabal
     # TODO Reactivate spacemacs-home is build and haskel is stable enough
-    # cabal update
-    # cabal install ghc-paths --bindir="${goPathBin}"
-    # cabal install haddock haddock-api --bindir="${goPathBin}"
+    #cabal update
+    #cabal install ghc-paths --bindir="${goPathBin}"
+    #cabal install haddock haddock-api --bindir="${goPathBin}"
 fi
