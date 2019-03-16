@@ -57,7 +57,9 @@ This function should only modify configuration layer settings."
                       auto-completion-enable-sort-by-usage t)
      better-defaults
      (clojure :variables
-              clojure-enable-fancify-symbols t)
+              clojure-enable-fancify-symbols t
+              clojure-enable-sayid t
+              clojure-enable-clj-refactor t)
      gpu
      graphviz
      (plantuml :variables

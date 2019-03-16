@@ -24,7 +24,7 @@ if [[ $1 ]]; then
            agda-stdlib elixir clojure nim nimble chicken smlnj sbcl pass idris gradle \
            gradle-doc groovy groovy-docs geckodriver terraform zeal graphviz cowsay \
            gsl lld mlocate firefox openssh sed xorg-xauth pam certbot --noconfirm
-    pacman -S cabal-install cabal-helper alex stack ghc ghc-static ghc-libs happy haskell-abstract-deque                \
+    pacman -S cabal-install alex stack ghc ghc-static ghc-libs happy haskell-abstract-deque                \
            haskell-abstract-par haskell-adjunctions haskell-aeson                            \
            haskell-aeson-better-errors haskell-aeson-compat haskell-aeson-pretty             \
            haskell-annotated-wl-pprint haskell-ansi-terminal haskell-ansi-wl-pprint          \
@@ -365,6 +365,12 @@ end" >> "${fishConfigFile}"
     "${goPath}/boot" -u
 
     # Install haskell dependencies with cabal
+    # https://wiki.archlinux.org/index.php/Haskell
+    #     echo "library-vanilla: False
+    # shared: True
+    # executable-dynamic: True
+    # ghc-options:
+    #   -dynamic" >> ~/.cabal/config
     # cabal new-update
     # hoogle generate
     # cabal new-install apply-refact --symlink-bindir="${goPathBin}"
