@@ -11,8 +11,8 @@ if [[ $1 ]]; then
            adobe-source-code-pro-fonts clang clang-tools-extra boost boost-libs llvm       \
            llvm-libs python-pytest python-pip python-mock python-setuptools cscope npm     \
            nodejs nodejs-less npm-check-updates luarocks docker docker-compose             \
-           docker-machine ctags fish fisherman gradle maven visualvm openjdk8-doc          \
-           jdk8-openjdk gnuplot go go-tools texlive-bin texlive-core texlive-fontsextra    \
+           docker-machine ctags fish fisherman gradle maven visualvm openjdk-doc          \
+           jdk-openjdk gnuplot go go-tools texlive-bin texlive-core texlive-fontsextra    \
            texlive-formatsextra texlive-games texlive-genericextra texlive-htmlxml         \
            texlive-humanities texlive-langchinese texlive-langcyrillic texlive-langextra   \
            texlive-langgreek texlive-langjapanese texlive-langkorean texlive-latexextra    \
@@ -20,11 +20,11 @@ if [[ $1 ]]; then
            texlive-publishers texlive-science texlive-bibtexextra lua coq memcached        \
            pandoc ruby opam llvm-ocaml ocaml-compiler-libs ocaml-ctypes        \
            ocaml-findlib ocamlbuild racket rust-racer rustfmt rust cargo r gcc-fortran-multilib     \
-           ansible ansible-lint puppet vagrant agda           \
+           ansible ansible-lint puppet vagrant agda \
            agda-stdlib elixir clojure nim nimble chicken smlnj sbcl pass idris gradle \
            gradle-doc groovy groovy-docs geckodriver terraform zeal graphviz cowsay \
-           gsl lld mlocate firefox openssh sed xorg-xauth pam --noconfirm
-    pacman -S cabal-install alex ghc ghc-static happy haskell-abstract-deque                \
+           gsl lld mlocate firefox openssh sed xorg-xauth pam certbot --noconfirm
+    pacman -S cabal-install cabal-helper alex stack ghc ghc-static ghc-libs happy haskell-abstract-deque                \
            haskell-abstract-par haskell-adjunctions haskell-aeson                            \
            haskell-aeson-better-errors haskell-aeson-compat haskell-aeson-pretty             \
            haskell-annotated-wl-pprint haskell-ansi-terminal haskell-ansi-wl-pprint          \
@@ -356,9 +356,17 @@ end" >> "${fishConfigFile}"
         elm-oracle elm-format tslint typescript-formatter webpack pulp eslint bower   \
         grunt typescript yarn js-yaml prettier
 
+    # Install leiningen and boot for clojure builds
+    wget -O "${goPath}/lein" https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
+    chmod +x "${goPath}/lein"
+    "${goPath}/lein" version
+    wget -O "${goPath}/boot" https://github.com/boot-clj/boot-bin/releases/download/latest/boot.sh
+    chmod +x "${goPath}/boot"
+    "${goPath}/boot" -u
+
     # Install haskell dependencies with cabal
-    # TODO Reactivate spacemacs-home is build and haskel is stable enough
-    #cabal update
-    #cabal install ghc-paths --bindir="${goPathBin}"
-    #cabal install haddock haddock-api --bindir="${goPathBin}"
+    # cabal new-update
+    # hoogle generate
+    # cabal new-install apply-refact --symlink-bindir="${goPathBin}"
+    # cabal new-install ghc-mod --symlink-bindir="${goPathBin}"
 fi
