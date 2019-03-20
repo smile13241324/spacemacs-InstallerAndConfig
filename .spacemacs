@@ -46,11 +46,11 @@ This function should only modify configuration layer settings."
      ocaml
      scheme
      (auto-completion :variables
-                      auto-completion-return-key-behavior nil
-                      auto-completion-tab-key-behavior 'complete
+                      auto-completion-return-key-behavior 'complete
+                      auto-completion-tab-key-behavior 'cycle
                       auto-completion-complete-with-key-sequence nil
                       auto-completion-complete-with-key-sequence-delay 0.1
-                      auto-completion-idle-delay 0.2
+                      auto-completion-idle-delay nil
                       auto-completion-private-snippets-directory nil
                       auto-completion-enable-snippets-in-popup nil
                       auto-completion-enable-help-tooltip t
@@ -169,8 +169,9 @@ This function should only modify configuration layer settings."
      idris
      (haskell :variables
               haskell-enable-hindent-style "fundamental"
-              haskell-completion-backend 'dante
-              haskell-enable-hindent t)
+              haskell-completion-backend 'ghci
+              haskell-enable-hindent t
+              haskell-process-type 'stack-ghci)
      pandoc
      sphinx
      lsp
@@ -220,7 +221,7 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '()
+   dotspacemacs-additional-packages '(lsp-haskell :location (recipe :fetcher github :repo "emacs-lsp/lsp-haskell"))
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -603,8 +604,8 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
   "Library to load while dumping.
 This function is called only while dumping Spacemacs configuration. You can
 `require' or `load' the libraries of your choice that will be included in the
-dump."
-  )
+dump.")
+
 
 (defun dotspacemacs/user-config ()
   "Configuration for user code:
@@ -710,4 +711,9 @@ before packages are loaded."
 
   ;; Activate line wrap for all text modes
   (add-hook 'text-mode-hook 'spacemacs/toggle-truncate-lines-off)
-  (add-hook 'text-mode-hook 'spacemacs/toggle-visual-line-navigation-off))
+  (add-hook 'text-mode-hook 'spacemacs/toggle-visual-line-navigation-off)
+
+  ;; Activate lsp haskell manually until lsp layer is ready
+  (setq lsp-haskell-process-path-hie "hie-wrapper")
+  (require 'lsp-haskell)
+  (add-hook 'haskell-mode-hook #'lsp))
