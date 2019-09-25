@@ -20,33 +20,14 @@ if [[ $1 ]]; then
            texlive-publishers texlive-science texlive-bibtexextra lua coq memcached        \
            ruby opam llvm-ocaml ocaml-compiler-libs ocaml-ctypes        \
            ocaml-findlib ocamlbuild racket rust-racer rustfmt rust cargo r gcc-fortran-multilib     \
-           ansible ansible-lint puppet vagrant \
+           ansible ansible-lint puppet vagrant swi-prolog \
            elixir clojure nim nimble chicken smlnj sbcl pass gradle \
            gradle-doc groovy groovy-docs geckodriver terraform zeal graphviz cowsay \
            gsl lld mlocate firefox openssh sed xorg-xauth pam certbot rlwrap --noconfirm
 
-    # Install python packages, removed conan from list as this has a conflict
-    # with dists pyyaml package
-    pip install --upgrade pip
-    pip install jedi json-rpc service_factory ipython autoflake hy \
-        flake8 Django fabric python-binary-memcached Pygments sphinx \
-        pycscope bashate yapf isort python-language-server pyls-isort \
-        pyls-mypy importmagic epc autopep8 pydocstyle rope
-    pip install --upgrade jedi json-rpc service_factory ipython autoflake hy  \
-        pycscope flake8 Django fabric python-binary-memcached Pygments sphinx   \
-        pycscope bashate yapf isort python-language-server pyls-isort \
-        pyls-mypy importmagic epc autopep8 pydocstyle rope
-
     # Install lua dependencies
     luarocks install luacheck
     luarocks install lanes
-
-    # Install Ruby dependencies
-    gem install rdoc pry pry-doc ruby_parser rubocop ruby_test rVM rails \
-        specific_install puppet-lint sqlint
-    # deactivated specific install as it is not working
-    # gem specific_install https://github.com/brigade/scss-lint.git
-    # gem specific_install https://github.com/Sweetchuck/scss_lint_reporter_checkstyle.git
 
     # Setup chicken properly
     chicken-install -s apropos chicken-doc
@@ -64,6 +45,20 @@ if [[ $1 ]]; then
 else
     # Set user specific actions which do not require sudo and should be run in
     # the local userspace
+
+    # Install Ruby dependencies
+    gem install -n ~/.local/bin rdoc pry pry-doc ruby_parser rubocop ruby_test rVM rails \
+        specific_install puppet-lint sqlint solargraph rubocop-performance
+    gem specific_install https://github.com/brigade/scss-lint.git
+    gem specific_install https://github.com/Sweetchuck/scss_lint_reporter_checkstyle.git
+
+    # Install python packages, removed conan from list as this has a conflict
+    # with dists pyyaml package
+    pip install --upgrade pip
+    pip install --force-reinstall pyang jedi json-rpc service_factory ipython autoflake hy \
+        flake8 fabric python-binary-memcached Pygments sphinx \
+        pycscope bashate yapf isort python-language-server[all] pyls-isort \
+        pyls-mypy pyls-black mypy importmagic epc autopep8 pydocstyle rope ptvsd pylint black
 
     # Set current path
     SOURCE="${BASH_SOURCE[0]}"
@@ -115,10 +110,10 @@ end" >> "${fishConfigFile}"
 
     # Build gnu global
     globalBaseDir="${installBaseDir}/global"
-    globalCurrentVersionExtractDir="${globalBaseDir}/global-6.6.2"
+    globalCurrentVersionExtractDir="${globalBaseDir}/global-6.6.3"
     if [[ ! -d "${globalCurrentVersionExtractDir}" ]]; then
         mkdir "${globalBaseDir}"
-        wget -O "${globalBaseDir}/global.tar.gz" http://tamacom.com/global/global-6.6.2.tar.gz
+        wget -O "${globalBaseDir}/global.tar.gz" http://tamacom.com/global/global-6.6.3.tar.gz
         tar -xpvf  "${globalBaseDir}/global.tar.gz" --directory "${globalBaseDir}"
         cd "${globalCurrentVersionExtractDir}" || exit
         ./configure --with-exuberant-ctags=/usr/bin/ctags
@@ -187,22 +182,21 @@ end" >> "${fishConfigFile}"
     fmt.Printf(\"hello, world\\n\")
     }" >> "${goPathSrcExampleFile}"
 
-    go get -u -v github.com/nsf/gocode
-    go get -u -v github.com/rogpeppe/godef
-    go get -u -v golang.org/x/tools/cmd/guru
-    go get -u -v github.com/fatih/gomodifytags
-    go get -u -v golang.org/x/tools/cmd/gorename
+    GO111MODULE=on go get -v golang.org/x/tools/gopls@latest
+    go get -u -v golang.org/x/tools/cmd/godoc
     go get -u -v golang.org/x/tools/cmd/goimports
-    go get -u -v github.com/zmb3/gogetdoc
-    go get -u -v github.com/cweill/gotests
-    go get -u -v github.com/haya14busa/gopkgs/cmd/gopkgs
+    go get -u -v golang.org/x/tools/cmd/gorename
+    go get -u -v golang.org/x/tools/cmd/guru
+    go get -u -v github.com/cweill/gotests/...
     go get -u -v github.com/davidrjenni/reftools/cmd/fillstruct
-    go get -u -v github.com/josharian/impl
-    go get -u -v github.com/alecthomas/gometalinter
-    go get -u -v github.com/golangci/golangci-lint/cmd/golangci-lint
-    gometalinter --install --update
+    go get -u -v github.com/fatih/gomodifytags
     go get -u -v github.com/godoctor/godoctor
-    go install github.com/godoctor/godoctor
+    go get -u -v github.com/golangci/golangci-lint/cmd/golangci-lint
+    go get -u -v github.com/haya14busa/gopkgs/cmd/gopkgs
+    go get -u -v github.com/josharian/impl
+    go get -u -v github.com/mdempsky/gocode
+    go get -u -v github.com/rogpeppe/godef
+    go get -u -v github.com/zmb3/gogetdoc
 
     # Install plantuml
     plantUmlInstallDir="${HOME}/.plantuml"
@@ -215,7 +209,8 @@ end" >> "${fishConfigFile}"
     npm config set prefix "${goPath}"
     npm install -g tern babel-eslint eslint-plugin-react vmd elm \
         elm-oracle elm-format tslint typescript-formatter webpack pulp eslint bower   \
-        grunt typescript yarn js-yaml prettier
+        grunt typescript yarn js-yaml prettier typescript-language-server js-beautify \
+        import-js parcel bash-language-server
 
     # Install leiningen and boot for clojure builds
     wget -O "${goPath}/lein" https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
@@ -240,7 +235,8 @@ end" >> "${fishConfigFile}"
         cd "${lspHaskelBaseDir}"
         git clone https://github.com/haskell/haskell-ide-engine --recurse-submodules
         cd haskell-ide-engine
-        stack ./install.hs hie-8.6.4
-        stack ./install.hs build-doc-8.6.4
+        stack ./install.hs hie-8.6.5
+        stack ./install.hs build-doc-8.6.5
     fi
     cd "${DIR}" || exit
+fi

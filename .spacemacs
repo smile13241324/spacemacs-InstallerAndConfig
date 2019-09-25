@@ -26,7 +26,6 @@ This function should only modify configuration layer settings."
    ;; a layer lazily. (default t)
    dotspacemacs-ask-for-lazy-installation t
 
-   ;; If non-nil layers with lazy install support are lazy installed.
    ;; List of additional paths where to look for configuration layers.
    ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
    dotspacemacs-configuration-layer-path '()
@@ -39,27 +38,37 @@ This function should only modify configuration layer settings."
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
+     lsp
+     dap
+     (dart :variables
+           dart-server-sdk-path "~/Downloads/dart-sdk/"
+           dart-sdk-path "~/Downloads/dart-sdk/"
+           dart-server-enable-analysis-server t
+           dart-server-format-on-save t)
      (helm :variables
            helm-enable-auto-resize t)
      nim
      spacemacs-purpose
      ocaml
+     (yang :variables yang-pyang-rules "ietf")
+     ietf
      scheme
      (auto-completion :variables
                       auto-completion-return-key-behavior 'complete
                       auto-completion-tab-key-behavior 'cycle
                       auto-completion-complete-with-key-sequence nil
                       auto-completion-complete-with-key-sequence-delay 0.1
-                      auto-completion-idle-delay nil
+                      auto-completion-idle-delay 0
                       auto-completion-private-snippets-directory nil
-                      auto-completion-enable-snippets-in-popup nil
+                      auto-completion-enable-snippets-in-popup t
                       auto-completion-enable-help-tooltip t
                       auto-completion-enable-sort-by-usage t)
      better-defaults
      (clojure :variables
               clojure-enable-fancify-symbols t
               clojure-enable-sayid t
-              clojure-enable-clj-refactor t)
+              clojure-enable-clj-refactor t
+              clojure-enable-linters 'squiggly)
      gpu
      graphviz
      (plantuml :variables
@@ -75,16 +84,21 @@ This function should only modify configuration layer settings."
           org-enable-bootstrap-support t
           org-enable-reveal-js-support t
           org-enable-hugo-support t
-          org-enable-trello-support t)
+          org-enable-trello-support t
+          org-enable-epub-support t
+          org-enable-sticky-header nil)
      (shell :variables
             shell-enable-smart-eshell t
             shell-default-shell 'ansi-term
             shell-default-height 30
             shell-default-position 'bottom
             shell-default-full-span nil
+            ;; shell-scripts-backend 'lsp
             shell-default-term-shell "/usr/bin/fish")
      syntax-checking
      version-control
+     import-js
+     web-beautify
      semantic
      templates
      epub
@@ -99,6 +113,7 @@ This function should only modify configuration layer settings."
      git
      github
      sml
+     bm
      (copy-as-format :variables
                      copy-as-format-default "markdown"
                      copy-as-format-asciidoc-include-file-name t)
@@ -106,8 +121,11 @@ This function should only modify configuration layer settings."
      common-lisp
      (python :variables
              python-backend 'lsp
+             python-lsp-server 'pyls
              python-test-runner 'pytest
-             python-enable-yapf-format-on-save t
+             python-formatter 'lsp
+             python-format-on-save t
+             python-save-before-test t
              python-sort-imports-on-save t)
      windows-scripts
      agda
@@ -118,7 +136,9 @@ This function should only modify configuration layer settings."
      (markdown :variables
                markdown-live-preview-engine 'vmd)
      bibtex
-     json
+     (json :variables json-fmt-tool 'web-beautify
+                      json-fmt-on-save t)
+
      debug
      (latex :variables
             latex-enable-auto-fill t
@@ -127,10 +147,17 @@ This function should only modify configuration layer settings."
      lua
      html
      (javascript :variables
-                 javascript-disable-tern-port-files nil)
+                 javascript-import-tool 'import-js
+                 javascript-backend 'lsp
+                 javascript-fmt-tool 'web-beautify
+                 javascript-repl 'nodejs
+                 js2-basic-offset 2
+                 js-indent-level 2)
      react
      yaml
      prettier
+     (multiple-cursors :variables
+                       multiple-cursors-backend 'evil-mc)
      nginx
      docker
      csv
@@ -149,15 +176,14 @@ This function should only modify configuration layer settings."
            java-backend 'lsp)
      groovy
      (go :variables
-         ;; go-backend 'lsp
+         go-backend 'lsp
          go-use-golangci-lint t
          gofmt-command "goimports"
          go-tab-width 4
          go-format-before-save t
          go-use-gocheck-for-testing t
          go-use-test-args "-race -timeout 10s"
-         godoc-at-point-function 'godoc-gogetdoc
-         )
+         godoc-at-point-function 'godoc-gogetdoc)
      ;; major-modes
      coq
      django
@@ -168,20 +194,23 @@ This function should only modify configuration layer settings."
      ;;      ess-enable-smart-equals t)
      idris
      (haskell :variables
-              haskell-enable-hindent-style "fundamental"
-              haskell-completion-backend 'ghci
+              haskell-completion-backend 'lsp
               haskell-enable-hindent t
               haskell-process-type 'stack-ghci)
      pandoc
      sphinx
-     lsp
      parinfer
      asciidoc
-     neotree
+     ;; neotree
+     (treemacs :variables
+               treemacs-use-follow-mode t
+               treemacs-use-filewatch-mode t
+               treemacs-use-collapsed-directories 3)
      ansible
      puppet
      rebox
      rust
+     hy
      xkcd
      typography
      vimscript
@@ -189,7 +218,8 @@ This function should only modify configuration layer settings."
                 terraform-auto-format-on-save t)
      (ruby :variables
            ruby-enable-enh-ruby-mode t
-           ruby-version-manager 'rvm)
+           ruby-backend 'lsp)
+     ;; ruby-version-manager 'rvm)
      ruby-on-rails
      asm
      (sql :variables
@@ -197,21 +227,24 @@ This function should only modify configuration layer settings."
      perl6
      autohotkey
      (elixir :variables
-             flycheck-elixir-credo-strict t)
+             flycheck-elixir-credo-strict t
+             elixir-backend 'lsp)
      faust
      vagrant
      erlang
      (dash :variables
            helm-dash-docset-newpath "~/.local/share/Zeal/Zeal/docsets")
      games
-     php
+     (php :variables php-backend 'lsp)
      nginx
      racket
      (colors :variables
              colors-colorize-identifiers 'all)
      d
      (typescript :variables
-                 typescript-fmt-tool 'typescript-formatter
+                 typescript-backend 'lsp
+                 typescript-fmt-tool 'tide
+                 typescript-linter 'tslint
                  typescript-fmt-on-save t))
 
    ;; List of additional packages that will be installed without being
@@ -221,7 +254,7 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(lsp-haskell :location (recipe :fetcher github :repo "emacs-lsp/lsp-haskell"))
+   dotspacemacs-additional-packages '()
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -252,10 +285,10 @@ It should only modify the values of Spacemacs settings."
    ;; (default nil)
    dotspacemacs-enable-emacs-pdumper nil
 
-   ;; File path pointing to emacs 27.1 executable compiled with support
-   ;; for the portable dumper (this is currently the branch pdumper).
-   ;; (default "emacs-27.0.50")
-   dotspacemacs-emacs-pdumper-executable-file "emacs-27.0.50"
+   ;; Name of executable file pointing to emacs 27+. This executable must be
+   ;; in your PATH.
+   ;; (default "emacs")
+   dotspacemacs-emacs-pdumper-executable-file "emacs"
 
    ;; Name of the Spacemacs dump file. This is the file will be created by the
    ;; portable dumper in the cache directory under dumps sub-directory.
@@ -289,8 +322,8 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-use-spacelpa nil
 
    ;; If non-nil then verify the signature for downloaded Spacelpa archives.
-   ;; (default nil)
-   dotspacemacs-verify-spacelpa-archives nil
+   ;; (default t)
+   dotspacemacs-verify-spacelpa-archives t
 
    ;; If non-nil then spacemacs will check for updates at startup
    ;; when the current branch is not `develop'. Note that checking for
@@ -310,9 +343,6 @@ It should only modify the values of Spacemacs settings."
    ;; section of the documentation for details on available variables.
    ;; (default 'vim)
    dotspacemacs-editing-style 'vim
-
-   ;; If non-nil output loading progress in `*Messages*' buffer. (default nil)
-   dotspacemacs-verbose-loading nil
 
    ;; Specify the startup banner. Default value is `official', it displays
    ;; the official spacemacs logo. An integer value is the index of text
@@ -335,6 +365,11 @@ It should only modify the values of Spacemacs settings."
    ;; True if the home buffer should respond to resize events. (default t)
    dotspacemacs-startup-buffer-responsive t
 
+   ;; Default major mode for a new empty buffer. Possible values are mode
+   ;; names such as `text-mode'; and `nil' to use Fundamental mode.
+   ;; (default `text-mode')
+   dotspacemacs-new-empty-buffer-major-mode 'org-mode
+
    ;; Default major mode of the scratch buffer (default `text-mode')
    dotspacemacs-scratch-mode 'org-mode
 
@@ -345,7 +380,7 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(spacemacs-dark, spacemacs-light, leuven)
+   dotspacemacs-themes '(spacemacs-dark leuven)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
@@ -363,7 +398,7 @@ It should only modify the values of Spacemacs settings."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 12
+                               :size 5.5
                                :weight normal
                                :width normal)
 
@@ -466,6 +501,11 @@ It should only modify the values of Spacemacs settings."
    ;; (default nil) (Emacs 24.4+ only)
    dotspacemacs-maximized-at-startup t
 
+   ;; If non-nil the frame is undecorated when Emacs starts up. Combine this
+   ;; variable with `dotspacemacs-maximized-at-startup' in OSX to obtain
+   ;; borderless fullscreen. (default nil)
+   dotspacemacs-undecorated-at-startup nil
+
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's active or selected.
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
@@ -493,10 +533,14 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-smooth-scrolling t
 
    ;; Control line numbers activation.
-   ;; If set to `t' or `relative' line numbers are turned on in all `prog-mode' and
-   ;; `text-mode' derivatives. If set to `relative', line numbers are relative.
+   ;; If set to `t', `relative' or `visual' then line numbers are enabled in all
+   ;; `prog-mode' and `text-mode' derivatives. If set to `relative', line
+   ;; numbers are relative. If set to `visual', line numbers are also relative,
+   ;; but lines are only visual lines are counted. For example, folded lines
+   ;; will not be counted and wrapped lines are counted as multiple lines.
    ;; This variable can also be set to a property list for finer control:
    ;; '(:relative nil
+   ;;   :visual nil
    ;;   :disabled-for-modes dired-mode
    ;;                       doc-view-mode
    ;;                       markdown-mode
@@ -504,6 +548,7 @@ It should only modify the values of Spacemacs settings."
    ;;                       pdf-view-mode
    ;;                       text-mode
    ;;   :size-limit-kb 1000)
+   ;; When used in a plist, `visual' takes precedence over `relative'.
    ;; (default nil)
    dotspacemacs-line-numbers t
 
@@ -516,7 +561,7 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-smartparens-strict-mode nil
 
    ;; If non-nil pressing the closing parenthesis `)' key in insert mode passes
-   ;; over any automatically added closing parenthesis, bracket, quote, etc…
+   ;; over any automatically added closing parenthesis, bracket, quote, etc...
    ;; This can be temporary disabled by pressing `C-q' before `)'. (default nil)
    dotspacemacs-smart-closing-parenthesis nil
 
@@ -597,8 +642,7 @@ See the header of this file for more information."
 This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
-If you are unsure, try setting them in `dotspacemacs/user-config' first."
-  )
+If you are unsure, try setting them in `dotspacemacs/user-config' first.")
 
 (defun dotspacemacs/user-load ()
   "Library to load while dumping.
@@ -703,17 +747,25 @@ before packages are loaded."
   ;; Format file on save
   (defun format-for-filetype ()
     "Run generic format function if not a mode specific one is available"
-    (let ((filetypes '("c" "cpp" "h" "hpp" "py" "pyc" "robot" "tf" "go" "yml" "yaml")))
+    (let ((filetypes '("hs" "c" "cpp" "h" "hpp" "py" "pyc" "robot" "tf" "go" "yml" "yaml")))
       (if (not (member (file-name-extension (buffer-file-name)) filetypes))
           (save-excursion
             (evil-indent (point-min) (point-max))))))
   (add-hook 'before-save-hook 'format-for-filetype)
 
+  ;; Checkout PR
+  (defun smile13241324/cherry-pick-pr (id)
+    "Take a given PR id and make a new local branch, then cherry pick the commit and print the thanks message"
+    (interactive "MEnter PR Id: ")
+    (with-current-buffer "*scratch*"
+      (let ((default-directory "~/.emacs.d"))
+        (erase-buffer)
+        (call-process-shell-command (concat "git fetch origin pull/" id "/head:" id) nil nil)
+        (call-process-shell-command (concat "git cherry-pick " id) nil nil)
+        (goto-char (point-max))
+        (insert "\n" "Thank you for contributing to Spacemacs! :+1:" "\n" "The PR has been cherry-picked into develop, you can safely delete your branch."))))
+  (spacemacs/set-leader-keys "o c" #'smile13241324/cherry-pick-pr)
+
   ;; Activate line wrap for all text modes
   (add-hook 'text-mode-hook 'spacemacs/toggle-truncate-lines-off)
-  (add-hook 'text-mode-hook 'spacemacs/toggle-visual-line-navigation-off)
-
-  ;; Activate lsp haskell manually until lsp layer is ready
-  (setq lsp-haskell-process-path-hie "hie-wrapper")
-  (require 'lsp-haskell)
-  (add-hook 'haskell-mode-hook #'lsp))
+  (add-hook 'text-mode-hook 'spacemacs/toggle-visual-line-navigation-off))
