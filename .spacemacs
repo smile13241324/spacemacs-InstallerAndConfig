@@ -40,11 +40,11 @@ This function should only modify configuration layer settings."
      ;; ----------------------------------------------------------------
      lsp
      dap
-     (dart :variables
-           dart-server-sdk-path "~/Downloads/dart-sdk/"
-           dart-sdk-path "~/Downloads/dart-sdk/"
-           dart-server-enable-analysis-server t
-           dart-server-format-on-save t)
+     ;; (dart :variables
+     ;;       dart-server-sdk-path "~/Downloads/dart-sdk/"
+     ;;       dart-sdk-path "~/Downloads/dart-sdk/"
+     ;;       dart-server-enable-analysis-server t
+     ;;       dart-server-format-on-save t)
      (helm :variables
            helm-enable-auto-resize t)
      nim
@@ -68,7 +68,8 @@ This function should only modify configuration layer settings."
               clojure-enable-fancify-symbols t
               clojure-enable-sayid t
               clojure-enable-clj-refactor t
-              clojure-enable-linters 'squiggly)
+              ;; clojure-enable-linters 'clj-kondo)
+              clojure-enable-linters '(clj-kondo joker))
      gpu
      graphviz
      (plantuml :variables
@@ -77,6 +78,7 @@ This function should only modify configuration layer settings."
      salt
      ibuffer
      emacs-lisp
+     (conda :variables conda-anaconda-home "/your/path/here")
      pdf
      (org :variables
           org-want-todo-bindings t
@@ -89,7 +91,7 @@ This function should only modify configuration layer settings."
           org-enable-sticky-header nil)
      (shell :variables
             shell-enable-smart-eshell t
-            shell-default-shell 'ansi-term
+            shell-default-shell 'vterm
             shell-default-height 30
             shell-default-position 'bottom
             shell-default-full-span nil
@@ -137,7 +139,7 @@ This function should only modify configuration layer settings."
                markdown-live-preview-engine 'vmd)
      bibtex
      (json :variables json-fmt-tool 'web-beautify
-                      json-fmt-on-save t)
+           json-fmt-on-save t)
 
      debug
      (latex :variables
@@ -664,7 +666,6 @@ before packages are loaded."
   (setq company-minimum-prefix-length 0)
   (define-key evil-insert-state-map (kbd "TAB") 'company-complete-common-or-cycle)
   (define-key evil-insert-state-map (kbd "M-j") 'company-yasnippet)
-  (define-key evil-insert-state-map (kbd "C-k") nil)
   (define-key evil-normal-state-map (kbd "M-j") 'company-yasnippet)
   (spacemacs/toggle-mode-line-minor-modes-off)
 
@@ -765,6 +766,9 @@ before packages are loaded."
         (goto-char (point-max))
         (insert "\n" "Thank you for contributing to Spacemacs! :+1:" "\n" "The PR has been cherry-picked into develop, you can safely delete your branch."))))
   (spacemacs/set-leader-keys "o c" #'smile13241324/cherry-pick-pr)
+
+  ;; Activate enlighten mode for clojure
+  (add-hook 'clojure-mode-hook 'cider-enlighten-mode)
 
   ;; Activate line wrap for all text modes
   (add-hook 'text-mode-hook 'spacemacs/toggle-truncate-lines-off)

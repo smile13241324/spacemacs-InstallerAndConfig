@@ -213,12 +213,18 @@ end" >> "${fishConfigFile}"
         import-js parcel bash-language-server
 
     # Install leiningen and boot for clojure builds
-    wget -O "${goPath}/lein" https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
-    chmod +x "${goPath}/lein"
-    "${goPath}/lein" version
-    wget -O "${goPath}/boot" https://github.com/boot-clj/boot-bin/releases/download/latest/boot.sh
-    chmod +x "${goPath}/boot"
-    "${goPath}/boot" -u
+    wget -O "${goPath}/lein/bin" https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
+    chmod +x "${goPath}/lein/bin"
+    "${goPath}/lein/bin" version
+    wget -O "${goPath}/boot/bin" https://github.com/boot-clj/boot-bin/releases/download/latest/boot.sh
+    chmod +x "${goPath}/boot/bin"
+    "${goPath}/boot/bin" -u
+
+    # Install additional linters for clojure
+    bash <(curl -s https://raw.githubusercontent.com/borkdude/clj-kondo/master/script/install-clj-kondo) --dir "${goPath}/bin"
+    go get -d github.com/candid82/joker
+    cd ${GOPATH}/src/github.com/candid82/joker
+    ./run.sh --version && go install
 
     # Install haskell dependencies with stack, do it manually to avoid dynamic
     # linking in arch linux haskell packages
