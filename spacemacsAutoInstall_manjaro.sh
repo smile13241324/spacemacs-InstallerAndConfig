@@ -45,20 +45,21 @@ if [[ $1 ]]; then
 else
     # Set user specific actions which do not require sudo and should be run in
     # the local userspace
+    localInstallDir = "${HOME}/.local"
+    localInstallBin = "${localInstallDir}/bin"
 
     # Install Ruby dependencies
-    gem install -n ~/.local/bin rdoc pry pry-doc ruby_parser rubocop ruby_test rVM rails \
+    gem install -n "${localInstallBin}" rdoc pry pry-doc ruby_parser rubocop ruby_test rVM rails \
         specific_install puppet-lint sqlint solargraph rubocop-performance
     gem specific_install https://github.com/brigade/scss-lint.git
     gem specific_install https://github.com/Sweetchuck/scss_lint_reporter_checkstyle.git
 
     # Install python packages, removed conan from list as this has a conflict
     # with dists pyyaml package
-    pip install --upgrade pip
     pip install --force-reinstall pyang jedi json-rpc service_factory ipython autoflake hy \
         flake8 fabric python-binary-memcached Pygments sphinx \
         pycscope bashate yapf isort python-language-server[all] pyls-isort \
-        pyls-mypy pyls-black mypy importmagic epc autopep8 pydocstyle rope ptvsd pylint black
+        pyls-mypy pyls-black mypy importmagic epc autopep8 pydocstyle rope ptvsd pylint black --user
 
     # Set current path
     SOURCE="${BASH_SOURCE[0]}"
@@ -157,7 +158,13 @@ end" >> "${fishConfigFile}"
     then
         echo "nothing to do"
     else
-        echo "export PATH=$PATH:${localBin}" >> ${HOME}/.profile
+        echo "export PATH=$PATH:${goPathBin}" >> ${HOME}/.profile
+    fi
+    if grep -Fq "${localInstallBin}" ${HOME}/.profile
+    then
+        echo "nothing to do"
+    else
+        echo "export PATH=$PATH:${localInstallBin}" >> ${HOME}/.profile
     fi
     if grep -Fxq "set -x GOPATH ${goPath}" "${fishConfigFile}"
     then
@@ -169,18 +176,24 @@ end" >> "${fishConfigFile}"
     then
         echo "nothing to do"
     else
-        echo "set -x PATH ${PATH//:/ } ${localBin}" >> "${fishConfigFile}"
+        echo "set -x PATH ${PATH//:/ } ${goPathBin}" >> "${fishConfigFile}"
+    fi
+    if grep -Fq "${localInstallBin}" "${fishConfigFile}"
+    then
+        echo "nothing to do"
+    else
+        echo "set -x PATH ${PATH//:/ } ${localInstallBin}" >> "${fishConfigFile}"
     fi
     [[ ! -d "${goPath}" ]] && mkdir "${goPath}"
     [[ ! -d "${goPathSrc}" ]] && mkdir "${goPathSrc}"
     [[ ! -d "${goPathSrcExample}" ]] && mkdir "${goPathSrcExample}"
     [[ ! -f "${goPathSrcExampleFile}" ]] && echo "package main
 
-    import \"fmt\"
+import \"fmt\"
 
-    func main() {
-    fmt.Printf(\"hello, world\\n\")
-    }" >> "${goPathSrcExampleFile}"
+func main() {
+fmt.Printf(\"hello, world\\n\")
+}" >> "${goPathSrcExampleFile}"
 
     GO111MODULE=on go get -v golang.org/x/tools/gopls@latest
     go get -u -v golang.org/x/tools/cmd/godoc
@@ -206,19 +219,19 @@ end" >> "${fishConfigFile}"
     fi
 
     # Install nodejs dependencies
-    npm config set prefix "${goPath}"
+    npm config set prefix "${installBaseDir}"
     npm install -g tern babel-eslint eslint-plugin-react vmd elm \
         elm-oracle elm-format tslint typescript-formatter webpack pulp eslint bower   \
         grunt typescript yarn js-yaml prettier typescript-language-server js-beautify \
         import-js parcel bash-language-server
 
     # Install leiningen and boot for clojure builds
-    wget -O "${goPath}/lein/bin" https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
-    chmod +x "${goPath}/lein/bin"
-    "${goPath}/lein/bin" version
-    wget -O "${goPath}/boot/bin" https://github.com/boot-clj/boot-bin/releases/download/latest/boot.sh
-    chmod +x "${goPath}/boot/bin"
-    "${goPath}/boot/bin" -u
+    wget -O "${localInstallDir}/bin/lein" https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
+    chmod +x "${localInstallDir}/bin/lein"
+    "${localInstallDir}/bin/lein" version
+    wget -O "${localInstallDir}/bin/boot" https://github.com/boot-clj/boot-bin/releases/download/latest/boot.sh
+    chmod +x "${localInstallDir}/bin/boot"
+    "${localInstallDir}/bin/boot" -u
 
     # Install additional linters for clojure
     bash <(curl -s https://raw.githubusercontent.com/borkdude/clj-kondo/master/script/install-clj-kondo) --dir "${goPath}/bin"
