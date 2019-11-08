@@ -23,7 +23,7 @@ if [[ $1 ]]; then
            ansible ansible-lint puppet vagrant swi-prolog \
            elixir clojure nim nimble chicken smlnj sbcl pass gradle \
            gradle-doc groovy groovy-docs geckodriver terraform zeal graphviz cowsay \
-           gsl lld mlocate firefox openssh sed xorg-xauth pam certbot rlwrap --noconfirm
+           gsl lld mlocate firefox openssh sed xorg-xauth pam rlwrap --noconfirm
 
     # Install lua dependencies
     luarocks install luacheck
@@ -45,17 +45,14 @@ if [[ $1 ]]; then
 else
     # Set user specific actions which do not require sudo and should be run in
     # the local userspace
-    localInstallDir = "${HOME}/.local"
-    localInstallBin = "${localInstallDir}/bin"
+    localInstallDir="${HOME}/.local"
+    localInstallBin="${localInstallDir}/bin"
 
     # Install Ruby dependencies
     gem install -n "${localInstallBin}" rdoc pry pry-doc ruby_parser rubocop ruby_test rVM rails \
         specific_install puppet-lint sqlint solargraph rubocop-performance
-    gem specific_install https://github.com/brigade/scss-lint.git
-    gem specific_install https://github.com/Sweetchuck/scss_lint_reporter_checkstyle.git
 
-    # Install python packages, removed conan from list as this has a conflict
-    # with dists pyyaml package
+    # Install python packages
     pip install --force-reinstall pyang jedi json-rpc service_factory ipython autoflake hy \
         flake8 fabric python-binary-memcached Pygments sphinx \
         pycscope bashate yapf isort python-language-server[all] pyls-isort \
@@ -219,7 +216,7 @@ fmt.Printf(\"hello, world\\n\")
     fi
 
     # Install nodejs dependencies
-    npm config set prefix "${installBaseDir}"
+    npm config set prefix "${localInstallDir}"
     npm install -g tern babel-eslint eslint-plugin-react vmd elm \
         elm-oracle elm-format tslint typescript-formatter webpack pulp eslint bower   \
         grunt typescript yarn js-yaml prettier typescript-language-server js-beautify \
@@ -234,7 +231,6 @@ fmt.Printf(\"hello, world\\n\")
     "${localInstallDir}/bin/boot" -u
 
     # Install additional linters for clojure
-    bash <(curl -s https://raw.githubusercontent.com/borkdude/clj-kondo/master/script/install-clj-kondo) --dir "${goPath}/bin"
     go get -d github.com/candid82/joker
     cd ${GOPATH}/src/github.com/candid82/joker
     ./run.sh --version && go install
