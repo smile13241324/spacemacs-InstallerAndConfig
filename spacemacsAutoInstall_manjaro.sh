@@ -21,7 +21,7 @@ if [[ $1 ]]; then
            ruby opam llvm-ocaml ocaml-compiler-libs ocaml-ctypes        \
            ocaml-findlib ocamlbuild racket rust-racer rustfmt rust cargo r gcc-fortran-multilib     \
            ansible ansible-lint puppet vagrant swi-prolog \
-           elixir clojure nim nimble chicken smlnj sbcl pass gradle \
+           elixir clojure nim nimble smlnj sbcl pass gradle \
            gradle-doc groovy groovy-docs geckodriver terraform zeal graphviz cowsay \
            gsl lld mlocate firefox openssh sed xorg-xauth pam rlwrap --noconfirm
 
@@ -29,16 +29,13 @@ if [[ $1 ]]; then
     luarocks install luacheck
     luarocks install lanes
 
-    # Setup chicken properly
-    chicken-install -s apropos chicken-doc
-    cd `csi -p '(chicken-home)'`
-    curl https://3e8.org/pub/chicken-doc/chicken-doc-repo.tgz | tar zx
-    cd "${DIR}" || exit
-
     # Fetch kubectl for kubernetes development
     curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
     chmod +x ./kubectl
     mv ./kubectl /usr/local/bin/kubectl
+
+    # Install stack for haskell
+    wget -qO- https://get.haskellstack.org/ | sh
 
     # Take care that locate is up-to-date for later searching
     updatedb
@@ -49,6 +46,7 @@ else
     localInstallBin="${localInstallDir}/bin"
 
     # Install Ruby dependencies
+    mkdir "${localInstallBin}" -p
     gem install -n "${localInstallBin}" rdoc pry pry-doc ruby_parser rubocop ruby_test rVM rails \
         specific_install puppet-lint sqlint solargraph rubocop-performance
 
@@ -238,7 +236,6 @@ fmt.Printf(\"hello, world\\n\")
     # Install haskell dependencies with stack, do it manually to avoid dynamic
     # linking in arch linux haskell packages
     # https://wiki.archlinux.org/index.php/Haskell
-    wget -qO- https://get.haskellstack.org/ | sh
     stack setup
     stack upgrade
     stack install pandoc ShellCheck hoogle hlint hindent hasktags happy alex apply-refact stylish-haskell
