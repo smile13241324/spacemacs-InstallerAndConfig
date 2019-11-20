@@ -238,7 +238,16 @@ fmt.Printf(\"hello, world\\n\")
     # https://wiki.archlinux.org/index.php/Haskell
     stack setup
     stack upgrade
-    stack install pandoc ShellCheck hoogle hlint hindent hasktags happy alex apply-refact stylish-haskell
+    stack install pandoc
+    stack install ShellCheck
+    stack install hoogle
+    stack install hlint
+    stack install hindent
+    stack install hasktags
+    stack install happy
+    stack install alex
+    stack install apply-refact
+    stack install stylish-haskell
 
     # Leave haskell lsp as this exceed max docker build time
     # Install haskell lsp from source
