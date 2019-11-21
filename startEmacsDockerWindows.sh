@@ -15,7 +15,7 @@ sleep 360s # Wait till the server is ready
 # allowing to control docker on the host from within this container.
 # To do so use the alternative command:
 # docker run -u root -d --rm -p "22:22" --hostname spacemacsBox --name spacemacsBox --mount type=volume,source=spacemacs-home-vol,target=/home/spacemacs --mount type=volume,source=spacemacs-hostCert-vol,target=/etc/ssh -v /var/run/docker.sock:/var/run/docker.sock smile13241324/spacemacs-installerandconfig /usr/bin/sshd -D
-# To start the container and connect with "docker exec -it -u root spacemacsBox bash"
+# To start the container and connect with "docker exec -it -u spacemacs spacemacsBox fish"
 docker run -u root -d --rm -p "22:22" --hostname spacemacsBox --name spacemacsBox --mount type=volume,source=spacemacs-home-vol,target=/home/spacemacs --mount type=volume,source=spacemacs-hostCert-vol,target=/etc/ssh smile13241324/spacemacs-installerandconfig /usr/bin/sshd -D
 
 # Second part to run as local user in cygwin
@@ -24,4 +24,4 @@ docker run -u root -d --rm -p "22:22" --hostname spacemacsBox --name spacemacsBo
 # If you do not have a public key do ssh-keygen -t ecdsa -b 521 for best results.
 
 # ssh into the server enabling X forwarding and replacing insecure X based authentification with ssh X authentification spoofing
-nohub ssh -Y spacemacs@localhost -p 22 emacs&
+nohup ssh -Y spacemacs@localhost -p 22 emacs&
