@@ -235,19 +235,20 @@ fmt.Printf(\"hello, world\\n\")
 
     # Install haskell dependencies with stack, do it manually to avoid dynamic
     # linking in arch linux haskell packages
+    # Avoid building too much packages as this exceed max build time
     # https://wiki.archlinux.org/index.php/Haskell
     stack setup
     stack upgrade
     stack install pandoc
     stack install ShellCheck
-    stack install hoogle
-    stack install hlint
-    stack install hindent
-    stack install hasktags
-    stack install happy
-    stack install alex
-    stack install apply-refact
-    stack install stylish-haskell
+    #stack install hoogle
+    #stack install hlint
+    #stack install hindent
+    #stack install hasktags
+    #stack install happy
+    #stack install alex
+    #stack install apply-refact
+    #stack install stylish-haskell
 
     # Leave haskell lsp as this exceed max docker build time
     # Install haskell lsp from source
