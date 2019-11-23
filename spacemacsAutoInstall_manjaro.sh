@@ -241,7 +241,7 @@ fmt.Printf(\"hello, world\\n\")
     stack upgrade
     stack install pandoc
     stack install ShellCheck
-    stack install hoogle
+    #stack install hoogle
     #stack install hlint
     #stack install hindent
     #stack install hasktags
