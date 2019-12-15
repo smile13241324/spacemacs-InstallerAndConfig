@@ -48,13 +48,14 @@ else
     # Install Ruby dependencies
     mkdir "${localInstallBin}" -p
     gem install -n "${localInstallBin}" rdoc pry pry-doc ruby_parser rubocop ruby_test rVM rails \
-        specific_install puppet-lint sqlint solargraph rubocop-performance
+        specific_install puppet-lint sqlint solargraph rubocop-performance yaml-ruby
 
     # Install python packages
     pip install --force-reinstall pyang jedi json-rpc service_factory ipython autoflake hy \
         flake8 fabric python-binary-memcached Pygments sphinx \
         pycscope bashate yapf isort python-language-server[all] pyls-isort \
-        pyls-mypy pyls-black mypy importmagic epc autopep8 pydocstyle rope ptvsd pylint black --user
+        pyls-mypy pyls-black mypy importmagic epc autopep8 pydocstyle rope ptvsd pylint black \
+        yamllint --user
 
     # Set current path
     SOURCE="${BASH_SOURCE[0]}"
