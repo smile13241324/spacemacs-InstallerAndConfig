@@ -58,7 +58,7 @@ This function should only modify configuration layer settings."
                       auto-completion-tab-key-behavior 'cycle
                       auto-completion-complete-with-key-sequence nil
                       auto-completion-complete-with-key-sequence-delay 0.1
-                      auto-completion-idle-delay 0
+                      auto-completion-idle-delay nil
                       auto-completion-private-snippets-directory nil
                       auto-completion-enable-snippets-in-popup t
                       auto-completion-enable-help-tooltip t
@@ -68,7 +68,6 @@ This function should only modify configuration layer settings."
               clojure-enable-fancify-symbols t
               clojure-enable-sayid t
               clojure-enable-clj-refactor t
-              ;; clojure-enable-linters 'clj-kondo)
               clojure-enable-linters '(clj-kondo joker))
      gpu
      graphviz
@@ -95,23 +94,24 @@ This function should only modify configuration layer settings."
             shell-default-height 30
             shell-default-position 'bottom
             shell-default-full-span nil
-            ;; shell-scripts-backend 'lsp
             shell-default-term-shell "/usr/bin/fish")
      syntax-checking
      version-control
      import-js
+     (cmake :variables
+            cmake-enable-cmake-ide-support t)
+     (c-c++ :variables
+            c-c++-backend 'lsp-clangd
+            c-c++-lsp-enable-semantic-highlight 'rainbow
+            c++-enable-organize-includes-on-save t
+            c-c++-adopt-subprojects t
+            c-c++-enable-clang-format-on-save t
+            c-c++-enable-auto-newline t)
      web-beautify
      semantic
      templates
      epub
      themes-megapack
-     (c-c++ :variables
-            c-c++-default-mode-for-headers 'c++-mode
-            c-c++-enable-clang-support t
-            c-c++-enable-clang-format-on-save t
-            c-c++-enable-auto-newline t)
-     (cmake :variables
-            cmake-enable-cmake-ide-support t)
      git
      github
      sml
@@ -132,7 +132,8 @@ This function should only modify configuration layer settings."
      windows-scripts
      agda
      jr
-     shell-scripts
+     (shell-scripts :variables
+                    shell-scripts-backend 'lsp)
      prodigy
      emoji
      (markdown :variables
@@ -156,12 +157,14 @@ This function should only modify configuration layer settings."
                  js2-basic-offset 2
                  js-indent-level 2)
      react
-     yaml
+     (yaml :variables
+           yaml-enable-lsp t)
      prettier
      (multiple-cursors :variables
                        multiple-cursors-backend 'evil-mc)
      nginx
-     docker
+     (docker :variables
+             docker-dockerfile-backend 'lsp)
      csv
      search-engine
      (restclient :variables
@@ -173,7 +176,6 @@ This function should only modify configuration layer settings."
      speed-reading
      systemd
      imenu-list
-     dap
      (java :variables
            java-backend 'lsp)
      groovy
@@ -186,14 +188,12 @@ This function should only modify configuration layer settings."
          go-use-gocheck-for-testing t
          go-use-test-args "-race -timeout 10s"
          godoc-at-point-function 'godoc-gogetdoc)
-     ;; major-modes
      coq
      django
      (elm :variables
           elm-sort-imports-on-save t
           elm-format-on-save t)
-     ;; (ess :variables
-     ;;      ess-enable-smart-equals t)
+     kubernetes
      idris
      (haskell :variables
               haskell-completion-backend 'lsp
@@ -203,11 +203,11 @@ This function should only modify configuration layer settings."
      sphinx
      parinfer
      asciidoc
-     ;; neotree
      (treemacs :variables
                treemacs-use-follow-mode t
                treemacs-use-filewatch-mode t
-               treemacs-use-collapsed-directories 3)
+               treemacs-collapse-dirs 3
+               treemacs-use-git-mode 'deferred)
      ansible
      puppet
      rebox
@@ -221,7 +221,6 @@ This function should only modify configuration layer settings."
      (ruby :variables
            ruby-enable-enh-ruby-mode t
            ruby-backend 'lsp)
-     ;; ruby-version-manager 'rvm)
      ruby-on-rails
      asm
      (sql :variables
@@ -237,7 +236,8 @@ This function should only modify configuration layer settings."
      (dash :variables
            helm-dash-docset-newpath "~/.local/share/Zeal/Zeal/docsets")
      games
-     (php :variables php-backend 'lsp)
+     php
+     helpful
      nginx
      racket
      (colors :variables
@@ -382,7 +382,7 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(spacemacs-dark leuven)
+   dotspacemacs-themes '(spacemacs-dark leuven spacemacs-light)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The

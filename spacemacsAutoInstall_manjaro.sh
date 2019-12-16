@@ -48,7 +48,7 @@ else
     # Install Ruby dependencies
     mkdir "${localInstallBin}" -p
     gem install -n "${localInstallBin}" rdoc pry pry-doc ruby_parser rubocop ruby_test rVM rails \
-        specific_install puppet-lint sqlint solargraph rubocop-performance yaml-ruby
+        specific_install puppet-lint sqlint solargraph rubocop-performance
 
     # Install python packages
     pip install --force-reinstall pyang jedi json-rpc service_factory ipython autoflake hy \
@@ -242,6 +242,7 @@ fmt.Printf(\"hello, world\\n\")
     stack upgrade
     stack install pandoc
     stack install ShellCheck
+    #stack install hadolint
     #stack install hoogle
     #stack install hlint
     #stack install hindent
