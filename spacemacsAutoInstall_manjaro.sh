@@ -219,7 +219,8 @@ fmt.Printf(\"hello, world\\n\")
     npm install -g tern babel-eslint eslint-plugin-react vmd elm \
         elm-oracle elm-format tslint typescript-formatter webpack pulp eslint bower   \
         grunt typescript yarn js-yaml prettier typescript-language-server js-beautify \
-        import-js parcel bash-language-server yaml-language-server dockerfile-language-server-nodejs
+        import-js parcel bash-language-server yaml-language-server dockerfile-language-server-nodejs \
+        flow-bin
 
     # Install leiningen and boot for clojure builds
     wget -O "${localInstallDir}/bin/lein" https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
