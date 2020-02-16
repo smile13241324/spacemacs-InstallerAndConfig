@@ -40,15 +40,14 @@ This function should only modify configuration layer settings."
      ;; ----------------------------------------------------------------
      lsp
      dap
-     ;; (dart :variables
-     ;;       dart-server-sdk-path "~/Downloads/dart-sdk/"
-     ;;       dart-sdk-path "~/Downloads/dart-sdk/"
-     ;;       dart-server-enable-analysis-server t
-     ;;       dart-server-format-on-save t)
+     (dart :variables
+           dart-backend 'lsp
+           lsp-dart-sdk-dir "~/Downloads/dart-sdk/")
      (helm :variables
            helm-enable-auto-resize t)
      nim
      spacemacs-purpose
+     elasticsearch
      ocaml
      (yang :variables yang-pyang-rules "ietf")
      ietf
@@ -58,10 +57,11 @@ This function should only modify configuration layer settings."
                       auto-completion-tab-key-behavior 'cycle
                       auto-completion-complete-with-key-sequence nil
                       auto-completion-complete-with-key-sequence-delay 0.1
-                      auto-completion-idle-delay nil
+                      auto-completion-idle-delay 0.2
                       auto-completion-private-snippets-directory nil
-                      auto-completion-enable-snippets-in-popup t
+                      auto-completion-enable-snippets-in-popup nil
                       auto-completion-enable-help-tooltip t
+                      auto-completion-use-company-box nil
                       auto-completion-enable-sort-by-usage t)
      better-defaults
      (clojure :variables
@@ -77,7 +77,6 @@ This function should only modify configuration layer settings."
      salt
      ibuffer
      emacs-lisp
-     (conda :variables conda-anaconda-home "/your/path/here")
      pdf
      (org :variables
           org-want-todo-bindings t
@@ -210,7 +209,6 @@ This function should only modify configuration layer settings."
                treemacs-use-git-mode 'deferred)
      ansible
      puppet
-     rebox
      rust
      hy
      xkcd
@@ -382,7 +380,9 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(spacemacs-dark leuven spacemacs-light)
+   dotspacemacs-themes '(spacemacs-dark
+                         leuven
+                         spacemacs-light)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
@@ -461,7 +461,7 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-auto-save-file-location 'cache
 
    ;; Maximum number of rollback slots to keep in the cache. (default 5)
-   dotspacemacs-max-rollback-slots 500
+   dotspacemacs-max-rollback-slots 50
 
    ;; If non-nil, the paste transient-state is enabled. While enabled, after you
    ;; paste something, pressing `C-j' and `C-k' several times cycles through the
@@ -470,7 +470,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; Which-key delay in seconds. The which-key buffer is the popup listing
    ;; the commands bound to the current keystroke sequence. (default 0.4)
-   dotspacemacs-which-key-delay 0.0
+   dotspacemacs-which-key-delay 0.4
 
    ;; Which-key frame position. Possible values are `right', `bottom' and
    ;; `right-then-bottom'. right-then-bottom tries to display the frame to the
@@ -644,14 +644,15 @@ See the header of this file for more information."
 This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
-If you are unsure, try setting them in `dotspacemacs/user-config' first.")
+If you are unsure, try setting them in `dotspacemacs/user-config' first."
+  )
 
 (defun dotspacemacs/user-load ()
   "Library to load while dumping.
 This function is called only while dumping Spacemacs configuration. You can
 `require' or `load' the libraries of your choice that will be included in the
-dump.")
-
+dump."
+  )
 
 (defun dotspacemacs/user-config ()
   "Configuration for user code:
@@ -659,11 +660,6 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
-  (global-company-mode 1)
-  (global-flycheck-mode 1)
-  (add-to-list 'flycheck-global-modes 'emacs-lisp-mode)
-  (setq company-statistics-size 4000)
-  (setq company-minimum-prefix-length 0)
   (define-key evil-insert-state-map (kbd "TAB") 'company-complete-common-or-cycle)
   (define-key evil-insert-state-map (kbd "M-j") 'company-yasnippet)
   (define-key evil-normal-state-map (kbd "M-j") 'company-yasnippet)
