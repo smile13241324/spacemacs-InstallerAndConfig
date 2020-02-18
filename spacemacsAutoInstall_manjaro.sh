@@ -243,25 +243,8 @@ fmt.Printf(\"hello, world\\n\")
     stack upgrade
     stack install pandoc
     stack install ShellCheck
-    stack install hadolint
-    # stack install hoogle
-    # stack install hlint
-    # stack install hindent
-    # stack install hasktags
-    # stack install happy
-    # stack install alex
-    # stack install apply-refact
-    # stack install stylish-haskell
 
-    # # Install haskell lsp from source
-    # lspHaskelBaseDir="${installBaseDir}/hie"
-    # if [[ ! -d "${lspHaskelBaseDir}" ]]; then
-    #     mkdir "${lspHaskelBaseDir}"
-    #     cd "${lspHaskelBaseDir}"
-    #     git clone https://github.com/haskell/haskell-ide-engine --recurse-submodules
-    #     cd haskell-ide-engine
-    #     stack ./install.hs hie-8.6.5
-    #     stack ./install.hs build-doc-8.6.5
-    # fi
-    # cd "${DIR}" || exit
+    # Get latest hadolint release
+    wget -O "${localInstallDir}/bin/hadolint" https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64
+    chmod +x "${localInstallDir}/bin/hadolint"
 fi

@@ -3,18 +3,19 @@ LABEL Description="This image creates a dockerized version of spacemacs with all
 COPY . /installRepo
 WORKDIR /installRepo
 RUN ./spacemacsAutoInstall_manjaro.sh "sudoRun" \
-&& sed -i 's/#X11Forwarding.*/X11Forwarding yes/' /etc/ssh/sshd_config \
-&& sed -i 's/#X11UseLocalhost.*/X11UseLocalhost no/' /etc/ssh/sshd_config \
-&& sed -i 's/#PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config \
-&& sed -i 's/#PubkeyAuthentication.*/PubkeyAuthentication yes/' /etc/ssh/sshd_config \
-&& sed -i 's/UsePAM.*/UsePAM yes/' /etc/ssh/sshd_config \
-&& sed -i 's/#PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config \
-&& ssh-keygen -A \
-&& useradd -m spacemacs -U
+  && sed -i 's/#X11Forwarding.*/X11Forwarding yes/' /etc/ssh/sshd_config \
+  && sed -i 's/#X11UseLocalhost.*/X11UseLocalhost no/' /etc/ssh/sshd_config \
+  && sed -i 's/#PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config \
+  && sed -i 's/#PubkeyAuthentication.*/PubkeyAuthentication yes/' /etc/ssh/sshd_config \
+  && sed -i 's/UsePAM.*/UsePAM yes/' /etc/ssh/sshd_config \
+  && sed -i 's/#PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config \
+  && ssh-keygen -A \
+  && useradd -m spacemacs -U
 USER spacemacs:spacemacs
 RUN ./spacemacsAutoInstall_manjaro.sh \
-&& mkdir -p /home/spacemacs/Documents \
-&& cp ./GTD /home/spacemacs/Documents/GTD -R
+  && rm "${HOME}/.spacemacsInstall" -R \
+  && mkdir -p /home/spacemacs/Documents \
+  && cp ./GTD /home/spacemacs/Documents/GTD -R
 
 # Persist the home dir where spacemacs resides
 VOLUME /home/spacemacs
