@@ -54,8 +54,8 @@ else
     pip install --force-reinstall pyang jedi json-rpc service_factory ipython autoflake hy \
         flake8 fabric python-binary-memcached Pygments sphinx \
         pycscope bashate yapf isort python-language-server[all] pyls-isort \
-        pyls-mypy pyls-black mypy importmagic epc autopep8 pydocstyle rope ptvsd pylint black \
-        yamllint --user
+        pyls-mypy pyls-black mypy importmagic epc autopep8 pycodestyle pydocstyle rope ptvsd pylint black \
+        yamllint pyflakes mccabe autopep8 --user
 
     # Set current path
     SOURCE="${BASH_SOURCE[0]}"
@@ -239,7 +239,7 @@ fmt.Printf(\"hello, world\\n\")
     # linking in arch linux haskell packages
     # Avoid building too much packages as this exceed max build time
     # https://wiki.archlinux.org/index.php/Haskell
-    stack setup
+    stack setup 8.6.5
     stack upgrade
     stack install pandoc
     stack install ShellCheck

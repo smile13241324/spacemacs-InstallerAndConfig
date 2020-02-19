@@ -38,7 +38,9 @@ This function should only modify configuration layer settings."
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     lsp
+     (lsp :variables
+          lsp-navigation 'peek
+          lsp-ui-doc-enable nil)
      dap
      (dart :variables
            dart-backend 'lsp
@@ -48,7 +50,6 @@ This function should only modify configuration layer settings."
      nim
      spacemacs-purpose
      elasticsearch
-     ocaml
      (yang :variables yang-pyang-rules "ietf")
      ietf
      scheme
@@ -88,7 +89,7 @@ This function should only modify configuration layer settings."
           org-enable-epub-support t
           org-enable-sticky-header nil)
      (shell :variables
-            shell-enable-smart-eshell t
+            shell-enable-smart-eshell nil
             shell-default-shell 'vterm
             shell-default-height 30
             shell-default-position 'bottom
@@ -129,7 +130,6 @@ This function should only modify configuration layer settings."
              python-save-before-test t
              python-sort-imports-on-save t)
      windows-scripts
-     agda
      jr
      (shell-scripts :variables
                     shell-scripts-backend 'lsp)
@@ -380,9 +380,7 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(spacemacs-dark
-                         leuven
-                         spacemacs-light)
+   dotspacemacs-themes '(spacemacs-dark)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
@@ -552,7 +550,7 @@ It should only modify the values of Spacemacs settings."
    ;;   :size-limit-kb 1000)
    ;; When used in a plist, `visual' takes precedence over `relative'.
    ;; (default nil)
-   dotspacemacs-line-numbers t
+   dotspacemacs-line-numbers nil
 
    ;; Code folding method. Possible values are `evil' and `origami'.
    ;; (default 'evil)
@@ -762,9 +760,6 @@ before packages are loaded."
         (goto-char (point-max))
         (insert "\n" "Thank you for contributing to Spacemacs! :+1:" "\n" "The PR has been cherry-picked into develop, you can safely delete your branch."))))
   (spacemacs/set-leader-keys "o c" #'smile13241324/cherry-pick-pr)
-
-  ;; Activate enlighten mode for clojure
-  (add-hook 'clojure-mode-hook 'cider-enlighten-mode)
 
   ;; Activate line wrap for all text modes
   (add-hook 'text-mode-hook 'spacemacs/toggle-truncate-lines-off)
