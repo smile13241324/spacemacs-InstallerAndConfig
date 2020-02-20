@@ -235,6 +235,10 @@ fmt.Printf(\"hello, world\\n\")
     cd ${GOPATH}/src/github.com/candid82/joker
     ./run.sh --version && go install
 
+    # Install sqlfmt
+    wget -q -O - https://github.com/mjibson/sqlfmt/releases/latest/download/sqlfmt_0.4.0_linux_amd64.tar.gz | tar -xpvzf - --directory "${localInstallDir}/bin"
+    chmod +x "${localInstallDir}/bin/sqlfmt"
+
     # Install haskell dependencies with stack, do it manually to avoid dynamic
     # linking in arch linux haskell packages
     # Avoid building too much packages as this exceed max build time
