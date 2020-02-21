@@ -245,6 +245,10 @@ fmt.Printf(\"hello, world\\n\")
     # https://wiki.archlinux.org/index.php/Haskell
     stack setup 8.6.5
     stack upgrade
+
+    # Set global resolver to latest lts version supported by stack
+    sed -i 's/resolver:.*/resolver: lts-14.27/' /home/spacemacs/.stack/global-project/stack.yaml
+
     stack install pandoc
     stack install ShellCheck
 
