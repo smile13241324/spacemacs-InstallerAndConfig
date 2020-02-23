@@ -247,7 +247,17 @@ fmt.Printf(\"hello, world\\n\")
     stack upgrade
 
     # Set global resolver to latest lts version supported by stack
-    sed -i 's/resolver:.*/resolver: lts-14.27/' /home/spacemacs/.stack/global-project/stack.yaml
+    mkdir -p /home/spacemacs/.stack/global-project
+    echo "# This is the implicit global project's config file, which is only used when
+# 'stack' is run outside of a real project.  Settings here do _not_ act as
+# defaults for all projects.  To change stack's default settings, edit
+# '/home/spacemacs/.stack/config.yaml' instead.
+#
+# For more information about stack's configuration, see
+# http://docs.haskellstack.org/en/stable/yaml_configuration/
+#
+packages: []
+resolver: lts-14.27" >> /home/spacemacs/.stack/global-project/stack.yaml
 
     stack install pandoc
     stack install ShellCheck

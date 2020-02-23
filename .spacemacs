@@ -101,11 +101,15 @@ This function should only modify configuration layer settings."
      (cmake :variables
             cmake-enable-cmake-ide-support t)
      (c-c++ :variables
+            c-c++-default-mode-for-headers 'c++-mode
+            ;; ccls-executable "/my/path"
+            ;; c-c++-backend 'lsp-ccls
             c-c++-backend 'lsp-clangd
             c-c++-lsp-enable-semantic-highlight 'rainbow
             c++-enable-organize-includes-on-save t
-            c-c++-adopt-subprojects t
+            c-c++-lsp-semantic-highlight-method 'overlay
             c-c++-enable-clang-format-on-save t
+            c-c++-adopt-subprojects t
             c-c++-enable-auto-newline t)
      web-beautify
      semantic
