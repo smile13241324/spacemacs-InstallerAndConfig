@@ -45,8 +45,7 @@ This function should only modify configuration layer settings."
      (dart :variables
            dart-backend 'lsp
            lsp-dart-sdk-dir "~/Downloads/dart-sdk/")
-     (helm :variables
-           helm-enable-auto-resize t)
+     helm
      nim
      spacemacs-purpose
      elasticsearch
@@ -64,6 +63,7 @@ This function should only modify configuration layer settings."
                       auto-completion-enable-help-tooltip t
                       auto-completion-use-company-box nil
                       auto-completion-enable-sort-by-usage t)
+     syntax-checking
      better-defaults
      (clojure :variables
               clojure-enable-fancify-symbols t
@@ -95,7 +95,6 @@ This function should only modify configuration layer settings."
             shell-default-position 'bottom
             shell-default-full-span nil
             shell-default-term-shell "/usr/bin/fish")
-     syntax-checking
      version-control
      import-js
      (cmake :variables
