@@ -13,7 +13,7 @@ RUN ./spacemacsAutoInstall_manjaro.sh "sudoRun" \
   && ssh-keygen -A \
   && useradd -m spacemacs -U \
   && mkdir -p /home/spacemacs/Documents \
-  && mv ./GTD /home/spacemacs/Documents/GTD -R \
+  && mv ./GTD /home/spacemacs/Documents/GTD \
   && chown spacemacs:spacemacs /home/spacemacs/Documents -R \
   && chown spacemacs:spacemacs /installRepo -R
 USER spacemacs:spacemacs
