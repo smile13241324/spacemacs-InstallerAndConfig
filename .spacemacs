@@ -247,6 +247,7 @@ This function should only modify configuration layer settings."
      (colors :variables
              colors-colorize-identifiers 'all)
      d
+     unicode-fonts
      (typescript :variables
                  typescript-backend 'lsp
                  typescript-fmt-tool 'tide
