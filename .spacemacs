@@ -46,6 +46,9 @@ This function should only modify configuration layer settings."
            dart-backend 'lsp
            lsp-dart-sdk-dir "~/Downloads/dart-sdk/")
      helm
+     notmuch
+     (scala :variables
+            scala-backend 'scala-metals)
      nim
      spacemacs-purpose
      elasticsearch
@@ -247,6 +250,7 @@ This function should only modify configuration layer settings."
      (typescript :variables
                  typescript-backend 'lsp
                  typescript-fmt-tool 'tide
+                 typescript-lsp-linter t
                  typescript-linter 'tslint
                  typescript-fmt-on-save t))
 
@@ -388,7 +392,7 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(spacemacs-dark)
+   dotspacemacs-themes '(spacemacs-dark modus-vivendi spacemacs-light modus-operandi)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
@@ -438,7 +442,7 @@ It should only modify the values of Spacemacs settings."
    ;; and TAB or `C-m' and `RET'.
    ;; In the terminal, these pairs are generally indistinguishable, so this only
    ;; works in the GUI. (default nil)
-   dotspacemacs-distinguish-gui-tab nil
+   dotspacemacs-distinguish-gui-tab t
 
    ;; Name of the default layout (default "Default")
    dotspacemacs-default-layout-name "Default"
@@ -628,6 +632,11 @@ It should only modify the values of Spacemacs settings."
    ;; (default nil)
    dotspacemacs-whitespace-cleanup 'all
 
+   ;; If non nil activate `clean-aindent-mode' which tries to correct
+   ;; indents of simple modes. This can interfer with mode specific
+   ;; indent handling. If it does deactivate it here.
+   dotspacemacs-use-clean-aindent-mode nil
+
    ;; Either nil or a number of seconds. If non-nil zone out after the specified
    ;; number of seconds. (default nil)
    dotspacemacs-zone-out-when-idle nil
@@ -650,15 +659,15 @@ See the header of this file for more information."
 This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
-If you are unsure, try setting them in `dotspacemacs/user-config' first."
-  )
+If you are unsure, try setting them in `dotspacemacs/user-config' first.")
+
 
 (defun dotspacemacs/user-load ()
   "Library to load while dumping.
 This function is called only while dumping Spacemacs configuration. You can
 `require' or `load' the libraries of your choice that will be included in the
-dump."
-  )
+dump.")
+
 
 (defun dotspacemacs/user-config ()
   "Configuration for user code:
