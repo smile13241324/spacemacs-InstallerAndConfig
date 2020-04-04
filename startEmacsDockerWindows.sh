@@ -1,4 +1,4 @@
-# Run this script in cygwin on your windows box. Cigwin must have xinit and openssh installed.
+# Run this script in cygwin on your windows box. Cygwin must have xinit and openssh installed.
 # Be aware that docker on windows requires you to be admin to run it, however running X as admin is a bad idea.
 # My recommendation is to execute the X related commands as your local user in a cygwin shell and run the docker command in a separate admin shell.
 
