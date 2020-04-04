@@ -30,3 +30,4 @@ Notice that to get a fullfledged ide a one time setup must be done including:
 * configuring your git identity
 * building your local version of hie the haskell language server, only required if you are using it
 For these `post_build.sh` is available which should be called in the terminal once the home volume is created.
+* importing your gpg keys with `gpg --import <your keys in encrypted form>`
