@@ -46,6 +46,9 @@ This function should only modify configuration layer settings."
            dart-backend 'lsp
            lsp-dart-sdk-dir "~/Downloads/dart-sdk/")
      helm
+     (spell-checking :variables
+                     spell-checking-enable-auto-dictionary t
+                     enable-flyspell-auto-completion t)
      notmuch
      (scala :variables
             scala-backend 'scala-metals)
@@ -54,6 +57,7 @@ This function should only modify configuration layer settings."
      elasticsearch
      (yang :variables yang-pyang-rules "ietf")
      ietf
+     ;; ggtags
      scheme
      (auto-completion :variables
                       auto-completion-return-key-behavior 'complete
@@ -80,9 +84,10 @@ This function should only modify configuration layer settings."
                plantuml-jar-path "~/.plantuml/plantUml.jar"
                org-plantuml-jar-path "~/.plantuml/plantUml.jar")
      salt
+     ipython-notebook
      ibuffer
      emacs-lisp
-     ;; pdf
+     pdf
      (org :variables
           org-want-todo-bindings t
           org-enable-github-support t
@@ -105,8 +110,6 @@ This function should only modify configuration layer settings."
             cmake-enable-cmake-ide-support t)
      (c-c++ :variables
             c-c++-default-mode-for-headers 'c++-mode
-            ;; ccls-executable "/my/path"
-            ;; c-c++-backend 'lsp-ccls
             c-c++-backend 'lsp-clangd
             c-c++-lsp-enable-semantic-highlight 'rainbow
             c++-enable-organize-includes-on-save t
@@ -241,6 +244,7 @@ This function should only modify configuration layer settings."
      ;; (dash :variables
      ;;       helm-dash-docset-newpath "~/.local/share/Zeal/Zeal/docsets")
      games
+     meson
      php
      helpful
      nginx
@@ -402,7 +406,6 @@ It should only modify the values of Spacemacs settings."
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(spacemacs-dark modus-vivendi spacemacs-light modus-operandi)
-
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
    ;; first three are spaceline themes. `doom' is the doom-emacs mode-line.
