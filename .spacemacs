@@ -42,13 +42,13 @@ This function should only modify configuration layer settings."
           lsp-navigation 'peek
           lsp-ui-doc-enable nil)
      dap
-     (dart :variables
-           dart-backend 'lsp
-           lsp-dart-sdk-dir "~/Downloads/dart-sdk/")
+     ;; (dart :variables
+     ;;       dart-backend 'lsp
+     ;;       lsp-dart-sdk-dir "~/Downloads/dart-sdk/")
      helm
-     (spell-checking :variables
-                     spell-checking-enable-auto-dictionary t
-                     enable-flyspell-auto-completion t)
+     ;; (spell-checking :variables
+     ;;                 spell-checking-enable-auto-dictionary t
+     ;;                 enable-flyspell-auto-completion t)
      notmuch
      (scala :variables
             scala-backend 'scala-metals)
@@ -57,7 +57,7 @@ This function should only modify configuration layer settings."
      elasticsearch
      (yang :variables yang-pyang-rules "ietf")
      ietf
-     ;; ggtags
+     ;; gtags
      scheme
      (auto-completion :variables
                       auto-completion-return-key-behavior 'complete
@@ -89,6 +89,7 @@ This function should only modify configuration layer settings."
      emacs-lisp
      pdf
      (org :variables
+          org-enable-org-journal-support t
           org-want-todo-bindings t
           org-enable-github-support t
           org-enable-bootstrap-support t
@@ -148,9 +149,10 @@ This function should only modify configuration layer settings."
      (markdown :variables
                markdown-live-preview-engine 'vmd)
      bibtex
-     (json :variables json-fmt-tool 'web-beautify
+     (json :variables
+           json-fmt-tool 'web-beautify
+           ;; json-backend 'lsp
            json-fmt-on-save t)
-
      debug
      (latex :variables
             latex-enable-auto-fill t
@@ -225,7 +227,8 @@ This function should only modify configuration layer settings."
      typography
      vimscript
      (terraform :variables
-                terraform-auto-format-on-save t)
+                terraform-auto-format-on-save t
+                terraform-backend 'lsp)
      (ruby :variables
            ruby-enable-enh-ruby-mode t
            ruby-backend 'lsp)
@@ -406,6 +409,7 @@ It should only modify the values of Spacemacs settings."
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(spacemacs-dark modus-vivendi spacemacs-light modus-operandi)
+
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
    ;; first three are spaceline themes. `doom' is the doom-emacs mode-line.
@@ -419,8 +423,7 @@ It should only modify the values of Spacemacs settings."
    ;; (default t)
    dotspacemacs-colorize-cursor-according-to-state t
 
-   ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
-   ;; quickly tweak the mode-line size to make separators look not too crappy.
+   ;; Default font or prioritized list of fonts.
    dotspacemacs-default-font '("Source Code Pro"
                                :size 7.5
                                :weight normal
@@ -660,7 +663,11 @@ It should only modify the values of Spacemacs settings."
    ;; Run `spacemacs/prettify-org-buffer' when
    ;; visiting README.org files of Spacemacs.
    ;; (default nil)
-   dotspacemacs-pretty-docs nil))
+   dotspacemacs-pretty-docs nil
+
+   ;; If nil the home buffer shows the full path of agenda items
+   ;; and todos. If non nil only the file name is shown.
+   dotspacemacs-home-shorten-agenda-source t))
 
 (defun dotspacemacs/user-env ()
   "Environment variables setup.
@@ -714,7 +721,7 @@ before packages are loaded."
   (spacemacs/set-leader-keys "s w a" 'engine/search-wolfram-alpha)
   (spacemacs/set-leader-keys "s w w" 'engine/search-wikipedia)
 
-  ;; Activate latex document preview
+  ;; Activate latex auto document preview
   (add-hook 'doc-view-mode-hook 'auto-revert-mode)
 
   ;; Configure indentation for web mode and react mode to work together
@@ -731,9 +738,6 @@ before packages are loaded."
     (add-to-list 'web-mode-indentation-params '("lineup-args" . nil))
     (add-to-list 'web-mode-indentation-params '("lineup-concats" . nil))
     (add-to-list 'web-mode-indentation-params '("lineup-calls" . nil)))
-
-  ;; Set variable for fish to work as ansi term terminal
-  (add-hook 'term-mode-hook 'toggle-truncate-lines)
 
   ;; Configure org mode
   (with-eval-after-load 'org

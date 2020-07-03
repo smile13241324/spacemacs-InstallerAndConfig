@@ -6,9 +6,9 @@ localInstallBin="${localInstallDir}/bin"
 # Set current path
 SOURCE="${BASH_SOURCE[0]}"
 while [[ -h "$SOURCE" ]]; do # resolve $SOURCE until the file is no longer a symlink
-	DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-	SOURCE="$(readlink "$SOURCE")"
-	[[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+    DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+    SOURCE="$(readlink "$SOURCE")"
+    [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
@@ -16,7 +16,7 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 installBaseDir="${HOME}/.spacemacsInstall"
 mkdir -p "${installBaseDir}"
 
-# Commit default spacemacs dotfile 
+# Commit default spacemacs dotfile
 cp .spacemacs ${HOME}/.spacemacs
 
 # Install haskell dependencies with stack, do it manually to avoid dynamic
@@ -60,4 +60,4 @@ stack install hoogle hlint hindent hasktags happy alex apply-refact stylish-hask
 #    git clone https://github.com/haskell/haskell-ide-engine --recurse-submodules
 #    cd haskell-ide-engine
 #    stack ./install.hs hie-8.6.5
-#fi	
+#fi
