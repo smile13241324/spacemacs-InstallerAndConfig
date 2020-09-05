@@ -23,7 +23,7 @@ cp .spacemacs ${HOME}/.spacemacs
 # linking in arch linux haskell packages
 # Avoid building too much packages as this exceed max build time
 # https://wiki.archlinux.org/index.php/Haskell
-stack setup 8.6.5
+stack setup
 stack upgrade
 
 # Set global resolver to latest lts version supported by stack
@@ -37,7 +37,7 @@ echo "# This is the implicit global project's config file, which is only used wh
 # http://docs.haskellstack.org/en/stable/yaml_configuration/
 #
 packages: []
-resolver: lts-14.27" >> /home/spacemacs/.stack/global-project/stack.yaml
+resolver: lts-16.12" >> /home/spacemacs/.stack/global-project/stack.yaml
 
 stack install pandoc
 stack install ShellCheck
@@ -45,9 +45,9 @@ stack install ShellCheck
 # Get latest hadolint release
 wget -O "${localInstallDir}/bin/hadolint" https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64
 chmod +x "${localInstallDir}/bin/hadolint"
-# Install haskell dependencies with stack, do it manually to avoid dynamic
+# Install haskell dependencies with stack, do it manually to avoid dynamic linking
 
-stack install hoogle hlint hindent hasktags happy alex apply-refact stylish-haskell-0.9.4.4
+stack install hoogle hlint hindent hasktags happy alex apply-refact stylish-haskell
 
 # Haskell lsp must be build locally otherwise it will run
 # over 4 hours in docker hub and exceed the max build time.
