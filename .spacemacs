@@ -30,7 +30,7 @@ This function should only modify configuration layer settings."
    ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
    dotspacemacs-configuration-layer-path '()
 
-   ;; List of configuration layers to load.
+   ;; Configuration layers
    dotspacemacs-configuration-layers
    '(
      ;; ----------------------------------------------------------------
@@ -39,8 +39,7 @@ This function should only modify configuration layer settings."
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      (lsp :variables
-          lsp-navigation 'peek
-          lsp-ui-doc-enable nil)
+          lsp-navigation 'peek)
      dap
      ;; (dart :variables
      ;;       dart-backend 'lsp
@@ -49,14 +48,15 @@ This function should only modify configuration layer settings."
      ;; (spell-checking :variables
      ;;                 spell-checking-enable-auto-dictionary t
      ;;                 enable-flyspell-auto-completion t)
-     notmuch
      (scala :variables
             scala-backend 'scala-metals)
-     nim
+     (nim :variables
+          nim-backend 'company-nim)
      spacemacs-purpose
      elasticsearch
      (yang :variables yang-pyang-rules "ietf")
      ietf
+     ;; ocaml
      ;; gtags
      scheme
      (auto-completion :variables
@@ -108,7 +108,8 @@ This function should only modify configuration layer settings."
      version-control
      import-js
      (cmake :variables
-            cmake-enable-cmake-ide-support t)
+            cmake-enable-cmake-ide-support t
+            cmake-backend 'company-cmake)
      (c-c++ :variables
             c-c++-default-mode-for-headers 'c++-mode
             c-c++-backend 'lsp-clangd
@@ -159,7 +160,12 @@ This function should only modify configuration layer settings."
             latex-enable-magic nil
             latex-enable-folding t)
      lua
-     html
+     (html :variables
+           web-fmt-tool 'web-beautify
+           css-enable-lsp t
+           less-enable-lsp t
+           scss-enable-lsp t
+           html-enable-lsp t)
      (javascript :variables
                  javascript-import-tool 'import-js
                  javascript-backend 'lsp
@@ -184,12 +190,17 @@ This function should only modify configuration layer settings."
      selectric
      octave
      purescript
+     (kotlin :variables
+             kotlin-backend 'lsp
+             kotlin-lsp-jar-path "~/.kotlin-lsp/install/server/bin/kotlin-language-server")
      speed-reading
      systemd
      imenu-list
      (java :variables
            java-backend 'lsp)
-     groovy
+     (groovy :variables
+             groovy-backend 'lsp
+             groovy-lsp-jar-path "~/.groovy-lsp/groovy-lsp-all.jar")
      (go :variables
          go-backend 'lsp
          go-use-golangci-lint t
@@ -202,6 +213,7 @@ This function should only modify configuration layer settings."
      coq
      django
      (elm :variables
+          elm-backend 'lsp
           elm-sort-imports-on-save t
           elm-format-on-save t)
      kubernetes
@@ -218,14 +230,16 @@ This function should only modify configuration layer settings."
                treemacs-use-follow-mode t
                treemacs-use-filewatch-mode t
                treemacs-collapse-dirs 3
+               treemacs-use-icons-dired t
+               treemacs-use-all-the-icons-theme nil
                treemacs-use-git-mode 'deferred)
      ansible
      puppet
      rust
-     hy
      xkcd
      typography
-     vimscript
+     (vimscript :variables
+                vimscript-backend 'lsp)
      (terraform :variables
                 terraform-auto-format-on-save t
                 terraform-backend 'lsp)
@@ -408,7 +422,7 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(spacemacs-dark modus-vivendi spacemacs-light modus-operandi)
+   dotspacemacs-themes '(modus-vivendi spacemacs-dark modus-operandi spacemacs-light dracula)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
@@ -519,7 +533,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil the frame is fullscreen when Emacs starts up. (default nil)
    ;; (Emacs 24.4+ only)
-   dotspacemacs-fullscreen-at-startup t
+   dotspacemacs-fullscreen-at-startup nil
 
    ;; If non-nil `spacemacs/toggle-fullscreen' will not use native fullscreen.
    ;; Use to disable fullscreen animations in OSX. (default nil)
@@ -528,7 +542,7 @@ It should only modify the values of Spacemacs settings."
    ;; If non-nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
    ;; (default nil) (Emacs 24.4+ only)
-   dotspacemacs-maximized-at-startup nil
+   dotspacemacs-maximized-at-startup t
 
    ;; If non-nil the frame is undecorated when Emacs starts up. Combine this
    ;; variable with `dotspacemacs-maximized-at-startup' in OSX to obtain
@@ -656,6 +670,13 @@ It should only modify the values of Spacemacs settings."
    ;; (default t)
    dotspacemacs-use-clean-aindent-mode nil
 
+   ;; If non-nil shift your number row to match the entered keyboard layout
+   ;; (only in insert mode). Currently the keyboard layouts
+   ;; (qwerty-us qwertz-de) are supported.
+   ;; New layouts can be added in `spacemacs-editing' layer.
+   ;; (default nil)
+   dotspacemacs-swap-number-row nil
+
    ;; Either nil or a number of seconds. If non-nil zone out after the specified
    ;; number of seconds. (default nil)
    dotspacemacs-zone-out-when-idle nil
@@ -670,7 +691,7 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-home-shorten-agenda-source t))
 
 (defun dotspacemacs/user-env ()
-  "Environment variables setup.
+  "Environment variables setup.))
 This function defines the environment variables for your Emacs session. By
 default it calls `spacemacs/load-spacemacs-env' which loads the environment
 variables declared in `~/.spacemacs.env' or `~/.spacemacs.d/.spacemacs.env'.
@@ -779,7 +800,7 @@ before packages are loaded."
   ;; Format file on save
   (defun format-for-filetype ()
     "Run generic format function if not a mode specific one is available"
-    (let ((filetypes '("hs" "c" "cpp" "h" "hpp" "py" "pyc" "robot" "tf" "go" "yml" "yaml")))
+    (let ((filetypes '("elm" "hs" "c" "cpp" "h" "hpp" "py" "pyc" "robot" "tf" "go" "yml" "yaml")))
       (if (not (member (file-name-extension (buffer-file-name)) filetypes))
           (save-excursion
             (evil-indent (point-min) (point-max))))))

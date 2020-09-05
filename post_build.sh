@@ -29,6 +29,7 @@ git config --global core.editor "$editor"
 read -p "Enter Your GPG Signing key (the identifier not the key itself use gpg -k to see it): "  gpgkey
 git config --global user.signingkey "$gpgkey"
 git config --global commit.gpgsign true
+git config --global pull.rebase false
 
 # Build haskell lsp server
 lspHaskelBaseDir="${installBaseDir}/hie"
