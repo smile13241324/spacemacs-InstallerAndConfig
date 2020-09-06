@@ -37,7 +37,7 @@ echo "# This is the implicit global project's config file, which is only used wh
 # http://docs.haskellstack.org/en/stable/yaml_configuration/
 #
 packages: []
-resolver: lts-16.12" >> /home/spacemacs/.stack/global-project/stack.yaml
+resolver: lts-14.27" >> /home/spacemacs/.stack/global-project/stack.yaml
 
 stack install pandoc
 stack install ShellCheck
@@ -47,7 +47,7 @@ wget -O "${localInstallDir}/bin/hadolint" https://github.com/hadolint/hadolint/r
 chmod +x "${localInstallDir}/bin/hadolint"
 # Install haskell dependencies with stack, do it manually to avoid dynamic linking
 
-stack install hoogle hlint hindent hasktags happy alex apply-refact stylish-haskell
+stack install hoogle hlint hindent hasktags happy alex apply-refact stylish-haskell-0.9.4.4
 
 # Haskell lsp must be build locally otherwise it will run
 # over 4 hours in docker hub and exceed the max build time.
