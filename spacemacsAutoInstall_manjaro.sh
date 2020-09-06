@@ -45,19 +45,3 @@ stack install ShellCheck
 # Get latest hadolint release
 wget -O "${localInstallDir}/bin/hadolint" https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64
 chmod +x "${localInstallDir}/bin/hadolint"
-# Install haskell dependencies with stack, do it manually to avoid dynamic linking
-
-stack install hoogle hlint hindent hasktags happy alex apply-refact stylish-haskell-0.9.4.4
-
-# Haskell lsp must be build locally otherwise it will run
-# over 4 hours in docker hub and exceed the max build time.
-# Install haskell lsp from source
-# Use build script for the base ghc version
-#lspHaskelBaseDir="${installBaseDir}/hie"
-#if [[ ! -d "${lspHaskelBaseDir}" ]]; then
-#    mkdir "${lspHaskelBaseDir}" -p
-#    cd "${lspHaskelBaseDir}"
-#    git clone https://github.com/haskell/haskell-ide-engine --recurse-submodules
-#    cd haskell-ide-engine
-#    stack ./install.hs hie-8.6.5
-#fi

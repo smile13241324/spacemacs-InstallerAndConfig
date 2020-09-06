@@ -6,9 +6,9 @@ localInstallBin="${localInstallDir}/bin"
 # Set current path
 SOURCE="${BASH_SOURCE[0]}"
 while [[ -h "$SOURCE" ]]; do # resolve $SOURCE until the file is no longer a symlink
-	DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-	SOURCE="$(readlink "$SOURCE")"
-	[[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+    DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+    SOURCE="$(readlink "$SOURCE")"
+    [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
@@ -30,6 +30,16 @@ read -p "Enter Your GPG Signing key (the identifier not the key itself use gpg -
 git config --global user.signingkey "$gpgkey"
 git config --global commit.gpgsign true
 git config --global pull.rebase false
+
+# Install haskell dependencies with stack, do it manually to avoid dynamic linking
+stack install hoogle
+stack install hlint
+stack install hindent
+stack install hasktags
+stack install happy
+stack install alex
+stack install apply-refact
+stack install stylish-haskell-0.9.4.4
 
 # Build haskell lsp server
 lspHaskelBaseDir="${installBaseDir}/hie"
