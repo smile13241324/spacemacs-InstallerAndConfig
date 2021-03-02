@@ -37,7 +37,7 @@ echo "# This is the implicit global project's config file, which is only used wh
 # http://docs.haskellstack.org/en/stable/yaml_configuration/
 #
 packages: []
-resolver: lts-14.27" >> /home/spacemacs/.stack/global-project/stack.yaml
+resolver: lts-17.4" >> /home/spacemacs/.stack/global-project/stack.yaml
 
 stack install pandoc
 stack install ShellCheck

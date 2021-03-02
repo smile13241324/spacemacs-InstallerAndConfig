@@ -39,11 +39,19 @@ This function should only modify configuration layer settings."
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      (lsp :variables
+          lsp-headerline-breadcrumb-enable nil
+          lsp-remap-xref-keybindings t
           lsp-navigation 'peek)
      dap
+     eaf
+     command-log
+     (crystal :variables
+              crystal-backend 'company-crystal)
      ;; (dart :variables
      ;;       dart-backend 'lsp
      ;;       lsp-dart-sdk-dir "~/Downloads/dart-sdk/")
+     (ess :variables
+          ess-r-backend 'lsp)
      helm
      ;; (spell-checking :variables
      ;;                 spell-checking-enable-auto-dictionary t
@@ -74,6 +82,7 @@ This function should only modify configuration layer settings."
      syntax-checking
      better-defaults
      (clojure :variables
+              clojure-backend 'cider
               clojure-enable-fancify-symbols t
               clojure-enable-sayid t
               clojure-enable-clj-refactor t
@@ -87,7 +96,7 @@ This function should only modify configuration layer settings."
      ipython-notebook
      ibuffer
      emacs-lisp
-     pdf
+     ;; pdf
      (org :variables
           org-enable-org-journal-support t
           org-want-todo-bindings t
@@ -96,7 +105,10 @@ This function should only modify configuration layer settings."
           org-enable-reveal-js-support t
           org-enable-hugo-support t
           org-enable-trello-support t
+          org-enable-org-contacts-support t
           org-enable-epub-support t
+          org-enable-jira-support t
+          org-enable-roam-support nil
           org-enable-sticky-header nil)
      (shell :variables
             shell-enable-smart-eshell nil
@@ -113,12 +125,11 @@ This function should only modify configuration layer settings."
      (c-c++ :variables
             c-c++-default-mode-for-headers 'c++-mode
             c-c++-backend 'lsp-clangd
+            ;; c-c++-backend 'lsp-ccls
             c-c++-lsp-enable-semantic-highlight 'rainbow
             c++-enable-organize-includes-on-save t
-            c-c++-lsp-semantic-highlight-method 'overlay
             c-c++-enable-clang-format-on-save t
-            c-c++-adopt-subprojects t
-            c-c++-enable-auto-newline t)
+            c-c++-adopt-subprojects t)
      web-beautify
      semantic
      templates
@@ -152,10 +163,11 @@ This function should only modify configuration layer settings."
      bibtex
      (json :variables
            json-fmt-tool 'web-beautify
-           ;; json-backend 'lsp
+           json-backend 'lsp
            json-fmt-on-save t)
      debug
      (latex :variables
+            latex-backend 'lsp
             latex-enable-auto-fill t
             latex-enable-magic nil
             latex-enable-folding t)
@@ -250,7 +262,6 @@ This function should only modify configuration layer settings."
      asm
      (sql :variables
           sql-capitalize-keywords t)
-     ;; perl6
      autohotkey
      ;; (elixir :variables
      ;;         flycheck-elixir-credo-strict t
@@ -268,10 +279,11 @@ This function should only modify configuration layer settings."
      racket
      (colors :variables
              colors-colorize-identifiers 'all)
+     languagetool
      d
      unicode-fonts
      (typescript :variables
-                 typescript-backend 'lsp
+                 typescript-backend 'tide
                  typescript-fmt-tool 'tide
                  typescript-lsp-linter t
                  typescript-linter 'tslint
@@ -325,7 +337,7 @@ It should only modify the values of Spacemacs settings."
    ;; To load it when starting Emacs add the parameter `--dump-file'
    ;; when invoking Emacs 27.1 executable on the command line, for instance:
    ;;   ./emacs --dump-file=$HOME/.emacs.d/.cache/dumps/spacemacs-27.1.pdmp
-   ;; (default spacemacs-27.1.pdmp)
+   ;; (default (format "spacemacs-%s.pdmp" emacs-version))
    dotspacemacs-emacs-dumper-dump-file (format "spacemacs-%s.pdmp" emacs-version)
 
    ;; If non-nil ELPA repositories are contacted via HTTPS whenever it's
@@ -355,7 +367,9 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil then Spacelpa repository is the primary source to install
    ;; a locked version of packages. If nil then Spacemacs will install the
-   ;; latest version of packages from MELPA. (default nil)
+   ;; latest version of packages from MELPA. Spacelpa is currently in
+   ;; experimental state please use only for testing purposes.
+   ;; (default nil)
    dotspacemacs-use-spacelpa nil
 
    ;; If non-nil then verify the signature for downloaded Spacelpa archives.
@@ -671,8 +685,8 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-use-clean-aindent-mode nil
 
    ;; If non-nil shift your number row to match the entered keyboard layout
-   ;; (only in insert mode). Currently the keyboard layouts
-   ;; (qwerty-us qwertz-de) are supported.
+   ;; (only in insert state). Currently supported keyboard layouts are:
+   ;; `qwerty-us', `qwertz-de' and `querty-ca-fr'.
    ;; New layouts can be added in `spacemacs-editing' layer.
    ;; (default nil)
    dotspacemacs-swap-number-row nil
@@ -737,10 +751,11 @@ before packages are loaded."
   (spacemacs/set-leader-keys "s w d" 'engine/search-duck-duck-go)
   (spacemacs/set-leader-keys "s w g" 'engine/search-github)
   (spacemacs/set-leader-keys "s w i" 'engine/search-spacemacs-issues)
-  (spacemacs/set-leader-keys "s w m" 'engine/search-google-maps)
+  (spacemacs/set-leader-keys "s w M" 'engine/search-google-maps)
   (spacemacs/set-leader-keys "s w b" 'engine/search-project-gutenberg)
   (spacemacs/set-leader-keys "s w a" 'engine/search-wolfram-alpha)
   (spacemacs/set-leader-keys "s w w" 'engine/search-wikipedia)
+  (spacemacs/set-leader-keys "s w m" 'engine/search-melpa)
 
   ;; Activate latex auto document preview
   (add-hook 'doc-view-mode-hook 'auto-revert-mode)
