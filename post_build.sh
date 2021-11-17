@@ -31,22 +31,16 @@ git config --global user.signingkey "$gpgkey"
 git config --global commit.gpgsign true
 git config --global pull.rebase false
 
+# This is mostly deprecated due to the new haskell lsp
 # Install haskell dependencies with stack, do it manually to avoid dynamic linking
-stack install hoogle
-stack install hlint
-stack install hindent
-stack install hasktags
-stack install happy
-stack install alex
-stack install apply-refact
-stack install stylish-haskell-0.9.4.4
+# stack install hoogle hlint hindent hasktags happy alex apply-refact stylish-haskell-0.9.4.4
 
-# Build haskell lsp server
-lspHaskelBaseDir="${installBaseDir}/hie"
-if [[ ! -d "${lspHaskelBaseDir}" ]]; then
-    mkdir "${lspHaskelBaseDir}" -p
-    cd "${lspHaskelBaseDir}"
-    git clone https://github.com/haskell/haskell-ide-engine --recurse-submodules
-    cd haskell-ide-engine
-    stack ./install.hs hie-8.6.5
-fi
+# # Build haskell lsp server
+# lspHaskelBaseDir="${installBaseDir}/hie"
+# if [[ ! -d "${lspHaskelBaseDir}" ]]; then
+#     mkdir "${lspHaskelBaseDir}" -p
+#     cd "${lspHaskelBaseDir}"
+#     git clone https://github.com/haskell/haskell-ide-engine --recurse-submodules
+#     cd haskell-ide-engine
+#     stack ./install.hs hie-8.6.5
+# fi

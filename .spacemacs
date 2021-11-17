@@ -30,7 +30,7 @@ This function should only modify configuration layer settings."
    ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
    dotspacemacs-configuration-layer-path '()
 
-   ;; Configuration layers
+   ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
      ;; ----------------------------------------------------------------
@@ -40,16 +40,16 @@ This function should only modify configuration layer settings."
      ;; ----------------------------------------------------------------
      (lsp :variables
           lsp-headerline-breadcrumb-enable nil
+          lsp-use-upstream-bindings t
           lsp-remap-xref-keybindings t
           lsp-navigation 'peek)
      dap
-     eaf
+     dotnet
+     fsharp
+     csharp
      command-log
      (crystal :variables
               crystal-backend 'company-crystal)
-     ;; (dart :variables
-     ;;       dart-backend 'lsp
-     ;;       lsp-dart-sdk-dir "~/Downloads/dart-sdk/")
      (ess :variables
           ess-r-backend 'lsp)
      helm
@@ -64,8 +64,6 @@ This function should only modify configuration layer settings."
      elasticsearch
      (yang :variables yang-pyang-rules "ietf")
      ietf
-     ;; ocaml
-     ;; gtags
      scheme
      (auto-completion :variables
                       auto-completion-return-key-behavior 'complete
@@ -77,8 +75,7 @@ This function should only modify configuration layer settings."
                       auto-completion-private-snippets-directory nil
                       auto-completion-enable-snippets-in-popup nil
                       auto-completion-enable-help-tooltip t
-                      auto-completion-use-company-box nil
-                      auto-completion-enable-sort-by-usage t)
+                      auto-completion-use-company-box nil)
      syntax-checking
      better-defaults
      (clojure :variables
@@ -106,10 +103,9 @@ This function should only modify configuration layer settings."
           org-enable-hugo-support t
           org-enable-trello-support t
           org-enable-org-contacts-support t
-          org-enable-epub-support t
-          org-enable-jira-support t
           org-enable-roam-support nil
-          org-enable-sticky-header nil)
+          org-enable-epub-support t
+          org-enable-jira-support t)
      (shell :variables
             shell-enable-smart-eshell nil
             shell-default-shell 'vterm
@@ -132,6 +128,7 @@ This function should only modify configuration layer settings."
             c-c++-adopt-subprojects t)
      web-beautify
      semantic
+     semantic-web
      templates
      epub
      themes-megapack
@@ -146,7 +143,7 @@ This function should only modify configuration layer settings."
      common-lisp
      (python :variables
              python-backend 'lsp
-             python-lsp-server 'pyls
+             python-lsp-server 'pylsp
              python-test-runner 'pytest
              python-formatter 'lsp
              python-format-on-save t
@@ -165,15 +162,22 @@ This function should only modify configuration layer settings."
            json-fmt-tool 'web-beautify
            json-backend 'lsp
            json-fmt-on-save t)
+     hackernews
+     lobsters
+     streamlink
+     twitch
      debug
      (latex :variables
             latex-backend 'lsp
             latex-enable-auto-fill t
             latex-enable-magic nil
+            latex-view-with-pdf-tools t
+            latex-view-pdf-in-split-window t
             latex-enable-folding t)
      lua
      (html :variables
            web-fmt-tool 'web-beautify
+           html-enable-leex-support t
            css-enable-lsp t
            less-enable-lsp t
            scss-enable-lsp t
@@ -202,9 +206,6 @@ This function should only modify configuration layer settings."
      selectric
      octave
      purescript
-     (kotlin :variables
-             kotlin-backend 'lsp
-             kotlin-lsp-jar-path "~/.kotlin-lsp/install/server/bin/kotlin-language-server")
      speed-reading
      systemd
      imenu-list
@@ -278,8 +279,8 @@ This function should only modify configuration layer settings."
      nginx
      racket
      (colors :variables
+             colors-enable-nyan-cat-progress-bar t
              colors-colorize-identifiers 'all)
-     languagetool
      d
      unicode-fonts
      (typescript :variables
@@ -411,15 +412,25 @@ It should only modify the values of Spacemacs settings."
    ;; List of items to show in startup buffer or an association list of
    ;; the form `(list-type . list-size)`. If nil then it is disabled.
    ;; Possible values for list-type are:
-   ;; `recents' `bookmarks' `projects' `agenda' `todos'.
+   ;; `recents' `recents-by-project' `bookmarks' `projects' `agenda' `todos'.
    ;; List sizes may be nil, in which case
    ;; `spacemacs-buffer-startup-lists-length' takes effect.
+   ;; The exceptional case is `recents-by-project', where list-type must be a
+   ;; pair of numbers, e.g. `(recents-by-project . (7 .  5))', where the first
+   ;; number is the project limit and the second the limit on the recent files
+   ;; within a project.
    dotspacemacs-startup-lists '((recents . 50)
                                 (projects . 15)
                                 (agenda . 10)
                                 (todos . 20))
    ;; True if the home buffer should respond to resize events. (default t)
    dotspacemacs-startup-buffer-responsive t
+
+   ;; Show numbers before the startup list lines. (default t)
+   dotspacemacs-show-startup-list-numbers t
+
+   ;; The minimum delay in seconds between number key presses. (default 0.4)
+   dotspacemacs-startup-buffer-multi-digit-delay 0.4
 
    ;; Default major mode for a new empty buffer. Possible values are mode
    ;; names such as `text-mode'; and `nil' to use Fundamental mode.
@@ -429,6 +440,14 @@ It should only modify the values of Spacemacs settings."
    ;; Default major mode of the scratch buffer (default `text-mode')
    dotspacemacs-scratch-mode 'org-mode
 
+   ;; If non-nil, *scratch* buffer will be persistent. Things you write down in
+   ;; *scratch* buffer will be saved and restored automatically.
+   dotspacemacs-scratch-buffer-persistent t
+
+   ;; If non-nil, `kill-buffer' on *scratch* buffer
+   ;; will bury it instead of killing.
+   dotspacemacs-scratch-buffer-unkillable t
+
    ;; Initial message in the scratch buffer, such as "Welcome to Spacemacs!"
    ;; (default nil)
    dotspacemacs-initial-scratch-message nil
@@ -436,7 +455,7 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(modus-vivendi spacemacs-dark modus-operandi spacemacs-light dracula)
+   dotspacemacs-themes '(spacemacs-dark modus-vivendi modus-operandi spacemacs-light dracula)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
@@ -451,9 +470,11 @@ It should only modify the values of Spacemacs settings."
    ;; (default t)
    dotspacemacs-colorize-cursor-according-to-state t
 
-   ;; Default font or prioritized list of fonts.
+   ;; Default font or prioritized list of fonts. The `:size' can be specified as
+   ;; a non-negative integer (pixel size), or a floating-point (point size).
+   ;; Point size is recommended, because it's device independent. (default 10.0)
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 7.5
+                               :size 9.0
                                :weight normal
                                :width normal)
 
@@ -547,7 +568,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil the frame is fullscreen when Emacs starts up. (default nil)
    ;; (Emacs 24.4+ only)
-   dotspacemacs-fullscreen-at-startup nil
+   dotspacemacs-fullscreen-at-startup t
 
    ;; If non-nil `spacemacs/toggle-fullscreen' will not use native fullscreen.
    ;; Use to disable fullscreen animations in OSX. (default nil)
@@ -556,7 +577,7 @@ It should only modify the values of Spacemacs settings."
    ;; If non-nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
    ;; (default nil) (Emacs 24.4+ only)
-   dotspacemacs-maximized-at-startup t
+   dotspacemacs-maximized-at-startup nil
 
    ;; If non-nil the frame is undecorated when Emacs starts up. Combine this
    ;; variable with `dotspacemacs-maximized-at-startup' in OSX to obtain
@@ -589,6 +610,10 @@ It should only modify the values of Spacemacs settings."
    ;; when it reaches the top or bottom of the screen. (default t)
    dotspacemacs-smooth-scrolling t
 
+   ;; Show the scroll bar while scrolling. The auto hide time can be configured
+   ;; by setting this variable to a number. (default t)
+   dotspacemacs-scroll-bar-while-scrolling t
+
    ;; Control line numbers activation.
    ;; If set to `t', `relative' or `visual' then line numbers are enabled in all
    ;; `prog-mode' and `text-mode' derivatives. If set to `relative', line
@@ -609,13 +634,18 @@ It should only modify the values of Spacemacs settings."
    ;; (default nil)
    dotspacemacs-line-numbers nil
 
-   ;; Code folding method. Possible values are `evil' and `origami'.
+   ;; Code folding method. Possible values are `evil', `origami' and `vimish'.
    ;; (default 'evil)
    dotspacemacs-folding-method 'evil
 
-   ;; If non-nil `smartparens-strict-mode' will be enabled in programming modes.
+   ;; If non-nil and `dotspacemacs-activate-smartparens-mode' is also non-nil,
+   ;; `smartparens-strict-mode' will be enabled in programming modes.
    ;; (default nil)
    dotspacemacs-smartparens-strict-mode nil
+
+   ;; If non-nil smartparens-mode will be enabled in programming modes.
+   ;; (default t)
+   dotspacemacs-activate-smartparens-mode t
 
    ;; If non-nil pressing the closing parenthesis `)' key in insert mode passes
    ;; over any automatically added closing parenthesis, bracket, quote, etc...
@@ -663,12 +693,18 @@ It should only modify the values of Spacemacs settings."
    ;; %n - Narrow if appropriate
    ;; %z - mnemonics of buffer, terminal, and keyboard coding systems
    ;; %Z - like %z, but including the end-of-line format
+   ;; If nil then Spacemacs uses default `frame-title-format' to avoid
+   ;; performance issues, instead of calculating the frame title by
+   ;; `spacemacs/title-prepare' all the time.
    ;; (default "%I@%S")
    dotspacemacs-frame-title-format "%I@%S"
 
    ;; Format specification for setting the icon title format
    ;; (default nil - same as frame-title-format)
    dotspacemacs-icon-title-format nil
+
+   ;; Show trailing whitespace (default t)
+   dotspacemacs-show-trailing-whitespace t
 
    ;; Delete whitespace while saving buffer. Possible values are `all'
    ;; to aggressively delete empty line and long sequences of whitespace,
@@ -683,6 +719,9 @@ It should only modify the values of Spacemacs settings."
    ;; If it does deactivate it here.
    ;; (default t)
    dotspacemacs-use-clean-aindent-mode nil
+
+   ;; Accept SPC as y for prompts if non nil. (default nil)
+   dotspacemacs-use-SPC-as-y nil
 
    ;; If non-nil shift your number row to match the entered keyboard layout
    ;; (only in insert state). Currently supported keyboard layouts are:
@@ -702,10 +741,13 @@ It should only modify the values of Spacemacs settings."
 
    ;; If nil the home buffer shows the full path of agenda items
    ;; and todos. If non nil only the file name is shown.
-   dotspacemacs-home-shorten-agenda-source t))
+   dotspacemacs-home-shorten-agenda-source t
+
+   ;; If non-nil then byte-compile some of Spacemacs files.
+   dotspacemacs-byte-compile t))
 
 (defun dotspacemacs/user-env ()
-  "Environment variables setup.))
+  "Environment variables setup.
 This function defines the environment variables for your Emacs session. By
 default it calls `spacemacs/load-spacemacs-env' which loads the environment
 variables declared in `~/.spacemacs.env' or `~/.spacemacs.d/.spacemacs.env'.
@@ -719,13 +761,11 @@ configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first.")
 
-
 (defun dotspacemacs/user-load ()
   "Library to load while dumping.
 This function is called only while dumping Spacemacs configuration. You can
 `require' or `load' the libraries of your choice that will be included in the
 dump.")
-
 
 (defun dotspacemacs/user-config ()
   "Configuration for user code:
@@ -737,6 +777,7 @@ before packages are loaded."
   (define-key evil-insert-state-map (kbd "M-j") 'company-yasnippet)
   (define-key evil-normal-state-map (kbd "M-j") 'company-yasnippet)
   (spacemacs/toggle-mode-line-minor-modes-off)
+  (spacemacs/toggle-mode-line-battery-on)
 
   ;; Set special fonts for company completion window
   (custom-set-faces
@@ -812,6 +853,9 @@ before packages are loaded."
                                               (tags priority-down category-keep)
                                               (search category-keep)))))
 
+  ;; Lint lisp files
+  ;; (add-to-list 'flycheck-global-modes 'emacs-lisp-mode)
+
   ;; Format file on save
   (defun format-for-filetype ()
     "Run generic format function if not a mode specific one is available"
@@ -833,6 +877,8 @@ before packages are loaded."
         (goto-char (point-max))
         (insert "\n" "Thank you for contributing to Spacemacs! :+1:" "\n" "The PR has been cherry-picked into develop, you can safely delete your branch."))))
   (spacemacs/set-leader-keys "o c" #'smile13241324/cherry-pick-pr)
+
+  ;; (spacemacs/recompile-elpa nil "~/.emacs.d")
 
   ;; Activate line wrap for all text modes
   (add-hook 'text-mode-hook 'spacemacs/toggle-truncate-lines-off)
