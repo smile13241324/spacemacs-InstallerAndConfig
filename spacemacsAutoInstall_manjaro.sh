@@ -9,7 +9,7 @@ if [[ $1 ]]; then
     pacman -S git tcl tk emacs ripgrep the_silver_searcher vim wget curl cmake \
            extra-cmake-modules python autoconf automake gdb gdb-common lldb      \
            adobe-source-code-pro-fonts clang clang-tools-extra boost boost-libs llvm       \
-           llvm-libs python-pytest python-pip python-mock python-setuptools cscope npm     \
+           llvm-libs cscope npm     \
            nodejs npm-check-updates luarocks docker docker-compose             \
            docker-machine make ctags fish gradle maven visualvm openjdk-doc          \
            jdk-openjdk gnuplot go go-tools texlive-bin texlive-core texlive-fontsextra    \
@@ -25,10 +25,6 @@ if [[ $1 ]]; then
            gradle-doc groovy groovy-docs geckodriver terraform graphviz cowsay \
            gsl lld mlocate firefox openssh sed xorg-xauth pam rlwrap kotlin texlab --noconfirm
 
-    # Install lua dependencies
-    luarocks install luacheck
-    luarocks install lanes
-
     # Fetch kubectl for kubernetes development
     curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
     chmod +x ./kubectl
@@ -39,6 +35,14 @@ if [[ $1 ]]; then
 
     # Take care that locate is up-to-date for later searching
     updatedb
+
+    # Install lua dependencies
+    luarocks install luacheck
+    luarocks install lanes
+
+    # Install pip directly from python as the OS does it wrongly
+    python -m ensurepip --upgrade
+    python -m pip install --upgrade pip
 else
     # Set user specific actions which do not require sudo and should be run in
     # the local userspace
@@ -51,11 +55,11 @@ else
         specific_install puppet-lint sqlint solargraph rubocop-performance
 
     # Install python packages
-    pip install --force-reinstall pyang jedi json-rpc service_factory ipython autoflake hy \
-        flake8 fabric python-binary-memcached Pygments sphinx \
-        pycscope bashate yapf isort 'python-language-server[all]' pyls-isort \
-        pyls-mypy pyls-black mypy importmagic epc autopep8 pycodestyle pydocstyle rope ptvsd pylint black \
-        yamllint pyflakes mccabe autopep8 cython cmake-language-server --user
+    python -m pip install --force-reinstall pyang jedi json-rpc service_factory ipython autoflake hy \
+           flake8 fabric python-binary-memcached Pygments sphinx \
+           pycscope bashate yapf isort 'python-language-server[all]' pyls-isort \
+           pyls-mypy pyls-black mypy importmagic epc autopep8 pycodestyle pydocstyle rope ptvsd pylint black \
+           yamllint pyflakes mccabe autopep8 cython cmake-language-server pytest mock setuptools --user
 
     # Set current path
     SOURCE="${BASH_SOURCE[0]}"
@@ -278,8 +282,8 @@ fmt.Printf(\"hello, world\\n\")
     packages: []
     resolver: lts-14.27" >> /home/spacemacs/.stack/global-project/stack.yaml
 
-    stack install pandoc
-    stack install ShellCheck
+    # Install haskell dependencies with stack, do it manually to avoid dynamic linking
+    stack install pandoc ShellCheck hoogle hlint hindent hasktags happy alex apply-refact stylish-haskell
 
     # Get latest hadolint release
     wget -O "${localInstallDir}/bin/hadolint" https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64
