@@ -39,8 +39,7 @@ This function should only modify configuration layer settings."
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      (lsp :variables
-          lsp-headerline-breadcrumb-enable nil
-          lsp-use-upstream-bindings t
+          lsp-use-upstream-bindings nil
           lsp-remap-xref-keybindings t
           lsp-navigation 'peek)
      dap

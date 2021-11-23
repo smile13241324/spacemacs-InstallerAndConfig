@@ -23,7 +23,8 @@ if [[ $1 ]]; then
            ansible ansible-lint puppet vagrant swi-prolog \
            elixir clojure smlnj sbcl pass gradle \
            gradle-doc groovy groovy-docs geckodriver terraform graphviz cowsay \
-           gsl lld mlocate firefox openssh sed xorg-xauth pam rlwrap kotlin texlab --noconfirm
+           gsl lld mlocate firefox openssh sed \
+           xorg-xauth pam rlwrap kotlin texlab pandoc pandoc-crossref --noconfirm
 
     # Fetch kubectl for kubernetes development
     curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
@@ -59,7 +60,8 @@ else
            flake8 fabric python-binary-memcached Pygments sphinx \
            pycscope bashate yapf isort 'python-language-server[all]' pyls-isort \
            pyls-mypy pyls-black mypy importmagic epc autopep8 pycodestyle pydocstyle rope ptvsd pylint black \
-           yamllint pyflakes mccabe autopep8 cython cmake-language-server pytest mock setuptools --user
+           yamllint pyflakes mccabe autopep8 cython cmake-language-server pytest mock setuptools pyls-flake8 \
+           pylsp-mypy pyls-isort python-lsp-black pylsp-rope memestra pyls-memestra --user
 
     # Set current path
     SOURCE="${BASH_SOURCE[0]}"
