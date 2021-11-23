@@ -248,18 +248,18 @@ fmt.Printf(\"hello, world\\n\")
     chmod +x "${localInstallDir}/bin/sqlfmt"
 
     # Build groovy server - Does not longer build with java 16.
-    # groovyBaseDir="${installBaseDir}/groovy-lsp"
-    # groovyInstallDir="${HOME}/.groovy-lsp"
-    # if [[ ! -d "${groovyBaseDir}" ]]; then
-    #     mkdir -p "${groovyInstallDir}"
-    #     cd "${installBaseDir}" || exit
-    #     git clone https://github.com/prominic/groovy-language-server.git groovy-lsp
-    #     cd "groovy-lsp" || exit
-    #     ./gradlew build
-    #     cp ./build/libs/groovy-lsp-all.jar "${groovyInstallDir}/groovy-lsp-all.jar"
-    #     chmod +x "${groovyInstallDir}/groovy-lsp-all.jar"
-    # fi
-    # cd "${DIR}" || exit
+    groovyBaseDir="${installBaseDir}/groovy-lsp"
+    groovyInstallDir="${HOME}/.groovy-lsp"
+    if [[ ! -d "${groovyBaseDir}" ]]; then
+        mkdir -p "${groovyInstallDir}"
+        cd "${installBaseDir}" || exit
+        git clone https://github.com/aw1cks-forks/groovy-language-server.git groovy-lsp
+        cd "groovy-lsp" || exit
+        ./gradlew build
+        cp ./build/libs/groovy-lsp-all.jar "${groovyInstallDir}/groovy-lsp-all.jar"
+        chmod +x "${groovyInstallDir}/groovy-lsp-all.jar"
+    fi
+    cd "${DIR}" || exit
 
     # Commit default spacemacs dotfile
     cp .spacemacs ${HOME}/.spacemacs
