@@ -92,7 +92,7 @@ This function should only modify configuration layer settings."
      ipython-notebook
      ibuffer
      emacs-lisp
-     ;; pdf
+     pdf
      (org :variables
           org-enable-org-journal-support t
           org-want-todo-bindings t
@@ -567,7 +567,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil the frame is fullscreen when Emacs starts up. (default nil)
    ;; (Emacs 24.4+ only)
-   dotspacemacs-fullscreen-at-startup t
+   dotspacemacs-fullscreen-at-startup nil
 
    ;; If non-nil `spacemacs/toggle-fullscreen' will not use native fullscreen.
    ;; Use to disable fullscreen animations in OSX. (default nil)
@@ -576,22 +576,22 @@ It should only modify the values of Spacemacs settings."
    ;; If non-nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
    ;; (default nil) (Emacs 24.4+ only)
-   dotspacemacs-maximized-at-startup nil
+   dotspacemacs-maximized-at-startup t
 
    ;; If non-nil the frame is undecorated when Emacs starts up. Combine this
    ;; variable with `dotspacemacs-maximized-at-startup' in OSX to obtain
    ;; borderless fullscreen. (default nil)
-   dotspacemacs-undecorated-at-startup nil
+   dotspacemacs-undecorated-at-startup t
 
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's active or selected.
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
-   dotspacemacs-active-transparency 100
+   dotspacemacs-active-transparency 95
 
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's inactive or deselected.
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
-   dotspacemacs-inactive-transparency 100
+   dotspacemacs-inactive-transparency 95
 
    ;; If non-nil show the titles of transient states. (default t)
    dotspacemacs-show-transient-state-title t
@@ -856,13 +856,13 @@ before packages are loaded."
   ;; (add-to-list 'flycheck-global-modes 'emacs-lisp-mode)
 
   ;; Format file on save
-  (defun format-for-filetype ()
-    "Run generic format function if not a mode specific one is available"
-    (let ((filetypes '("elm" "hs" "c" "cpp" "h" "hpp" "py" "pyc" "robot" "tf" "go" "yml" "yaml")))
-      (if (not (member (file-name-extension (buffer-file-name)) filetypes))
-          (save-excursion
-            (evil-indent (point-min) (point-max))))))
-  (add-hook 'before-save-hook 'format-for-filetype)
+  ;; (defun format-for-filetype ()
+  ;;   "Run generic format function if not a mode specific one is available"
+  ;;   (let ((filetypes '("elm" "hs" "c" "cpp" "h" "hpp" "py" "pyc" "robot" "tf" "go" "yml" "yaml")))
+  ;;     (if (not (member (file-name-extension (buffer-file-name)) filetypes))
+  ;;         (save-excursion
+  ;;           (evil-indent (point-min) (point-max))))))
+  ;; (add-hook 'before-save-hook 'format-for-filetype)
 
   ;; Checkout PR
   (defun smile13241324/cherry-pick-pr (id)
@@ -878,6 +878,7 @@ before packages are loaded."
   (spacemacs/set-leader-keys "o c" #'smile13241324/cherry-pick-pr)
 
   ;; (spacemacs/recompile-elpa nil "~/.emacs.d")
+  (spacemacs/toggle-transparency)
 
   ;; Activate line wrap for all text modes
   (add-hook 'text-mode-hook 'spacemacs/toggle-truncate-lines-off)
