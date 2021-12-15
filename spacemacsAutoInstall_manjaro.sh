@@ -57,7 +57,7 @@ else
 
     # Install python packages
     python -m pip install --force-reinstall pyang jedi json-rpc service_factory ipython autoflake hy \
-           flake8 fabric python-binary-memcached Pygments sphinx \
+           wheel flake8 fabric python-binary-memcached Pygments sphinx \
            pycscope bashate yapf isort 'python-language-server[all]' pyls-isort \
            pyls-mypy pyls-black mypy importmagic epc autopep8 pycodestyle pydocstyle rope ptvsd pylint black \
            yamllint pyflakes mccabe autopep8 cython cmake-language-server pytest mock setuptools pyls-flake8 \
