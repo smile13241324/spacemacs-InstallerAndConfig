@@ -18,8 +18,7 @@ if [[ $1 ]]; then
            texlive-langgreek texlive-langjapanese texlive-langkorean texlive-latexextra    \
            texlive-music texlive-pictures texlive-plainextra texlive-pstricks              \
            texlive-publishers texlive-science texlive-bibtexextra lua coq memcached        \
-           ruby opam llvm-ocaml ocaml-compiler-libs ocaml-ctypes        \
-           ocaml-findlib ocamlbuild racket rust-racer rustfmt rust cargo r gcc-fortran-multilib     \
+           ruby opam racket rust-racer rustfmt rust cargo r gcc-fortran-multilib     \
            ansible ansible-lint puppet vagrant swi-prolog \
            elixir clojure smlnj sbcl pass gradle \
            gradle-doc groovy groovy-docs geckodriver terraform graphviz cowsay \
@@ -56,11 +55,11 @@ else
         specific_install puppet-lint sqlint solargraph rubocop-performance
 
     # Install python packages
-    python -m pip install --force-reinstall pyang jedi json-rpc service_factory ipython autoflake hy \
+    python -m pip install --force-reinstall pyang jedi json-rpc service_factory ipython autoflake \
            wheel flake8 fabric python-binary-memcached Pygments sphinx \
            pycscope bashate yapf isort 'python-language-server[all]' pyls-isort \
            pyls-mypy pyls-black mypy importmagic epc autopep8 pycodestyle pydocstyle rope ptvsd pylint black \
-           yamllint pyflakes mccabe autopep8 cython cmake-language-server pytest mock setuptools pyls-flake8 \
+           yamllint pyflakes mccabe autopep8 cython==3.0.0a9 cmake-language-server pytest mock setuptools pyls-flake8 \
            pylsp-mypy pyls-isort python-lsp-black pylsp-rope memestra pyls-memestra --user
 
     # Set current path
