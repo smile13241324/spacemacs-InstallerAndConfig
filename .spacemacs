@@ -878,7 +878,7 @@ before packages are loaded."
   (spacemacs/set-leader-keys "o c" #'smile13241324/cherry-pick-pr)
 
   ;; (spacemacs/recompile-elpa nil "~/.emacs.d")
-  (spacemacs/toggle-transparency)
+  ;; (spacemacs/toggle-transparency)
 
   ;; Activate line wrap for all text modes
   (add-hook 'text-mode-hook 'spacemacs/toggle-truncate-lines-off)
