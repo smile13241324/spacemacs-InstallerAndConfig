@@ -59,7 +59,7 @@ else
            wheel flake8 fabric python-binary-memcached Pygments sphinx \
            pycscope bashate yapf isort 'python-language-server[all]' pyls-isort \
            pyls-mypy pyls-black mypy importmagic epc autopep8 pycodestyle pydocstyle rope ptvsd pylint black \
-           yamllint pyflakes mccabe autopep8 cython==3.0.0a9 cmake-language-server pytest mock setuptools pyls-flake8 \
+           yamllint pyflakes mccabe autopep8 cython==3.0.0a10 cmake-language-server pytest mock setuptools pyls-flake8 \
            pylsp-mypy pyls-isort python-lsp-black pylsp-rope memestra pyls-memestra --user
 
     # Set current path
@@ -108,37 +108,6 @@ end
 function fish_title
 true
 end" >> "${fishConfigFile}"
-
-    # Build gnu global
-    globalBaseDir="${installBaseDir}/global"
-    globalCurrentVersionExtractDir="${globalBaseDir}/global-6.6.7"
-    if [[ ! -d "${globalCurrentVersionExtractDir}" ]]; then
-        mkdir "${globalBaseDir}"
-        wget -O "${globalBaseDir}/global.tar.gz" https://ftp.gnu.org/pub/gnu/global/global-6.6.7.tar.gz
-        tar -xpvf  "${globalBaseDir}/global.tar.gz" --directory "${globalBaseDir}"
-        cd "${globalCurrentVersionExtractDir}" || exit
-        ./configure --with-exuberant-ctags=/usr/bin/ctags
-        make
-        sudo make install
-        make clean
-        cp gtags.conf ${HOME}/.globalrc
-
-        #Add gtags config string only if not already existing
-        if grep -Fxq "export GTAGSLABEL=pygments" ${HOME}/.profile
-        then
-            echo "nothing to do"
-        else
-            echo "export GTAGSLABEL=pygments" >> ${HOME}/.profile
-        fi
-
-        if grep -Fxq "set -x GTAGSLABEL pygments" "${fishConfigFile}"
-        then
-            echo "nothing to do"
-        else
-            echo "set -x GTAGSLABEL pygments" >> "${fishConfigFile}"
-        fi
-    fi
-    cd "${DIR}" || exit
 
     # Prepare Go environment
     goPath="${HOME}/goWorkspace"

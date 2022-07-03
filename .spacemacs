@@ -43,6 +43,7 @@ This function should only modify configuration layer settings."
           lsp-remap-xref-keybindings t
           lsp-navigation 'peek)
      dap
+     mu4e
      dotnet
      fsharp
      csharp
@@ -52,9 +53,7 @@ This function should only modify configuration layer settings."
      (ess :variables
           ess-r-backend 'lsp)
      helm
-     ;; (spell-checking :variables
-     ;;                 spell-checking-enable-auto-dictionary t
-     ;;                 enable-flyspell-auto-completion t)
+     ;; ivy
      (scala :variables
             scala-backend 'scala-metals)
      (nim :variables
@@ -120,7 +119,6 @@ This function should only modify configuration layer settings."
      (c-c++ :variables
             c-c++-default-mode-for-headers 'c++-mode
             c-c++-backend 'lsp-clangd
-            ;; c-c++-backend 'lsp-ccls
             c-c++-lsp-enable-semantic-highlight 'rainbow
             c++-enable-organize-includes-on-save t
             c-c++-enable-clang-format-on-save t
@@ -132,7 +130,6 @@ This function should only modify configuration layer settings."
      epub
      themes-megapack
      git
-     github
      sml
      bm
      (copy-as-format :variables
@@ -263,14 +260,9 @@ This function should only modify configuration layer settings."
      (sql :variables
           sql-capitalize-keywords t)
      autohotkey
-     ;; (elixir :variables
-     ;;         flycheck-elixir-credo-strict t
-     ;;         elixir-backend 'lsp)
      faust
      vagrant
      erlang
-     ;; (dash :variables
-     ;;       helm-dash-docset-newpath "~/.local/share/Zeal/Zeal/docsets")
      games
      meson
      php
@@ -283,8 +275,7 @@ This function should only modify configuration layer settings."
      d
      unicode-fonts
      (typescript :variables
-                 typescript-backend 'tide
-                 typescript-fmt-tool 'tide
+                 typescript-backend 'lsp
                  typescript-lsp-linter t
                  typescript-linter 'tslint
                  typescript-fmt-on-save t))
@@ -321,9 +312,13 @@ It should only modify the values of Spacemacs settings."
   ;; This setq-default sexp is an exhaustive list of all the supported
   ;; spacemacs settings.
   (setq-default
-   ;; If non-nil then enable support for the portable dumper. You'll need
-   ;; to compile Emacs 27 from source following the instructions in file
+   ;; If non-nil then enable support for the portable dumper. You'll need to
+   ;; compile Emacs 27 from source following the instructions in file
    ;; EXPERIMENTAL.org at to root of the git repository.
+   ;;
+   ;; WARNING: pdumper does not work with Native Compilation, so it's disabled
+   ;; regardless of the following setting when native compilation is in effect.
+   ;;
    ;; (default nil)
    dotspacemacs-enable-emacs-pdumper nil
 
@@ -408,6 +403,16 @@ It should only modify the values of Spacemacs settings."
    ;; If the value is nil then no banner is displayed. (default 'official)
    dotspacemacs-startup-banner 'official
 
+   ;; Scale factor controls the scaling (size) of the startup banner. Default
+   ;; value is `auto' for scaling the logo automatically to fit all buffer
+   ;; contents, to a maximum of the full image height and a minimum of 3 line
+   ;; heights. If set to a number (int or float) it is used as a constant
+   ;; scaling factor for the default logo size.
+   dotspacemacs-startup-banner-scale 'auto
+
+   ;; Scale musst take real row count into account
+   ;; Default should be the fixed size
+
    ;; List of items to show in startup buffer or an association list of
    ;; the form `(list-type . list-size)`. If nil then it is disabled.
    ;; Possible values for list-type are:
@@ -430,6 +435,11 @@ It should only modify the values of Spacemacs settings."
 
    ;; The minimum delay in seconds between number key presses. (default 0.4)
    dotspacemacs-startup-buffer-multi-digit-delay 0.4
+
+   ;; If non-nil, show file icons for entries and headings on Spacemacs home buffer.
+   ;; This has no effect in terminal or if "all-the-icons" package or the font
+   ;; is not installed. (default nil)
+   dotspacemacs-startup-buffer-show-icons nil
 
    ;; Default major mode for a new empty buffer. Possible values are mode
    ;; names such as `text-mode'; and `nil' to use Fundamental mode.
@@ -473,7 +483,7 @@ It should only modify the values of Spacemacs settings."
    ;; a non-negative integer (pixel size), or a floating-point (point size).
    ;; Point size is recommended, because it's device independent. (default 10.0)
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 9.0
+                               :size 7.0
                                :weight normal
                                :width normal)
 
@@ -567,7 +577,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil the frame is fullscreen when Emacs starts up. (default nil)
    ;; (Emacs 24.4+ only)
-   dotspacemacs-fullscreen-at-startup nil
+   dotspacemacs-fullscreen-at-startup t
 
    ;; If non-nil `spacemacs/toggle-fullscreen' will not use native fullscreen.
    ;; Use to disable fullscreen animations in OSX. (default nil)
@@ -576,7 +586,7 @@ It should only modify the values of Spacemacs settings."
    ;; If non-nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
    ;; (default nil) (Emacs 24.4+ only)
-   dotspacemacs-maximized-at-startup t
+   dotspacemacs-maximized-at-startup nil
 
    ;; If non-nil the frame is undecorated when Emacs starts up. Combine this
    ;; variable with `dotspacemacs-maximized-at-startup' in OSX to obtain
@@ -617,8 +627,8 @@ It should only modify the values of Spacemacs settings."
    ;; If set to `t', `relative' or `visual' then line numbers are enabled in all
    ;; `prog-mode' and `text-mode' derivatives. If set to `relative', line
    ;; numbers are relative. If set to `visual', line numbers are also relative,
-   ;; but lines are only visual lines are counted. For example, folded lines
-   ;; will not be counted and wrapped lines are counted as multiple lines.
+   ;; but only visual lines are counted. For example, folded lines will not be
+   ;; counted and wrapped lines are counted as multiple lines.
    ;; This variable can also be set to a property list for finer control:
    ;; '(:relative nil
    ;;   :visual nil
@@ -712,14 +722,14 @@ It should only modify the values of Spacemacs settings."
    ;; (default nil)
    dotspacemacs-whitespace-cleanup 'all
 
-   ;; If non nil activate `clean-aindent-mode' which tries to correct
-   ;; virtual indentation of simple modes. This can interfer with mode specific
+   ;; If non-nil activate `clean-aindent-mode' which tries to correct
+   ;; virtual indentation of simple modes. This can interfere with mode specific
    ;; indent handling like has been reported for `go-mode'.
    ;; If it does deactivate it here.
    ;; (default t)
    dotspacemacs-use-clean-aindent-mode nil
 
-   ;; Accept SPC as y for prompts if non nil. (default nil)
+   ;; Accept SPC as y for prompts if non-nil. (default nil)
    dotspacemacs-use-SPC-as-y nil
 
    ;; If non-nil shift your number row to match the entered keyboard layout
@@ -853,16 +863,7 @@ before packages are loaded."
                                               (search category-keep)))))
 
   ;; Lint lisp files
-  ;; (add-to-list 'flycheck-global-modes 'emacs-lisp-mode)
-
-  ;; Format file on save
-  ;; (defun format-for-filetype ()
-  ;;   "Run generic format function if not a mode specific one is available"
-  ;;   (let ((filetypes '("elm" "hs" "c" "cpp" "h" "hpp" "py" "pyc" "robot" "tf" "go" "yml" "yaml")))
-  ;;     (if (not (member (file-name-extension (buffer-file-name)) filetypes))
-  ;;         (save-excursion
-  ;;           (evil-indent (point-min) (point-max))))))
-  ;; (add-hook 'before-save-hook 'format-for-filetype)
+  (add-to-list 'flycheck-global-modes 'emacs-lisp-mode)
 
   ;; Checkout PR
   (defun smile13241324/cherry-pick-pr (id)
@@ -876,9 +877,6 @@ before packages are loaded."
         (goto-char (point-max))
         (insert "\n" "Thank you for contributing to Spacemacs! :+1:" "\n" "The PR has been cherry-picked into develop, you can safely delete your branch."))))
   (spacemacs/set-leader-keys "o c" #'smile13241324/cherry-pick-pr)
-
-  ;; (spacemacs/recompile-elpa nil "~/.emacs.d")
-  ;; (spacemacs/toggle-transparency)
 
   ;; Activate line wrap for all text modes
   (add-hook 'text-mode-hook 'spacemacs/toggle-truncate-lines-off)
