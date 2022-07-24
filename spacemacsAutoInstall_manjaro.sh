@@ -6,10 +6,10 @@ if [[ $1 ]]; then
     # Install external packages
     pacman -Syyu --noconfirm
     pacman -S base-devel --noconfirm
-    pacman -S git tcl tk emacs ripgrep the_silver_searcher vim wget curl cmake \
+    pacman -S libgccjit git tcl tk ripgrep the_silver_searcher vim wget curl cmake \
            extra-cmake-modules python autoconf automake gdb gdb-common lldb      \
            adobe-source-code-pro-fonts clang clang-tools-extra boost boost-libs llvm       \
-           llvm-libs cscope npm     \
+           llvm-libs npm     \
            nodejs npm-check-updates luarocks docker docker-compose             \
            docker-machine make ctags fish gradle maven visualvm openjdk-doc          \
            jdk-openjdk gnuplot go go-tools texlive-bin texlive-core texlive-fontsextra    \
@@ -20,7 +20,7 @@ if [[ $1 ]]; then
            texlive-publishers texlive-science texlive-bibtexextra lua coq memcached        \
            ruby opam racket rust-racer rustfmt rust cargo r gcc-fortran-multilib     \
            ansible ansible-lint puppet vagrant swi-prolog \
-           elixir clojure smlnj sbcl pass gradle \
+           elixir smlnj sbcl pass gradle \
            gradle-doc groovy groovy-docs geckodriver terraform graphviz cowsay \
            gsl lld mlocate firefox openssh sed \
            xorg-xauth pam rlwrap kotlin texlab pandoc pandoc-crossref --noconfirm
@@ -43,6 +43,20 @@ if [[ $1 ]]; then
     # Install pip directly from python as the OS does it wrongly
     python -m ensurepip --upgrade
     python -m pip install --upgrade pip
+
+    # Build emacs
+    emacsBaseDir="${HOME}/emacsBuild"
+    if [[ ! -d "${emacsBaseDir}" ]]; then
+        git clone git://git.savannah.gnu.org/emacs.git "${emacsBaseDir}"
+        cd "${emacsBaseDir}" || exit
+        ./autogen.sh
+        ./configure --with-pgtk --with-json --with-mailutils --with-cairo --with-x-toolkit=gtk3 --with-modules --with-native-compilation
+        make -j8
+        sudo make install
+        make distclean
+        cd ..
+        rm "${emacsBaseDir}" -R
+    fi
 else
     # Set user specific actions which do not require sudo and should be run in
     # the local userspace
@@ -56,8 +70,8 @@ else
 
     # Install python packages
     python -m pip install --force-reinstall pyang jedi json-rpc service_factory ipython autoflake \
-           wheel flake8 fabric python-binary-memcached Pygments sphinx \
-           pycscope bashate yapf isort 'python-language-server[all]' pyls-isort \
+           wheel flake8 fabric python-binary-memcached sphinx \
+           bashate yapf isort 'python-language-server[all]' pyls-isort \
            pyls-mypy pyls-black mypy importmagic epc autopep8 pycodestyle pydocstyle rope ptvsd pylint black \
            yamllint pyflakes mccabe autopep8 cython==3.0.0a10 cmake-language-server pytest mock setuptools pyls-flake8 \
            pylsp-mypy pyls-isort python-lsp-black pylsp-rope memestra pyls-memestra --user
@@ -196,21 +210,6 @@ fmt.Printf(\"hello, world\\n\")
         flow-bin vscode-json-languageserver vscode-css-languageserver-bin vscode-html-languageserver-bin \
         vim-language-server @elm-tooling/elm-language-server elm-analyse less
 
-    # Install leiningen and boot for clojure builds as well as lsp
-    wget -O "${localInstallDir}/bin/lein" https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
-    chmod +x "${localInstallDir}/bin/lein"
-    "${localInstallDir}/bin/lein" version
-    wget -O "${localInstallDir}/bin/boot" https://github.com/boot-clj/boot-bin/releases/download/latest/boot.sh
-    chmod +x "${localInstallDir}/bin/boot"
-    "${localInstallDir}/bin/boot" -u
-    wget -O "${localInstallDir}/bin/clojure-lsp" https://github.com/snoe/clojure-lsp/releases/latest/download/clojure-lsp
-    chmod +x "${localInstallDir}/bin/clojure-lsp"
-
-    # Install additional linters for clojure
-    go get -d github.com/candid82/joker
-    cd ${GOPATH}/src/joker
-    ./run.sh --version && go install
-
     # Install sqlfmt
     wget -q -O - https://github.com/mjibson/sqlfmt/releases/latest/download/sqlfmt_0.4.0_linux_amd64.tar.gz | tar -xpvzf - --directory "${localInstallDir}/bin"
     chmod +x "${localInstallDir}/bin/sqlfmt"
@@ -239,21 +238,9 @@ fmt.Printf(\"hello, world\\n\")
     stack setup
     stack upgrade
 
-    # Set global resolver to latest lts version supported by stack
-    mkdir -p /home/spacemacs/.stack/global-project
-    echo "# This is the implicit global project's config file, which is only used when
-    # 'stack' is run outside of a real project.  Settings here do _not_ act as
-    # defaults for all projects.  To change stack's default settings, edit
-    # '/home/spacemacs/.stack/config.yaml' instead.
-    #
-    # For more information about stack's configuration, see
-    # http://docs.haskellstack.org/en/stable/yaml_configuration/
-    #
-    packages: []
-    resolver: lts-14.27" >> /home/spacemacs/.stack/global-project/stack.yaml
-
     # Install haskell dependencies with stack, do it manually to avoid dynamic linking
-    stack install pandoc ShellCheck hoogle hlint hindent hasktags happy alex apply-refact stylish-haskell
+    stack install pandoc ShellCheck hoogle hlint hasktags happy alex apply-refact
+    # stylish-haskell hindent
 
     # Get latest hadolint release
     wget -O "${localInstallDir}/bin/hadolint" https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64

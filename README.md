@@ -13,7 +13,6 @@ Currently the external dependencies for most of the more popular layers are inst
 * go
 * python
 * kubernetes
-* clojure
 * docker
 * C++ with Clang
 * common-lisp

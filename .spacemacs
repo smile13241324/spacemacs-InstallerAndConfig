@@ -76,12 +76,6 @@ This function should only modify configuration layer settings."
                       auto-completion-use-company-box nil)
      syntax-checking
      better-defaults
-     (clojure :variables
-              clojure-backend 'cider
-              clojure-enable-fancify-symbols t
-              clojure-enable-sayid t
-              clojure-enable-clj-refactor t
-              clojure-enable-linters '(clj-kondo joker))
      gpu
      graphviz
      (plantuml :variables
@@ -591,7 +585,7 @@ It should only modify the values of Spacemacs settings."
    ;; If non-nil the frame is undecorated when Emacs starts up. Combine this
    ;; variable with `dotspacemacs-maximized-at-startup' in OSX to obtain
    ;; borderless fullscreen. (default nil)
-   dotspacemacs-undecorated-at-startup t
+   dotspacemacs-undecorated-at-startup nil
 
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's active or selected.
