@@ -76,6 +76,7 @@ This function should only modify configuration layer settings."
                       auto-completion-use-company-box nil)
      syntax-checking
      better-defaults
+     translate
      gpu
      graphviz
      (plantuml :variables
@@ -858,12 +859,14 @@ before packages are loaded."
 
   ;; Lint lisp files
   (add-to-list 'flycheck-global-modes 'emacs-lisp-mode)
+  (add-to-list 'load-path "/usr/share/emacs/site-lisp/")
 
   ;; Checkout PR
   (defun smile13241324/cherry-pick-pr (id)
     "Take a given PR id and make a new local branch, then cherry pick the commit and print the thanks message"
     (interactive "MEnter PR Id: ")
     (with-current-buffer "*scratch*"
+
       (let ((default-directory "~/.emacs.d"))
         (erase-buffer)
         (call-process-shell-command (concat "git fetch origin pull/" id "/head:" id) nil nil)
