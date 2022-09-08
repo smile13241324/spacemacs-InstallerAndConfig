@@ -3,7 +3,8 @@ FROM manjarolinux/base
 LABEL Description="This image creates a dockerized version of spacemacs with all external tools required. It persists the home dir of the local user in a volume this allows to save stuff and let emacs caches work as expected. An ssh server is also installed for X forwarding accepting only public key authentification from the base image. To use it add your public key to ~/.ssh/authorized_keys" Vendor="smile13241324@gmail.com" Version="1.5"
 COPY . /installRepo
 WORKDIR /installRepo
-RUN ./spacemacsAutoInstall_manjaro.sh "sudoRun" \
+RUN sed -i 's/IgnorePkg.*/#IgnorePkg/' /etc/pacman.conf \
+    && ./spacemacsAutoInstall_manjaro.sh "sudoRun" \
     && sed -i 's/#X11Forwarding.*/X11Forwarding yes/' /etc/ssh/sshd_config \
     && sed -i 's/#X11UseLocalhost.*/X11UseLocalhost no/' /etc/ssh/sshd_config \
     && sed -i 's/#PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config \
