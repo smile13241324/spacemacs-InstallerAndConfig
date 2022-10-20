@@ -26,7 +26,7 @@ if [[ $1 ]]; then
            xorg-xauth pam rlwrap kotlin texlab pandoc pandoc-crossref --noconfirm
 
     # Fetch kubectl for kubernetes development
-    curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+    curl -LO https://storage.googleapis.com/kubernetes-release/release/"$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)"/bin/linux/amd64/kubectl
     chmod +x ./kubectl
     mv ./kubectl /usr/local/bin/kubectl
 
@@ -100,11 +100,11 @@ else
 
     # Add .profile as default value for .bash_profile
     [[ ! -f "${HOME}/.profile" ]] && touch "${HOME}/.profile"
-    if grep -Fxq "[[ -f ${HOME}/.profile ]] && . ${HOME}/.profile" ${HOME}/.bash_profile
+    if grep -Fxq "[[ -f ${HOME}/.profile ]] && . ${HOME}/.profile" "${HOME}"/.bash_profile
     then
         echo "nothing to do"
     else
-        echo "[[ -f ${HOME}/.profile ]] && . ${HOME}/.profile" >> ${HOME}/.bash_profile
+        echo "[[ -f ${HOME}/.profile ]] && . ${HOME}/.profile" >> "${HOME}"/.bash_profile
     fi
 
     # Install fish terminal
@@ -112,7 +112,7 @@ else
     fishConfigFile="${fishConfigDir}/config.fish"
     mkdir -p "${fishConfigDir}"
     TERMINFO="$(locate eterm-color.ti)"
-    tic -o ${HOME}/.terminfo ${TERMINFO}
+    tic -o "${HOME}"/.terminfo "${TERMINFO}"
     [[ ! -f "${fishConfigFile}" ]] && echo "# emacs ansi-term support
 if test -n \"\$EMACS\"
 set -x TERM eterm-color
@@ -131,23 +131,23 @@ end" >> "${fishConfigFile}"
     goPathSrcExampleFile="${goPathSrcExample}/example.go"
     export GOPATH=${goPath}
     export PATH=$PATH:${goPathBin}
-    if grep -Fxq "export GOPATH=${goPath}" ${HOME}/.profile
+    if grep -Fxq "export GOPATH=${goPath}" "${HOME}"/.profile
     then
         echo "nothing to do"
     else
-        echo "export GOPATH=${goPath}" >> ${HOME}/.profile
+        echo "export GOPATH=${goPath}" >> "${HOME}"/.profile
     fi
-    if grep -Fq "${goPathBin}" ${HOME}/.profile
+    if grep -Fq "${goPathBin}" "${HOME}"/.profile
     then
         echo "nothing to do"
     else
-        echo "export PATH=$PATH:${goPathBin}" >> ${HOME}/.profile
+        echo "export PATH=$PATH:${goPathBin}" >> "${HOME}"/.profile
     fi
-    if grep -Fq "${localInstallBin}" ${HOME}/.profile
+    if grep -Fq "${localInstallBin}" "${HOME}"/.profile
     then
         echo "nothing to do"
     else
-        echo "export PATH=$PATH:${localInstallBin}" >> ${HOME}/.profile
+        echo "export PATH=$PATH:${localInstallBin}" >> "${HOME}"/.profile
     fi
     if grep -Fxq "set -x GOPATH ${goPath}" "${fishConfigFile}"
     then
@@ -229,7 +229,7 @@ fmt.Printf(\"hello, world\\n\")
     cd "${DIR}" || exit
 
     # Commit default spacemacs dotfile
-    cp .spacemacs ${HOME}/.spacemacs
+    cp .spacemacs "${HOME}"/.spacemacs
 
     # Install haskell dependencies with stack, do it manually to avoid dynamic
     # linking in arch linux haskell packages
