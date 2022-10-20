@@ -18,7 +18,7 @@ if [[ $1 ]]; then
            texlive-langgreek texlive-langjapanese texlive-langkorean texlive-latexextra    \
            texlive-music texlive-pictures texlive-plainextra texlive-pstricks              \
            texlive-publishers texlive-science texlive-bibtexextra lua coq memcached        \
-           ruby opam racket rust-racer rustfmt rust cargo r gcc-fortran-multilib     \
+           ruby opam racket rustfmt rust cargo r gcc-fortran-multilib     \
            ansible ansible-lint puppet vagrant swi-prolog \
            elixir smlnj sbcl pass gradle \
            gradle-doc groovy groovy-docs geckodriver terraform graphviz cowsay \
@@ -50,7 +50,7 @@ if [[ $1 ]]; then
         git clone git://git.savannah.gnu.org/emacs.git "${emacsBaseDir}"
         cd "${emacsBaseDir}" || exit
         ./autogen.sh
-        ./configure --with-pgtk --with-json --with-mailutils --with-cairo --with-x-toolkit=gtk3 --with-modules --with-native-compilation
+        ./configure --with-pgtk --with-json --with-mailutils --with-cairo --with-x-toolkit=gtk3 --with-modules --with-native-compilation --without-compress-install
         make -j8
         sudo make install
         make distclean
