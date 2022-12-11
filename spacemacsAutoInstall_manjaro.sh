@@ -11,7 +11,7 @@ if [[ $1 ]]; then
            adobe-source-code-pro-fonts clang clang-tools-extra boost boost-libs llvm       \
            llvm-libs npm     \
            nodejs npm-check-updates luarocks docker docker-compose             \
-           docker-machine make ctags fish gradle maven visualvm openjdk-doc          \
+           docker-machine docker-buildx make ctags fish gradle maven visualvm openjdk-doc          \
            jdk-openjdk gnuplot go go-tools texlive-bin texlive-core texlive-fontsextra    \
            texlive-formatsextra texlive-games texlive-genericextra texlive-htmlxml         \
            texlive-humanities texlive-langchinese texlive-langcyrillic texlive-langextra   \
