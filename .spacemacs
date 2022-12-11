@@ -43,7 +43,6 @@ This function should only modify configuration layer settings."
           lsp-remap-xref-keybindings t
           lsp-navigation 'peek)
      dap
-     mu4e
      dotnet
      fsharp
      csharp
@@ -83,7 +82,6 @@ This function should only modify configuration layer settings."
                plantuml-jar-path "~/.plantuml/plantUml.jar"
                org-plantuml-jar-path "~/.plantuml/plantUml.jar")
      salt
-     ipython-notebook
      ibuffer
      emacs-lisp
      pdf
@@ -119,8 +117,6 @@ This function should only modify configuration layer settings."
             c-c++-enable-clang-format-on-save t
             c-c++-adopt-subprojects t)
      web-beautify
-     semantic
-     semantic-web
      templates
      epub
      themes-megapack
@@ -572,7 +568,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil the frame is fullscreen when Emacs starts up. (default nil)
    ;; (Emacs 24.4+ only)
-   dotspacemacs-fullscreen-at-startup t
+   dotspacemacs-fullscreen-at-startup nil
 
    ;; If non-nil `spacemacs/toggle-fullscreen' will not use native fullscreen.
    ;; Use to disable fullscreen animations in OSX. (default nil)
@@ -581,12 +577,12 @@ It should only modify the values of Spacemacs settings."
    ;; If non-nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
    ;; (default nil) (Emacs 24.4+ only)
-   dotspacemacs-maximized-at-startup nil
+   dotspacemacs-maximized-at-startup t
 
    ;; If non-nil the frame is undecorated when Emacs starts up. Combine this
    ;; variable with `dotspacemacs-maximized-at-startup' in OSX to obtain
    ;; borderless fullscreen. (default nil)
-   dotspacemacs-undecorated-at-startup nil
+   dotspacemacs-undecorated-at-startup t
 
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's active or selected.
@@ -834,7 +830,8 @@ before packages are loaded."
     (setq org-brain-path "~/Documents/GTD")
     (setq org-default-notes-file "~/Documents/GTD/Inbox.org")
     (setq org-archive-location "~/Documents/GTD/Reference.org::* Archived from %s")
-    (setq spaceline-org-clock-p t)
+    (display-time-mode t)
+
     (setq org-capture-templates
           '(("i" "Input" entry (file "")
              "* %? %i")
@@ -859,7 +856,37 @@ before packages are loaded."
 
   ;; Lint lisp files
   (add-to-list 'flycheck-global-modes 'emacs-lisp-mode)
-  (add-to-list 'load-path "/usr/share/emacs/site-lisp/")
+
+  ;; (spacemacs|define-transient-state elisp-debug
+;;     :title "Elisp Debug Transient State"
+;;     :doc
+;;     "
+;; Jumping^^            Breakpoint^^             Execution Modes^^          Display^^
+;; -------^^---------   ----------^^----------   ---------------^^-------   -------^^-----------------
+;; [_g_] goto here      [_p_] set breakpoint     [_n_] next step            [_r_] show previous result
+;; [_s_] forward sexp   [_P_] unset breakpoint   [_N_] go mode              [_R_] show backtrace
+;; [_o_] step out       ^^                       [_c_] continue mode        ^^
+;; [_i_] step in        ^^                       [_C_] continue fast mode   ^^
+;; ^^                   ^^                       ^^                         ^^
+;; ^^                   ^^                       ^^                         ^^
+;; [_q_] quit debugging
+;; "
+;;     :evil-leader-for-mode (emacs-lisp-mode . "d.")
+;;     :foreign-keys run
+;;     :bindings
+;;     ("n" edebug-step-mode)
+;;     ("N" edebug-go-mode)
+;;     ("c" edebug-continue-mode)
+;;     ("C" edebug-Continue-fast-mode)
+;;     ("g" edebug-goto-here)
+;;     ("s" edebug-forward-sexp)
+;;     ("o" edebug-step-out)
+;;     ("i" edebug-step-in)
+;;     ("r" edebug-previous-result)
+;;     ("R" edebug-pop-to-backtrace)
+;;     ("p" edebug-set-breakpoint)
+;;     ("P" edebug-unset-breakpoint)
+;;     ("q" edebug-top-level-nonstop :exit t))
 
   ;; Checkout PR
   (defun smile13241324/cherry-pick-pr (id)
