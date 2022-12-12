@@ -855,7 +855,7 @@ before packages are loaded."
                                               (search category-keep)))))
 
   ;; Lint lisp files
-  (add-to-list 'flycheck-global-modes 'emacs-lisp-mode)
+  ;; (add-to-list 'flycheck-global-modes 'emacs-lisp-mode)
 
   ;; (spacemacs|define-transient-state elisp-debug
 ;;     :title "Elisp Debug Transient State"

@@ -7,6 +7,7 @@ if [[ $1 ]]; then
     pacman -Syyu --noconfirm
     pacman -S base-devel --noconfirm
     pacman -S libgccjit git tcl tk ripgrep the_silver_searcher vim wget curl cmake \
+           tree-sitter \
            extra-cmake-modules python autoconf automake gdb gdb-common lldb      \
            adobe-source-code-pro-fonts clang clang-tools-extra boost boost-libs llvm       \
            llvm-libs npm     \
@@ -49,8 +50,9 @@ if [[ $1 ]]; then
     if [[ ! -d "${emacsBaseDir}" ]]; then
         git clone git://git.savannah.gnu.org/emacs.git "${emacsBaseDir}"
         cd "${emacsBaseDir}" || exit
+        git checkout emacs-29
         ./autogen.sh
-        ./configure --with-pgtk --with-json --with-mailutils --with-cairo --with-x-toolkit=gtk3 --with-modules --with-native-compilation --without-compress-install
+        ./configure --with-pgtk --with-json --with-mailutils --with-cairo --with-modules --with-native-compilation --without-compress-install --with-tree-sitter
         make -j8
         sudo make install
         make distclean
@@ -73,7 +75,7 @@ else
            wheel flake8 fabric python-binary-memcached sphinx \
            bashate yapf isort 'python-language-server[all]' pyls-isort \
            pyls-mypy pyls-black mypy importmagic epc autopep8 pycodestyle pydocstyle rope ptvsd pylint black \
-           yamllint pyflakes mccabe autopep8 cython==3.0.0a10 cmake-language-server pytest mock setuptools pyls-flake8 \
+           yamllint pyflakes mccabe autopep8 cython==3.0.0a11 cmake-language-server pytest mock setuptools pyls-flake8 \
            pylsp-mypy pyls-isort python-lsp-black pylsp-rope memestra pyls-memestra --user
 
     # Set current path
