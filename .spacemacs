@@ -84,7 +84,10 @@ This function should only modify configuration layer settings."
      salt
      ibuffer
      emacs-lisp
-     pdf
+     (tree-sitter :variables tree-sitter-syntax-highlight-enable t
+                             tree-sitter-indent-enable t
+                             tree-sitter-fold-enable t)
+     ;; pdf
      (org :variables
           org-enable-org-journal-support t
           org-want-todo-bindings t
@@ -293,7 +296,7 @@ This function should only modify configuration layer settings."
    ;; installs only the used packages but won't delete unused ones. `all'
    ;; installs *all* packages supported by Spacemacs and never uninstalls them.
    ;; (default is `used-only')
-   dotspacemacs-install-packages 'used-only))
+   dotspacemacs-install-packages 'used-but-keep-unused))
 
 (defun dotspacemacs/init ()
   "Initialization:
@@ -855,7 +858,7 @@ before packages are loaded."
                                               (search category-keep)))))
 
   ;; Lint lisp files
-  ;; (add-to-list 'flycheck-global-modes 'emacs-lisp-mode)
+  (add-to-list 'flycheck-global-modes 'emacs-lisp-mode)
 
   ;; (spacemacs|define-transient-state elisp-debug
 ;;     :title "Elisp Debug Transient State"
