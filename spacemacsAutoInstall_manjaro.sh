@@ -7,13 +7,13 @@ if [[ $1 ]]; then
     pacman -Syyu --noconfirm
     pacman -S base-devel --noconfirm
     pacman -S libgccjit git tcl tk ripgrep the_silver_searcher vim wget curl cmake \
-           tree-sitter \
+           tree-sitter clojure \
            extra-cmake-modules python autoconf automake gdb gdb-common lldb      \
            adobe-source-code-pro-fonts clang clang-tools-extra boost boost-libs llvm       \
            llvm-libs npm libpng zlib poppler-glib \
            nodejs npm-check-updates luarocks docker docker-compose             \
            docker-machine docker-buildx make ctags fish gradle maven visualvm openjdk-doc          \
-           jdk-openjdk gnuplot go go-tools texlive-bin texlive-core texlive-fontsextra    \
+           jdk-openjdk-19 gnuplot go go-tools texlive-bin texlive-core texlive-fontsextra    \
            texlive-formatsextra texlive-games  \
            texlive-humanities texlive-langchinese texlive-langcyrillic texlive-langextra   \
            texlive-langgreek texlive-langjapanese texlive-langkorean texlive-latexextra    \
@@ -76,7 +76,7 @@ else
            bashate yapf isort 'python-language-server[all]' pyls-isort \
            pyls-mypy pyls-black mypy importmagic epc autopep8 pycodestyle pydocstyle rope ptvsd pylint black \
            yamllint pyflakes mccabe autopep8 cython cmake-language-server pytest mock setuptools pyls-flake8 \
-           pylsp-mypy pyls-isort python-lsp-black pylsp-rope memestra pyls-memestra 'cryptography<41' --user
+           pylsp-mypy pyls-isort python-lsp-black pylsp-rope memestra pyls-memestra --user --break-system-packages
 
     # Set current path
     SOURCE="${BASH_SOURCE[0]}"
@@ -216,19 +216,36 @@ fmt.Printf(\"hello, world\\n\")
     wget -q -O - https://github.com/mjibson/sqlfmt/releases/latest/download/sqlfmt_0.4.0_linux_amd64.tar.gz | tar -xpvzf - --directory "${localInstallDir}/bin"
     chmod +x "${localInstallDir}/bin/sqlfmt"
 
-    # Build groovy server - Does not longer build with java 16.
-    groovyBaseDir="${installBaseDir}/groovy-lsp"
-    groovyInstallDir="${HOME}/.groovy-lsp"
-    if [[ ! -d "${groovyBaseDir}" ]]; then
-        mkdir -p "${groovyInstallDir}"
-        cd "${installBaseDir}" || exit
-        git clone https://github.com/aw1cks-forks/groovy-language-server.git groovy-lsp
-        cd "groovy-lsp" || exit
-        ./gradlew build
-        cp ./build/libs/groovy-lsp-all.jar "${groovyInstallDir}/groovy-lsp-all.jar"
-        chmod +x "${groovyInstallDir}/groovy-lsp-all.jar"
-    fi
-    cd "${DIR}" || exit
+    # Build groovy lsp is not compatible with java 20
+    # groovyBaseDir="${installBaseDir}/groovy-lsp"
+    # groovyInstallDir="${HOME}/.groovy-lsp"
+    # if [[ ! -d "${groovyBaseDir}" ]]; then
+    #     mkdir -p "${groovyInstallDir}"
+    #     cd "${installBaseDir}" || exit
+    #     git clone https://github.com/GroovyLanguageServer/groovy-language-server groovy-lsp
+    #     cd "groovy-lsp" || exit
+    #     ./gradlew build
+    #     cp ./build/libs/groovy-lsp-all.jar "${groovyInstallDir}/groovy-lsp-all.jar"
+    #     chmod +x "${groovyInstallDir}/groovy-lsp-all.jar"
+    # fi
+    # cd "${DIR}" || exit
+
+    # Install leiningen and boot for clojure builds as well as lsp
+    wget -O "${localInstallDir}/bin/lein" https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
+    chmod +x "${localInstallDir}/bin/lein"
+    "${localInstallDir}/bin/lein" version
+    wget -O "${localInstallDir}/bin/boot" https://github.com/boot-clj/boot-bin/releases/download/latest/boot.sh
+    chmod +x "${localInstallDir}/bin/boot"
+    "${localInstallDir}/bin/boot" -u
+    wget -O "${localInstallDir}/bin/clojure-lsp" https://github.com/snoe/clojure-lsp/releases/latest/download/clojure-lsp
+    chmod +x "${localInstallDir}/bin/clojure-lsp"
+
+    # Install additional linters for clojure
+    wget -O "${localInstallDir}/joker-linux-amd64.zip" https://github.com/candid82/joker/releases/latest/download/joker-linux-amd64.zip
+    unzip "${localInstallDir}/joker-linux-amd64.zip"
+    mv "${localInstallDir}/joker" "${localInstallDir}/bin/joker"
+    chmod +x "${localInstallDir}/bin/joker"
+    rm "${localInstallDir}/joker-linux-amd64.zip"
 
     # Commit default spacemacs dotfile
     cp .spacemacs "${HOME}"/.spacemacs
@@ -242,7 +259,6 @@ fmt.Printf(\"hello, world\\n\")
 
     # Install haskell dependencies with stack, do it manually to avoid dynamic linking
     stack install pandoc ShellCheck hoogle hlint hasktags happy alex apply-refact
-    # stylish-haskell hindent
 
     # Get latest hadolint release
     wget -O "${localInstallDir}/bin/hadolint" https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64

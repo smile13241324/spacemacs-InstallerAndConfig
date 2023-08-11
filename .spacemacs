@@ -46,7 +46,7 @@ This function should only modify configuration layer settings."
      dotnet
      fsharp
      vue
-     ;; csharp
+     csharp
      command-log
      (crystal :variables
               crystal-backend 'company-crystal)
@@ -259,6 +259,12 @@ This function should only modify configuration layer settings."
      (sql :variables
           sql-capitalize-keywords t)
      autohotkey
+     (clojure :variables
+              clojure-backend 'cider
+              clojure-enable-fancify-symbols t
+              clojure-enable-sayid t
+              clojure-enable-clj-refactor t
+              clojure-enable-linters '(clj-kondo joker))
      faust
      vagrant
      erlang
