@@ -45,7 +45,8 @@ This function should only modify configuration layer settings."
      dap
      dotnet
      fsharp
-     csharp
+     vue
+     ;; csharp
      command-log
      (crystal :variables
               crystal-backend 'company-crystal)
@@ -61,6 +62,7 @@ This function should only modify configuration layer settings."
      elasticsearch
      (yang :variables yang-pyang-rules "ietf")
      ietf
+     julia
      scheme
      (auto-completion :variables
                       auto-completion-return-key-behavior 'complete
@@ -84,9 +86,9 @@ This function should only modify configuration layer settings."
      salt
      ibuffer
      emacs-lisp
-     (tree-sitter :variables tree-sitter-syntax-highlight-enable t
-                             tree-sitter-indent-enable t
-                             tree-sitter-fold-enable t)
+     ;; (tree-sitter :variables tree-sitter-syntax-highlight-enable t
+     ;;                         tree-sitter-indent-enable t
+     ;;                         tree-sitter-fold-enable t)
      ;; pdf
      (org :variables
           org-enable-org-journal-support t
@@ -96,6 +98,7 @@ This function should only modify configuration layer settings."
           org-enable-reveal-js-support t
           org-enable-hugo-support t
           org-enable-trello-support t
+          org-enable-modern-support nil
           org-enable-org-contacts-support t
           org-enable-roam-support nil
           org-enable-epub-support t
@@ -131,6 +134,7 @@ This function should only modify configuration layer settings."
                      copy-as-format-asciidoc-include-file-name t)
      pass
      common-lisp
+     semantic
      (python :variables
              python-backend 'lsp
              python-lsp-server 'pylsp
@@ -165,6 +169,7 @@ This function should only modify configuration layer settings."
             latex-view-pdf-in-split-window t
             latex-enable-folding t)
      lua
+     notmuch
      (html :variables
            web-fmt-tool 'web-beautify
            html-enable-leex-support t
@@ -747,7 +752,7 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-home-shorten-agenda-source t
 
    ;; If non-nil then byte-compile some of Spacemacs files.
-   dotspacemacs-byte-compile t))
+   dotspacemacs-byte-compile nil))
 
 (defun dotspacemacs/user-env ()
   "Environment variables setup.
@@ -807,13 +812,13 @@ before packages are loaded."
   ;; Configure indentation for web mode and react mode to work together
   (setq-default
    ;; js2-mode
-   js2-basic-offset 2
+   js4-basic-offset 4
    ;; web-mode
-   css-indent-offset 2
-   web-mode-markup-indent-offset 2
-   web-mode-css-indent-offset 2
-   web-mode-code-indent-offset 2
-   web-mode-attr-indent-offset 2)
+   css-indent-offset 4
+   web-mode-markup-indent-offset 4
+   web-mode-css-indent-offset 4
+   web-mode-code-indent-offset 4
+   web-mode-attr-indent-offset 4)
   (with-eval-after-load 'web-mode
     (add-to-list 'web-mode-indentation-params '("lineup-args" . nil))
     (add-to-list 'web-mode-indentation-params '("lineup-concats" . nil))
@@ -858,38 +863,7 @@ before packages are loaded."
                                               (search category-keep)))))
 
   ;; Lint lisp files
-  (add-to-list 'flycheck-global-modes 'emacs-lisp-mode)
-
-  ;; (spacemacs|define-transient-state elisp-debug
-;;     :title "Elisp Debug Transient State"
-;;     :doc
-;;     "
-;; Jumping^^            Breakpoint^^             Execution Modes^^          Display^^
-;; -------^^---------   ----------^^----------   ---------------^^-------   -------^^-----------------
-;; [_g_] goto here      [_p_] set breakpoint     [_n_] next step            [_r_] show previous result
-;; [_s_] forward sexp   [_P_] unset breakpoint   [_N_] go mode              [_R_] show backtrace
-;; [_o_] step out       ^^                       [_c_] continue mode        ^^
-;; [_i_] step in        ^^                       [_C_] continue fast mode   ^^
-;; ^^                   ^^                       ^^                         ^^
-;; ^^                   ^^                       ^^                         ^^
-;; [_q_] quit debugging
-;; "
-;;     :evil-leader-for-mode (emacs-lisp-mode . "d.")
-;;     :foreign-keys run
-;;     :bindings
-;;     ("n" edebug-step-mode)
-;;     ("N" edebug-go-mode)
-;;     ("c" edebug-continue-mode)
-;;     ("C" edebug-Continue-fast-mode)
-;;     ("g" edebug-goto-here)
-;;     ("s" edebug-forward-sexp)
-;;     ("o" edebug-step-out)
-;;     ("i" edebug-step-in)
-;;     ("r" edebug-previous-result)
-;;     ("R" edebug-pop-to-backtrace)
-;;     ("p" edebug-set-breakpoint)
-;;     ("P" edebug-unset-breakpoint)
-;;     ("q" edebug-top-level-nonstop :exit t))
+  ;; (add-to-list 'flycheck-global-modes 'emacs-lisp-mode)
 
   ;; Checkout PR
   (defun smile13241324/cherry-pick-pr (id)
@@ -904,6 +878,9 @@ before packages are loaded."
         (goto-char (point-max))
         (insert "\n" "Thank you for contributing to Spacemacs! :+1:" "\n" "The PR has been cherry-picked into develop, you can safely delete your branch."))))
   (spacemacs/set-leader-keys "o c" #'smile13241324/cherry-pick-pr)
+
+  ;; Need to move to treemacs setup
+  (lsp-treemacs-sync-mode 1)
 
   ;; Activate line wrap for all text modes
   (add-hook 'text-mode-hook 'spacemacs/toggle-truncate-lines-off)

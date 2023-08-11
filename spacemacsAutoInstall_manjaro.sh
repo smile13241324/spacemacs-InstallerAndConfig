@@ -14,13 +14,13 @@ if [[ $1 ]]; then
            nodejs npm-check-updates luarocks docker docker-compose             \
            docker-machine docker-buildx make ctags fish gradle maven visualvm openjdk-doc          \
            jdk-openjdk gnuplot go go-tools texlive-bin texlive-core texlive-fontsextra    \
-           texlive-formatsextra texlive-games texlive-genericextra texlive-htmlxml         \
+           texlive-formatsextra texlive-games  \
            texlive-humanities texlive-langchinese texlive-langcyrillic texlive-langextra   \
            texlive-langgreek texlive-langjapanese texlive-langkorean texlive-latexextra    \
-           texlive-music texlive-pictures texlive-plainextra texlive-pstricks              \
+           texlive-music texlive-pictures texlive-pstricks              \
            texlive-publishers texlive-science texlive-bibtexextra lua coq memcached        \
            ruby opam racket rustfmt rust cargo r gcc-fortran-multilib     \
-           ansible ansible-lint puppet vagrant swi-prolog \
+           puppet vagrant swi-prolog \
            elixir smlnj sbcl pass gradle \
            gradle-doc groovy groovy-docs geckodriver terraform graphviz cowsay \
            gsl lld mlocate firefox openssh sed \
@@ -52,7 +52,7 @@ if [[ $1 ]]; then
         cd "${emacsBaseDir}" || exit
         git checkout emacs-29
         ./autogen.sh
-        ./configure --with-pgtk --with-json --with-mailutils --with-cairo --with-modules --with-native-compilation --without-compress-install --with-tree-sitter
+        ./configure --with-x --with-x-toolkit=gtk3 --with-json --with-mailutils --with-cairo --with-modules --with-native-compilation=aot --without-compress-install --with-tree-sitter
         make -j8
         sudo make install
         make distclean
@@ -72,11 +72,11 @@ else
 
     # Install python packages
     python -m pip install --force-reinstall pyang jedi json-rpc service_factory ipython autoflake \
-           wheel flake8 fabric python-binary-memcached sphinx \
+           ansible wheel flake8 fabric python-binary-memcached sphinx \
            bashate yapf isort 'python-language-server[all]' pyls-isort \
            pyls-mypy pyls-black mypy importmagic epc autopep8 pycodestyle pydocstyle rope ptvsd pylint black \
-           yamllint pyflakes mccabe autopep8 cython==3.0.0a11 cmake-language-server pytest mock setuptools pyls-flake8 \
-           pylsp-mypy pyls-isort python-lsp-black pylsp-rope memestra pyls-memestra --user
+           yamllint pyflakes mccabe autopep8 cython cmake-language-server pytest mock setuptools pyls-flake8 \
+           pylsp-mypy pyls-isort python-lsp-black pylsp-rope memestra pyls-memestra 'cryptography<41' --user
 
     # Set current path
     SOURCE="${BASH_SOURCE[0]}"
@@ -205,7 +205,7 @@ fmt.Printf(\"hello, world\\n\")
 
     # Install nodejs dependencies
     npm config set prefix "${localInstallDir}"
-    npm install -g tern babel-eslint eslint-plugin-react vmd elm \
+    npm install -g tern babel-eslint eslint-plugin-react vmd elm volar \
         elm-oracle elm-format elm-test tslint typescript-formatter webpack pulp eslint bower   \
         grunt typescript yarn js-yaml prettier typescript-language-server js-beautify \
         import-js parcel bash-language-server yaml-language-server dockerfile-language-server-nodejs \
