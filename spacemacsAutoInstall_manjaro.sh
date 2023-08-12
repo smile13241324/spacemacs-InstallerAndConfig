@@ -13,7 +13,7 @@ if [[ $1 ]]; then
            llvm-libs npm libpng zlib poppler-glib \
            nodejs npm-check-updates luarocks docker docker-compose             \
            docker-machine docker-buildx make ctags fish gradle maven visualvm openjdk-doc          \
-           jdk-openjdk-19 gnuplot go go-tools texlive-bin texlive-core texlive-fontsextra    \
+           jdk-openjdk gnuplot go go-tools texlive-bin texlive-core texlive-fontsextra    \
            texlive-formatsextra texlive-games  \
            texlive-humanities texlive-langchinese texlive-langcyrillic texlive-langextra   \
            texlive-langgreek texlive-langjapanese texlive-langkorean texlive-latexextra    \
