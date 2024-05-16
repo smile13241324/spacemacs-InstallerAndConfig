@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 localInstallDir="${HOME}/.local"
 localInstallBin="${localInstallDir}/bin"
 
