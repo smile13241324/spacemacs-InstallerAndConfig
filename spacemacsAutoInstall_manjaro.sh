@@ -11,6 +11,7 @@ if [[ $1 ]]; then
            extra-cmake-modules python autoconf automake gdb gdb-common lldb      \
            adobe-source-code-pro-fonts clang clang-tools-extra boost boost-libs llvm       \
            llvm-libs npm libpng zlib poppler-glib \
+           emacs \
            nodejs npm-check-updates luarocks docker docker-compose             \
            docker-machine docker-buildx make ctags fish gradle maven visualvm openjdk-doc          \
            jdk-openjdk gnuplot go go-tools texlive-bin texlive-core texlive-fontsextra    \
@@ -31,6 +32,11 @@ if [[ $1 ]]; then
     chmod +x ./kubectl
     mv ./kubectl /usr/local/bin/kubectl
 
+    # Install helm
+    curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+    chmod +x get_helm.sh
+    ./get_helm.sh
+
     # Install stack for haskell
     wget -qO- https://get.haskellstack.org/ | sh
 
@@ -45,20 +51,21 @@ if [[ $1 ]]; then
     python -m ensurepip --upgrade
     python -m pip install --upgrade pip
 
+    ## We use the buildin emacs but keep the code to build manually again when necessary
     # Build emacs
-    emacsBaseDir="${HOME}/emacsBuild"
-    if [[ ! -d "${emacsBaseDir}" ]]; then
-        git clone git://git.savannah.gnu.org/emacs.git "${emacsBaseDir}"
-        cd "${emacsBaseDir}" || exit
-        git checkout emacs-29
-        ./autogen.sh
-        ./configure --with-x --with-x-toolkit=gtk3 --with-json --with-mailutils --with-cairo --with-modules --with-native-compilation=aot --without-compress-install --with-tree-sitter
-        make -j8
-        sudo make install
-        make distclean
-        cd ..
-        rm "${emacsBaseDir}" -R
-    fi
+    # emacsBaseDir="${HOME}/emacsBuild"
+    # if [[ ! -d "${emacsBaseDir}" ]]; then
+    #     git clone git://git.savannah.gnu.org/emacs.git "${emacsBaseDir}"
+    #     cd "${emacsBaseDir}" || exit
+    #     git checkout emacs-29
+    #     ./autogen.sh
+    #     ./configure --with-x --with-x-toolkit=gtk3 --with-json --with-mailutils --with-cairo --with-modules --with-native-compilation=aot --without-compress-install --with-tree-sitter
+    #     make -j8
+    #     sudo make install
+    #     make distclean
+    #     cd ..
+    #     rm "${emacsBaseDir}" -R
+    # fi
 else
     # Set user specific actions which do not require sudo and should be run in
     # the local userspace
@@ -206,11 +213,11 @@ fmt.Printf(\"hello, world\\n\")
     # Install nodejs dependencies
     npm config set prefix "${localInstallDir}"
     npm install -g tern babel-eslint eslint-plugin-react vmd elm volar \
-        elm-oracle elm-format elm-test tslint typescript-formatter webpack pulp eslint bower   \
+        elm-oracle elm-format elm-test typescript-formatter webpack pulp eslint bower   \
         grunt typescript yarn js-yaml prettier typescript-language-server js-beautify \
         import-js parcel bash-language-server yaml-language-server dockerfile-language-server-nodejs \
         flow-bin vscode-json-languageserver vscode-css-languageserver-bin vscode-html-languageserver-bin \
-        vim-language-server @elm-tooling/elm-language-server elm-analyse less
+        vim-language-server @elm-tooling/elm-language-server elm-analyse less typescript
 
     # Install sqlfmt
     wget -q -O - https://github.com/mjibson/sqlfmt/releases/latest/download/sqlfmt_0.4.0_linux_amd64.tar.gz | tar -xpvzf - --directory "${localInstallDir}/bin"
