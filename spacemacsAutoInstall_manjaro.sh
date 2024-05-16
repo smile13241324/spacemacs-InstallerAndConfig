@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 #Run package installations in system global area when parm is non-nill using
 #sudo -H
@@ -48,6 +49,7 @@ if [[ $1 ]]; then
     luarocks install lanes
 
     # Install pip directly from python as the OS does it wrongly
+    rm /usr/lib/python3.12/EXTERNALLY-MANAGED -f
     python -m ensurepip --upgrade
     python -m pip install --upgrade pip
 
@@ -80,10 +82,9 @@ else
     # Install python packages
     python -m pip install --force-reinstall pyang jedi json-rpc service_factory ipython autoflake \
            ansible wheel flake8 fabric python-binary-memcached sphinx \
-           bashate yapf isort 'python-language-server[all]' pyls-isort \
-           pyls-mypy pyls-black mypy importmagic epc autopep8 pycodestyle pydocstyle rope ptvsd pylint black \
-           yamllint pyflakes mccabe autopep8 cython cmake-language-server pytest mock setuptools pyls-flake8 \
-           pylsp-mypy pyls-isort python-lsp-black pylsp-rope memestra pyls-memestra --user --break-system-packages
+           bashate yapf isort 'python-lsp-server[all]' \
+           pylsp-mypy mypy isort Black rope ruff python-lsp-black \
+           python-lsp-isort pyls-memestra python-lsp-ruff pylsp-rope memestra --user
 
     # Set current path
     SOURCE="${BASH_SOURCE[0]}"
@@ -98,7 +99,6 @@ else
     spacemacsInstallationDir="${HOME}/.emacs.d"
     [[ ! -d "${spacemacsInstallationDir}" ]] && git clone https://github.com/syl20bnr/spacemacs "${spacemacsInstallationDir}"
     cd "${spacemacsInstallationDir}" || exit
-    git checkout origin/develop --track
     git checkout develop
     git pull
     cd "${DIR}" || exit
@@ -108,6 +108,7 @@ else
     mkdir -p "${installBaseDir}"
 
     # Add .profile as default value for .bash_profile
+    echo "Setting profile settings"
     [[ ! -f "${HOME}/.profile" ]] && touch "${HOME}/.profile"
     if grep -Fxq "[[ -f ${HOME}/.profile ]] && . ${HOME}/.profile" "${HOME}"/.bash_profile
     then
@@ -117,6 +118,7 @@ else
     fi
 
     # Install fish terminal
+    echo "Setting fish settings"
     fishConfigDir="${HOME}/.config/fish"
     fishConfigFile="${fishConfigDir}/config.fish"
     mkdir -p "${fishConfigDir}"
@@ -133,6 +135,7 @@ true
 end" >> "${fishConfigFile}"
 
     # Prepare Go environment
+    echo "prepare go env"
     goPath="${HOME}/goWorkspace"
     goPathSrc="${goPath}/src"
     goPathBin="${goPath}/bin"
@@ -204,6 +207,7 @@ fmt.Printf(\"hello, world\\n\")
     go install github.com/rogpeppe/godef@latest
 
     # Install plantuml
+    echo "prepare plantuml"
     plantUmlInstallDir="${HOME}/.plantuml"
     if [[ ! -d "${plantUmlInstallDir}" ]]; then
         mkdir "${plantUmlInstallDir}"
@@ -211,6 +215,7 @@ fmt.Printf(\"hello, world\\n\")
     fi
 
     # Install nodejs dependencies
+    echo "prepare npm"
     npm config set prefix "${localInstallDir}"
     npm install -g tern babel-eslint eslint-plugin-react vmd elm volar \
         elm-oracle elm-format elm-test typescript-formatter webpack pulp eslint bower   \
@@ -220,10 +225,12 @@ fmt.Printf(\"hello, world\\n\")
         vim-language-server @elm-tooling/elm-language-server elm-analyse less typescript
 
     # Install sqlfmt
-    wget -q -O - https://github.com/mjibson/sqlfmt/releases/latest/download/sqlfmt_0.4.0_linux_amd64.tar.gz | tar -xpvzf - --directory "${localInstallDir}/bin"
+    echo "prepare sqlfmt"
+    wget -q -O - https://github.com/maddyblue/sqlfmt/releases/download/v0.5.0/sqlfmt_Linux_x86_64.tar.gz | tar -xpvzf - --directory "${localInstallDir}/bin"
     chmod +x "${localInstallDir}/bin/sqlfmt"
 
     # Build groovy lsp is not compatible with java 20
+    # echo "prepare groovy lsp"
     # groovyBaseDir="${installBaseDir}/groovy-lsp"
     # groovyInstallDir="${HOME}/.groovy-lsp"
     # if [[ ! -d "${groovyBaseDir}" ]]; then
@@ -238,36 +245,48 @@ fmt.Printf(\"hello, world\\n\")
     # cd "${DIR}" || exit
 
     # Install leiningen and boot for clojure builds as well as lsp
+    echo "prepare leiningen"
     wget -O "${localInstallDir}/bin/lein" https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
     chmod +x "${localInstallDir}/bin/lein"
     "${localInstallDir}/bin/lein" version
+
+    echo "prepare boot"
     wget -O "${localInstallDir}/bin/boot" https://github.com/boot-clj/boot-bin/releases/download/latest/boot.sh
     chmod +x "${localInstallDir}/bin/boot"
     "${localInstallDir}/bin/boot" -u
-    wget -O "${localInstallDir}/bin/clojure-lsp" https://github.com/snoe/clojure-lsp/releases/latest/download/clojure-lsp
+
+    echo "clojure lsp"
+    wget -O "${localInstallDir}/bin/clojure-lsp" https://github.com/clojure-lsp/clojure-lsp/releases/latest/download/clojure-lsp
     chmod +x "${localInstallDir}/bin/clojure-lsp"
 
     # Install additional linters for clojure
+    echo "clojure jocker"
+    cd "${localInstallDir}" || exit
     wget -O "${localInstallDir}/joker-linux-amd64.zip" https://github.com/candid82/joker/releases/latest/download/joker-linux-amd64.zip
     unzip "${localInstallDir}/joker-linux-amd64.zip"
     mv "${localInstallDir}/joker" "${localInstallDir}/bin/joker"
     chmod +x "${localInstallDir}/bin/joker"
     rm "${localInstallDir}/joker-linux-amd64.zip"
+    cd "${DIR}" || exit
 
     # Commit default spacemacs dotfile
+    echo "copy dotfile"
     cp .spacemacs "${HOME}"/.spacemacs
 
     # Install haskell dependencies with stack, do it manually to avoid dynamic
     # linking in arch linux haskell packages
     # Avoid building too much packages as this exceed max build time
     # https://wiki.archlinux.org/index.php/Haskell
+    echo "install stack haskell env"
     stack setup
     stack upgrade
 
     # Install haskell dependencies with stack, do it manually to avoid dynamic linking
+    echo "install stack additional packages"
     stack install pandoc ShellCheck hoogle hlint hasktags happy alex apply-refact
 
     # Get latest hadolint release
+    echo "install hadolint"
     wget -O "${localInstallDir}/bin/hadolint" https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64
     chmod +x "${localInstallDir}/bin/hadolint"
 fi
