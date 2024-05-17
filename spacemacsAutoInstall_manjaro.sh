@@ -12,7 +12,7 @@ if [[ $1 ]]; then
            extra-cmake-modules python autoconf automake gdb gdb-common lldb      \
            adobe-source-code-pro-fonts clang clang-tools-extra boost boost-libs llvm       \
            llvm-libs npm libpng zlib poppler-glib \
-           emacs-wayland \
+           emacs-wayland libva-utils libva-mesa-driver \
            nodejs npm-check-updates luarocks docker docker-compose             \
            docker-machine docker-buildx make ctags fish gradle maven visualvm openjdk-doc          \
            jdk-openjdk gnuplot go go-tools texlive-bin texlive-core texlive-fontsextra    \
@@ -53,6 +53,10 @@ if [[ $1 ]]; then
     python -m ensurepip --upgrade
     python -m pip install --upgrade pip
 
+    # Manually create a standard pip link
+    ln /usr/bin/pip3 pip --symbolic
+    mv ./pip /usr/bin/
+
     ## We use the buildin emacs but keep the code to build manually again when necessary
     # Build emacs
     # emacsBaseDir="${HOME}/emacsBuild"
@@ -82,6 +86,7 @@ else
     # Install python packages
     python -m pip install --force-reinstall pyang jedi json-rpc service_factory ipython autoflake \
            ansible wheel flake8 fabric python-binary-memcached sphinx \
+           importmagic epc \
            bashate yapf isort 'python-lsp-server[all]' \
            pylsp-mypy mypy isort Black rope ruff python-lsp-black \
            python-lsp-isort pyls-memestra python-lsp-ruff pylsp-rope memestra --user
@@ -141,25 +146,37 @@ end" >> "${fishConfigFile}"
     goPathBin="${goPath}/bin"
     goPathSrcExample="${goPathSrc}/example"
     goPathSrcExampleFile="${goPathSrcExample}/example.go"
+    JAVA_HOME="/usr/lib/jvm/default-runtime"
     export GOPATH=${goPath}
-    export PATH=$PATH:${goPathBin}
+    export PATH=$PATH:${goPathBin}:${localInstallBin}
+    export JAVA_HOME
+
+    # Prepare .profile with paths
+    if grep -Fxq "export JAVA_HOME=${JAVA_HOME}" "${HOME}"/.profile
+    then
+        echo "nothing to do"
+    else
+        echo "export JAVA_HOME=${JAVA_HOME}" >> "${HOME}"/.profile
+    fi
     if grep -Fxq "export GOPATH=${goPath}" "${HOME}"/.profile
     then
         echo "nothing to do"
     else
         echo "export GOPATH=${goPath}" >> "${HOME}"/.profile
     fi
-    if grep -Fq "${goPathBin}" "${HOME}"/.profile
+    if grep -Fxq "export PATH=${PATH}" "${HOME}"/.profile
     then
         echo "nothing to do"
     else
-        echo "export PATH=$PATH:${goPathBin}" >> "${HOME}"/.profile
+        echo "export PATH=${PATH}" >> "${HOME}"/.profile
     fi
-    if grep -Fq "${localInstallBin}" "${HOME}"/.profile
+
+    # Prepare fish config with paths
+    if grep -Fxq "set -x JAVA_HOME ${JAVA_HOME}" "${fishConfigFile}"
     then
         echo "nothing to do"
     else
-        echo "export PATH=$PATH:${localInstallBin}" >> "${HOME}"/.profile
+        echo "set -x JAVA_HOME ${JAVA_HOME}" >> "${fishConfigFile}"
     fi
     if grep -Fxq "set -x GOPATH ${goPath}" "${fishConfigFile}"
     then
@@ -167,17 +184,11 @@ end" >> "${fishConfigFile}"
     else
         echo "set -x GOPATH ${goPath}" >> "${fishConfigFile}"
     fi
-    if grep -Fq "${goPathBin}" "${fishConfigFile}"
+    if grep -Fxq "set -x PATH ${PATH//:/ }" "${fishConfigFile}"
     then
         echo "nothing to do"
     else
-        echo "set -x PATH ${PATH//:/ } ${goPathBin}" >> "${fishConfigFile}"
-    fi
-    if grep -Fq "${localInstallBin}" "${fishConfigFile}"
-    then
-        echo "nothing to do"
-    else
-        echo "set -x PATH ${PATH//:/ } ${localInstallBin}" >> "${fishConfigFile}"
+        echo "set -x PATH ${PATH//:/ }" >> "${fishConfigFile}"
     fi
     [[ ! -d "${goPath}" ]] && mkdir "${goPath}"
     [[ ! -d "${goPathSrc}" ]] && mkdir "${goPathSrc}"

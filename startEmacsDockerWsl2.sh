@@ -1,4 +1,6 @@
+#!/usr/bin/env bash
 set -e
+
 # This script is for running spacemacs in wsl2 from docker transfering the screen via wayland.
 # For this wsl2 needs to be updated to the latest version as well as your system must be
 # ready to pass gpus to containers.
