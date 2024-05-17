@@ -905,7 +905,35 @@ before packages are loaded."
   ;; Need to move to treemacs setup
   (lsp-treemacs-sync-mode 1)
 
-  (setq lsp-java-jdt-download-url "https://www.eclipse.org/downloads/download.php?file=/jdtls/milestones/1.29.0/jdt-language-server-1.29.0-202310261436.tar.gz")
+  ;; Setup lsp
+  (defconst lsp-java-lombok-jar-path (expand-file-name
+                                      (locate-user-emacs-file
+                                        (f-join ".cache" "lombok.jar"))))
+  (defun smile13241324/lombok-download ()
+    "Download the latest Lombok JAR file and install it into `lsp-java-lombok-jar-path'."
+    (interactive)
+    (if (and (y-or-n-p (format "Download the latest Lombok JAR into %s? "
+                               lsp-java-lombok-jar-path))
+             (or (not (file-exists-p lsp-java-lombok-jar-path))
+                 (y-or-n-p (format "The Lombok JAR already exists at %s, overwrite? "
+                                   lsp-java-lombok-jar-path))))
+        (progn
+          (mkdir (file-name-directory lsp-java-lombok-jar-path) t)
+          (message "Downloading Lombok JAR into %s" lsp-java-lombok-jar-path)
+          (url-copy-file "https://projectlombok.org/downloads/lombok.jar" lsp-java-lombok-jar-path t))
+      (message "Aborted.")))
+
+  (defun smile13241324/setup-lsp-java-vmargs ()
+    (setq lsp-java-vmargs '("-XX:+UseZGC" "-XX:+ZGenerational" "-Xmx15G" "-Xms1G"))
+    (setq lsp-java-vmargs
+          (append lsp-java-vmargs
+                  (list (concat "-javaagent:" lsp-java-lombok-jar-path)))))
+
+  ;; Setup lsp java with productive settings
+  (setq lsp-java-jdt-download-url "https://www.eclipse.org/downloads/download.php?file=/jdtls/milestones/1.35.0/jdt-language-server-1.35.0-202404251256.tar.gz")
+
+  ;; Setup the lsp-java vmargs
+  (smile13241324/setup-lsp-java-vmargs)
 
   ;; Activate line wrap for all text modes
   (add-hook 'text-mode-hook 'spacemacs/toggle-truncate-lines-off)
