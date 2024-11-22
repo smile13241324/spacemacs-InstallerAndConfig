@@ -14,7 +14,7 @@ if [[ $1 ]]; then
            llvm-libs npm libpng zlib poppler-glib \
            emacs-wayland libva-utils libva-mesa-driver \
            nodejs npm-check-updates luarocks docker docker-compose             \
-           docker-machine docker-buildx make ctags fish gradle maven visualvm openjdk-doc          \
+           docker-machine docker-buildx make ctags fish gradle maven openjdk-doc          \
            jdk-openjdk gnuplot go go-tools texlive-bin texlive-core texlive-fontsextra    \
            texlive-formatsextra texlive-games  \
            texlive-humanities texlive-langchinese texlive-langcyrillic texlive-langextra   \
