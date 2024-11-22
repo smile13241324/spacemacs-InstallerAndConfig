@@ -1,7 +1,4 @@
-;; -*- mode: emacs-lisp; lexical-binding: t -*-
-;; This file is loaded by Spacemacs at startup.
-;; It must be stored in your home directory.
-
+;; -*- mode: emacs-lisp; lexical-binding: t -*- ;; This file is loaded by Spacemacs at startup.  ;; It must be stored in your home directory.
 (defun dotspacemacs/layers ()
   "Layer configuration:
 This function should only modify configuration layer settings."
@@ -46,7 +43,6 @@ This function should only modify configuration layer settings."
      dotnet
      openai
      fsharp
-     vue
      csharp
      command-log
      (crystal :variables
@@ -88,9 +84,10 @@ This function should only modify configuration layer settings."
      ibuffer
      emacs-lisp
      spacemacs-layouts
-     ;; (tree-sitter :variables tree-sitter-syntax-highlight-enable t
-     ;;                         tree-sitter-indent-enable t
-     ;;                         tree-sitter-fold-enable t)
+     (tree-sitter :variables
+                  tree-sitter-syntax-highlight-enable t
+                  tree-sitter-indent-enable nil
+                  tree-sitter-fold-enable nil)
      ;; pdf
      (org :variables
           org-enable-org-journal-support t
@@ -100,10 +97,10 @@ This function should only modify configuration layer settings."
           org-enable-reveal-js-support t
           org-enable-hugo-support t
           org-enable-trello-support t
-          org-enable-modern-support nil
-          org-enable-org-contacts-support t
-          org-enable-roam-support nil
           org-enable-epub-support t
+          org-enable-sticky-header t
+          org-enable-verb-support t
+          org-enable-roam-ui t
           org-enable-jira-support t)
      (shell :variables
             shell-enable-smart-eshell nil
@@ -112,6 +109,7 @@ This function should only modify configuration layer settings."
             shell-default-position 'bottom
             shell-default-full-span nil
             shell-default-term-shell "/usr/bin/fish")
+     swift
      version-control
      import-js
      (cmake :variables
@@ -126,6 +124,7 @@ This function should only modify configuration layer settings."
             c-c++-adopt-subprojects t)
      web-beautify
      templates
+     finance
      epub
      themes-megapack
      git
@@ -136,7 +135,6 @@ This function should only modify configuration layer settings."
                      copy-as-format-asciidoc-include-file-name t)
      pass
      common-lisp
-     semantic
      (python :variables
              python-backend 'lsp
              python-lsp-server 'pylsp
@@ -196,7 +194,7 @@ This function should only modify configuration layer settings."
      (multiple-cursors :variables
                        multiple-cursors-backend  'mc;; other mode  'evil-mc (not support number)
                        mc/cmds-to-run-once '(upcase-region)
-      )
+                       )
      nginx
      (docker :variables
              docker-dockerfile-backend 'lsp)
@@ -350,8 +348,6 @@ It should only modify the values of Spacemacs settings."
    ;; If non-nil ELPA repositories are contacted via HTTPS whenever it's
    ;; possible. Set it to nil if you have no way to use HTTPS in your
    ;; environment, otherwise it is strongly recommended to let it set to t.
-   ;; This variable has no effect if Emacs is launched with the parameter
-   ;; `--insecure' which forces the value of this variable to nil.
    ;; (default t)
    dotspacemacs-elpa-https t
 
@@ -585,6 +581,11 @@ It should only modify the values of Spacemacs settings."
    ;; displayed in the current window. (default nil)
    dotspacemacs-switch-to-buffer-prefers-purpose nil
 
+   ;; Whether side windows (such as those created by treemacs or neotree)
+   ;; are kept or minimized by `spacemacs/toggle-maximize-window' (SPC w m).
+   ;; (default t)
+   dotspacemacs-maximize-window-keep-side-windows t
+
    ;; If non-nil a progress bar is displayed when spacemacs is loading. This
    ;; may increase the boot time on some systems and emacs builds, set it to
    ;; nil to boost the loading time. (default t)
@@ -661,7 +662,6 @@ It should only modify the values of Spacemacs settings."
    ;;   :size-limit-kb 1000)
    ;; When used in a plist, `visual' takes precedence over `relative'.
    ;; (default nil)
-   ;; dotspacemacs-line-numbers t
    dotspacemacs-line-numbers t
 
    ;; Code folding method. Possible values are `evil', `origami' and `vimish'.
@@ -707,6 +707,13 @@ It should only modify the values of Spacemacs settings."
    ;; (default '("rg" "ag" "pt" "ack" "grep"))
    dotspacemacs-search-tools '("rg" "ag" "pt" "ack" "grep")
 
+   ;; The backend used for undo/redo functionality. Possible values are
+   ;; `undo-fu', `undo-redo' and `undo-tree' see also `evil-undo-system'.
+   ;; Note that saved undo history does not get transferred when changing
+   ;; your undo system. The default is currently `undo-fu' as `undo-tree'
+   ;; is not maintained anymore and `undo-redo' is very basic."
+   dotspacemacs-undo-system 'undo-fu
+
    ;; Format specification for setting the frame title.
    ;; %a - the `abbreviated-file-name', or `buffer-name'
    ;; %t - `projectile-project-name'
@@ -742,6 +749,9 @@ It should only modify the values of Spacemacs settings."
    ;; to aggressively delete empty line and long sequences of whitespace,
    ;; `trailing' to delete only the whitespace at end of lines, `changed' to
    ;; delete only whitespace for changed lines or `nil' to disable cleanup.
+   ;; The variable `global-spacemacs-whitespace-cleanup-modes' controls
+   ;; which major modes have whitespace cleanup enabled or disabled
+   ;; by default.
    ;; (default nil)
    dotspacemacs-whitespace-cleanup 'all
 
@@ -776,7 +786,7 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-home-shorten-agenda-source nil
 
    ;; If non-nil then byte-compile some of Spacemacs files.
-   dotspacemacs-byte-compile nil))
+   dotspacemacs-byte-compile t))
 
 (defun dotspacemacs/user-env ()
   "Environment variables setup.
@@ -849,6 +859,7 @@ before packages are loaded."
 
   ;; Configure org mode
   (with-eval-after-load 'org
+    (setq org-src-tab-acts-natively nil)
     (setq org-agenda-files (quote ("~/Documents/GTD/CalendarActionList.org" "~/Documents/GTD/NextActionList.org" "~/Documents/GTD/ProjectList.org")))
     (setq org-refile-targets (quote (("~/Documents/GTD/CalendarActionList.org" :maxlevel . 1)
                                      ("~/Documents/GTD/NextActionList.org" :maxlevel . 1)
@@ -885,30 +896,31 @@ before packages are loaded."
                                               (tags priority-down category-keep)
                                               (search category-keep)))))
 
-  ;; Lint lisp files
-  ;; (add-to-list 'flycheck-global-modes 'emacs-lisp-mode)
+  (with-eval-after-load 'org-roam
+    (setq org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start t)
+    )
 
   ;; Checkout PR
-  (defun smile13241324/cherry-pick-pr (id)
-    "Take a given PR id and make a new local branch, then cherry pick the commit and print the thanks message"
-    (interactive "MEnter PR Id: ")
-    (with-current-buffer "*scratch*"
+  ;; (defun smile13241324/cherry-pick-pr (id)
+  ;;   "Take a given PR id and make a new local branch, then cherry pick the commit and print the thanks message"
+  ;;   (interactive "MEnter PR Id: ")
+  ;;   (with-current-buffer "*scratch*"
 
-      (let ((default-directory "~/.emacs.d"))
-        (erase-buffer)
-        (call-process-shell-command (concat "git fetch origin pull/" id "/head:" id) nil nil)
-        (call-process-shell-command (concat "git cherry-pick " id) nil nil)
-        (goto-char (point-max))
-        (insert "\n" "Thank you for contributing to Spacemacs! :+1:" "\n" "The PR has been cherry-picked into develop, you can safely delete your branch."))))
-  (spacemacs/set-leader-keys "o c" #'smile13241324/cherry-pick-pr)
-
-  ;; Need to move to treemacs setup
-  (lsp-treemacs-sync-mode 1)
+  ;;     (let ((default-directory "~/.emacs.d"))
+  ;;       (erase-buffer)
+  ;;       (call-process-shell-command (concat "git fetch origin pull/" id "/head:" id) nil nil)
+  ;;       (call-process-shell-command (concat "git cherry-pick " id) nil nil)
+  ;;       (goto-char (point-max))
+  ;;       (insert "\n" "Thank you for contributing to Spacemacs! :+1:" "\n" "The PR has been cherry-picked into develop, you can safely delete your branch."))))
+  ;; (spacemacs/set-leader-keys "o c" #'smile13241324/cherry-pick-pr)
 
   ;; Setup lsp
   (defconst lsp-java-lombok-jar-path (expand-file-name
                                       (locate-user-emacs-file
-                                        (f-join ".cache" "lombok.jar"))))
+                                       (f-join ".cache" "lombok.jar"))))
   (defun smile13241324/lombok-download ()
     "Download the latest Lombok JAR file and install it into `lsp-java-lombok-jar-path'."
     (interactive)
@@ -924,13 +936,13 @@ before packages are loaded."
       (message "Aborted.")))
 
   (defun smile13241324/setup-lsp-java-vmargs ()
-    (setq lsp-java-vmargs '("-XX:+UseZGC" "-XX:+ZGenerational" "-Xmx15G" "-Xms1G"))
+    (setq lsp-java-vmargs '("-XX:+UseZGC" "-XX:+ZGenerational" "-Xmx20G" "-Xms20G" "-XX:MaxMetaspaceSize=10G" "-XX:+UseStringDeduplication"))
     (setq lsp-java-vmargs
           (append lsp-java-vmargs
                   (list (concat "-javaagent:" lsp-java-lombok-jar-path)))))
 
   ;; Setup lsp java with productive settings
-  (setq lsp-java-jdt-download-url "https://www.eclipse.org/downloads/download.php?file=/jdtls/milestones/1.35.0/jdt-language-server-1.35.0-202404251256.tar.gz")
+  (setq lsp-java-jdt-download-url "https://www.eclipse.org/downloads/download.php?file=/jdtls/milestones/1.36.0/jdt-language-server-1.36.0-202405301306.tar.gz")
 
   ;; Setup the lsp-java vmargs
   (smile13241324/setup-lsp-java-vmargs)
@@ -938,20 +950,22 @@ before packages are loaded."
   ;; Activate line wrap for all text modes
   (add-hook 'text-mode-hook 'spacemacs/toggle-truncate-lines-off)
   (add-hook 'text-mode-hook 'spacemacs/toggle-visual-line-navigation-off))
+
+
 (defun dotspacemacs/emacs-custom-settings ()
   "Emacs custom settings.
 This is an auto-generated function, do not modify its content directly, use
 Emacs customize menu instead.
 This function is called at the very end of Spacemacs initialization."
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
- '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
-)
+  (custom-set-faces
+   ;; custom-set-faces was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
+   '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+  )
