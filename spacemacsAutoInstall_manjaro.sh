@@ -8,11 +8,12 @@ if [[ $1 ]]; then
     pacman -Syyu --noconfirm
     pacman -S base-devel --noconfirm
     pacman -S libgccjit git tcl tk ripgrep the_silver_searcher vim wget curl cmake \
-           tree-sitter clojure \
+           virt-manager qemu-full vde2 ebtables dnsmasq bridge-utils openbsd-netcat \
+           tree-sitter clojure android-tools android-udev \
            extra-cmake-modules python autoconf automake gdb gdb-common lldb      \
            adobe-source-code-pro-fonts clang clang-tools-extra boost boost-libs llvm       \
            llvm-libs npm libpng zlib poppler-glib \
-           emacs-wayland libva-utils libva-mesa-driver \
+           libva-utils libva-mesa-driver \
            nodejs npm-check-updates luarocks docker docker-compose             \
            docker-machine docker-buildx make ctags fish gradle maven openjdk-doc          \
            jdk-openjdk gnuplot go go-tools texlive-bin texlive-core texlive-fontsextra    \
@@ -20,6 +21,7 @@ if [[ $1 ]]; then
            texlive-humanities texlive-langchinese texlive-langcyrillic texlive-langextra   \
            texlive-langgreek texlive-langjapanese texlive-langkorean texlive-latexextra    \
            texlive-music texlive-pictures texlive-pstricks              \
+           emacs-wayland \
            texlive-publishers texlive-science texlive-bibtexextra lua coq memcached        \
            ruby opam racket rustfmt rust cargo r gcc-fortran-multilib     \
            puppet vagrant swi-prolog \
@@ -38,9 +40,6 @@ if [[ $1 ]]; then
     chmod +x get_helm.sh
     ./get_helm.sh
 
-    # Install stack for haskell
-    wget -qO- https://get.haskellstack.org/ | sh
-
     # Take care that locate is up-to-date for later searching
     updatedb
 
@@ -56,22 +55,6 @@ if [[ $1 ]]; then
     # Manually create a standard pip link
     ln /usr/bin/pip3 pip --symbolic
     mv ./pip /usr/bin/
-
-    ## We use the buildin emacs but keep the code to build manually again when necessary
-    # Build emacs
-    # emacsBaseDir="${HOME}/emacsBuild"
-    # if [[ ! -d "${emacsBaseDir}" ]]; then
-    #     git clone git://git.savannah.gnu.org/emacs.git "${emacsBaseDir}"
-    #     cd "${emacsBaseDir}" || exit
-    #     git checkout emacs-29
-    #     ./autogen.sh
-    #     ./configure --with-x --with-x-toolkit=gtk3 --with-json --with-mailutils --with-cairo --with-modules --with-native-compilation=aot --without-compress-install --with-tree-sitter
-    #     make -j8
-    #     sudo make install
-    #     make distclean
-    #     cd ..
-    #     rm "${emacsBaseDir}" -R
-    # fi
 else
     # Set user specific actions which do not require sudo and should be run in
     # the local userspace
@@ -80,13 +63,17 @@ else
 
     # Install Ruby dependencies
     mkdir "${localInstallBin}" -p
-    gem install -n "${localInstallBin}" rdoc pry pry-doc ruby_parser rubocop ruby_test rVM rails \
+    gem install -n "${localInstallBin}" pry
+    set +e
+    gem install -n "${localInstallBin}" pry-doc
+    set -e
+    gem install -n "${localInstallBin}" pry-doc
+    gem install -n "${localInstallBin}" rdoc ruby_parser rubocop ruby_test rVM rails \
         specific_install puppet-lint sqlint solargraph rubocop-performance
 
     # Install python packages
     python -m pip install --force-reinstall pyang jedi json-rpc service_factory ipython autoflake \
            ansible wheel flake8 fabric python-binary-memcached sphinx \
-           importmagic epc \
            bashate yapf isort 'python-lsp-server[all]' \
            pylsp-mypy mypy isort Black rope ruff python-lsp-black \
            python-lsp-isort pyls-memestra python-lsp-ruff pylsp-rope memestra --user
@@ -146,9 +133,11 @@ end" >> "${fishConfigFile}"
     goPathBin="${goPath}/bin"
     goPathSrcExample="${goPathSrc}/example"
     goPathSrcExampleFile="${goPathSrcExample}/example.go"
+    haskellPath="${HOME}/.ghcup/bin"
+    cabalPath="${HOME}/.cabal/bin"
     JAVA_HOME="/usr/lib/jvm/default-runtime"
     export GOPATH=${goPath}
-    export PATH=$PATH:${goPathBin}:${localInstallBin}
+    export PATH=$PATH:${goPathBin}:${localInstallBin}:${haskellPath}:${cabalPath}
     export JAVA_HOME
 
     # Prepare .profile with paths
@@ -241,19 +230,19 @@ fmt.Printf(\"hello, world\\n\")
     chmod +x "${localInstallDir}/bin/sqlfmt"
 
     # Build groovy lsp is not compatible with java 20
-    # echo "prepare groovy lsp"
-    # groovyBaseDir="${installBaseDir}/groovy-lsp"
-    # groovyInstallDir="${HOME}/.groovy-lsp"
-    # if [[ ! -d "${groovyBaseDir}" ]]; then
-    #     mkdir -p "${groovyInstallDir}"
-    #     cd "${installBaseDir}" || exit
-    #     git clone https://github.com/GroovyLanguageServer/groovy-language-server groovy-lsp
-    #     cd "groovy-lsp" || exit
-    #     ./gradlew build
-    #     cp ./build/libs/groovy-lsp-all.jar "${groovyInstallDir}/groovy-lsp-all.jar"
-    #     chmod +x "${groovyInstallDir}/groovy-lsp-all.jar"
-    # fi
-    # cd "${DIR}" || exit
+    echo "prepare groovy lsp"
+    groovyBaseDir="${installBaseDir}/groovy-lsp"
+    groovyInstallDir="${HOME}/.groovy-lsp"
+    if [[ ! -d "${groovyBaseDir}" ]]; then
+        mkdir -p "${groovyInstallDir}"
+        cd "${installBaseDir}" || exit
+        git clone https://github.com/GroovyLanguageServer/groovy-language-server groovy-lsp
+        cd "groovy-lsp" || exit
+        ./gradlew build
+        cp ./build/libs/groovy-lsp-all.jar "${groovyInstallDir}/groovy-lsp-all.jar"
+        chmod +x "${groovyInstallDir}/groovy-lsp-all.jar"
+    fi
+    cd "${DIR}" || exit
 
     # Install leiningen and boot for clojure builds as well as lsp
     echo "prepare leiningen"
@@ -284,13 +273,11 @@ fmt.Printf(\"hello, world\\n\")
     echo "copy dotfile"
     cp .spacemacs "${HOME}"/.spacemacs
 
-    # Install haskell dependencies with stack, do it manually to avoid dynamic
-    # linking in arch linux haskell packages
-    # Avoid building too much packages as this exceed max build time
-    # https://wiki.archlinux.org/index.php/Haskell
-    echo "install stack haskell env"
-    stack setup
-    stack upgrade
+    # Install Haskell package manager
+    echo "install haskell tools"
+    export BOOTSTRAP_HASKELL_NONINTERACTIVE="True"
+    export BOOTSTRAP_HASKELL_INSTALL_HLS="True"
+    curl --proto '=https' --tlsv1.3 -sSf https://get-ghcup.haskell.org | sh
 
     # Install haskell dependencies with stack, do it manually to avoid dynamic linking
     echo "install stack additional packages"
@@ -300,4 +287,8 @@ fmt.Printf(\"hello, world\\n\")
     echo "install hadolint"
     wget -O "${localInstallDir}/bin/hadolint" https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64
     chmod +x "${localInstallDir}/bin/hadolint"
+
+    # Obtain android studio
+    wget https://r4---sn-h0jelnes.gvt1.com/edgedl/android/studio/ide-zips/2024.3.1.14/android-studio-2024.3.1.14-linux.tar.gz
+    tar -xf android-studio-2024.3.1.14-linux.tar.gz -C "${HOME}/Documents/"
 fi

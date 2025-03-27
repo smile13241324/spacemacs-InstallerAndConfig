@@ -140,7 +140,7 @@ This function should only modify configuration layer settings."
              python-lsp-server 'pylsp
              python-test-runner 'pytest
              python-formatter 'lsp
-             python-format-on-save t
+             python-format-on-save nil
              python-save-before-test t
              python-sort-imports-on-save t)
      windows-scripts
@@ -904,18 +904,18 @@ before packages are loaded."
     )
 
   ;; Checkout PR
-  ;; (defun smile13241324/cherry-pick-pr (id)
-  ;;   "Take a given PR id and make a new local branch, then cherry pick the commit and print the thanks message"
-  ;;   (interactive "MEnter PR Id: ")
-  ;;   (with-current-buffer "*scratch*"
+  (defun smile13241324/cherry-pick-pr (id)
+    "Take a given PR id and make a new local branch, then cherry pick the commit and print the thanks message"
+    (interactive "MEnter PR Id: ")
+    (with-current-buffer "*scratch*"
 
-  ;;     (let ((default-directory "~/.emacs.d"))
-  ;;       (erase-buffer)
-  ;;       (call-process-shell-command (concat "git fetch origin pull/" id "/head:" id) nil nil)
-  ;;       (call-process-shell-command (concat "git cherry-pick " id) nil nil)
-  ;;       (goto-char (point-max))
-  ;;       (insert "\n" "Thank you for contributing to Spacemacs! :+1:" "\n" "The PR has been cherry-picked into develop, you can safely delete your branch."))))
-  ;; (spacemacs/set-leader-keys "o c" #'smile13241324/cherry-pick-pr)
+      (let ((default-directory "~/.emacs.d"))
+        (erase-buffer)
+        (call-process-shell-command (concat "git fetch origin pull/" id "/head:" id) nil nil)
+        (call-process-shell-command (concat "git cherry-pick " id) nil nil)
+        (goto-char (point-max))
+        (insert "\n" "Thank you for contributing to Spacemacs! :+1:" "\n" "The PR has been cherry-picked into develop, you can safely delete your branch."))))
+  (spacemacs/set-leader-keys "o c" #'smile13241324/cherry-pick-pr)
 
   ;; Setup lsp
   (defconst lsp-java-lombok-jar-path (expand-file-name
