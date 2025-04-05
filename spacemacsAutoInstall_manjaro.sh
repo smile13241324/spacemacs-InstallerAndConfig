@@ -6,6 +6,7 @@ set -e
 if [[ $1 ]]; then
     # Install external packages
     pacman -Syyu --noconfirm
+    pacman --noconfirm --ask=4 -Syu iptables-nft
     pacman -S base-devel --noconfirm
     pacman -S libgccjit git tcl tk ripgrep the_silver_searcher vim wget curl cmake \
            virt-manager qemu-full vde2 ebtables dnsmasq bridge-utils openbsd-netcat \
@@ -15,7 +16,8 @@ if [[ $1 ]]; then
            llvm-libs npm libpng zlib poppler-glib \
            libva-utils libva-mesa-driver \
            nodejs npm-check-updates luarocks docker docker-compose             \
-           docker-machine docker-buildx make ctags fish gradle maven openjdk-doc          \
+           docker-machine docker-buildx make ctags fish gradle maven openjdk21-doc          \
+           jdk21-openjdk \
            jdk-openjdk gnuplot go go-tools texlive-bin texlive-core texlive-fontsextra    \
            texlive-formatsextra texlive-games  \
            texlive-humanities texlive-langchinese texlive-langcyrillic texlive-langextra   \
@@ -48,7 +50,7 @@ if [[ $1 ]]; then
     luarocks install lanes
 
     # Install pip directly from python as the OS does it wrongly
-    rm /usr/lib/python3.12/EXTERNALLY-MANAGED -f
+    rm /usr/lib/python3.13/EXTERNALLY-MANAGED -f
     python -m ensurepip --upgrade
     python -m pip install --upgrade pip
 
@@ -136,11 +138,19 @@ end" >> "${fishConfigFile}"
     haskellPath="${HOME}/.ghcup/bin"
     cabalPath="${HOME}/.cabal/bin"
     JAVA_HOME="/usr/lib/jvm/default-runtime"
+    ANDROID_HOME="${HOME}/Android/Sdk"
+    export ANDROID_HOME=${ANDROID_HOME}
+    export JAVA_HOME=${JAVA_HOME}
     export GOPATH=${goPath}
-    export PATH=$PATH:${goPathBin}:${localInstallBin}:${haskellPath}:${cabalPath}
-    export JAVA_HOME
+    export PATH=$PATH:${goPathBin}:${localInstallBin}:${haskellPath}:${cabalPath}:${ANDROID_HOME}/emulator:${ANDROID_HOME}/platform-tools
 
     # Prepare .profile with paths
+    if grep -Fxq "export ANDROID_HOME=${ANDROID_HOME}" "${HOME}"/.profile
+    then
+        echo "nothing to do"
+    else
+        echo "export ANDROID_HOME=${ANDROID_HOME}" >> "${HOME}"/.profile
+    fi
     if grep -Fxq "export JAVA_HOME=${JAVA_HOME}" "${HOME}"/.profile
     then
         echo "nothing to do"
@@ -161,6 +171,12 @@ end" >> "${fishConfigFile}"
     fi
 
     # Prepare fish config with paths
+    if grep -Fxq "set -x ANDROID_HOME ${ANDROID_HOME}" "${fishConfigFile}"
+    then
+        echo "nothing to do"
+    else
+        echo "set -x ANDROID_HOME ${ANDROID_HOME}" >> "${fishConfigFile}"
+    fi
     if grep -Fxq "set -x JAVA_HOME ${JAVA_HOME}" "${fishConfigFile}"
     then
         echo "nothing to do"
@@ -290,5 +306,6 @@ fmt.Printf(\"hello, world\\n\")
 
     # Obtain android studio
     wget https://r4---sn-h0jelnes.gvt1.com/edgedl/android/studio/ide-zips/2024.3.1.14/android-studio-2024.3.1.14-linux.tar.gz
+    mkdir "${HOME}/Documents/" -p
     tar -xf android-studio-2024.3.1.14-linux.tar.gz -C "${HOME}/Documents/"
 fi

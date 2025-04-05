@@ -903,6 +903,20 @@ before packages are loaded."
           org-roam-ui-open-on-start t)
     )
 
+  ;; Automatically clock my time
+  (defun smile13241324/org-clock-in-when-task-state-changes-to-in-progress ()
+    "Clock in an Org mode task when the status is changed to 'IN_PROGRESS'."
+    (when (and (eq major-mode 'org-mode)
+               (member (downcase (or (org-get-todo-state) "")) '("in_progress")))
+      (org-clock-in)))
+  (add-hook 'org-after-todo-state-change-hook #'smile13241324/org-clock-in-when-task-state-changes-to-in-progress)
+  (defun smile13241324/org-clock-in-when-task-state-changes-from-in-progress ()
+    "Clock in an Org mode task when the status is changed to something else then 'IN_PROGRESS'."
+    (when (and (eq major-mode 'org-mode)
+               (not (member (downcase (or (org-get-todo-state) "")) '("in_progress"))))
+      (org-clock-out)))
+  (add-hook 'org-after-todo-state-change-hook #'smile13241324/org-clock-in-when-task-state-changes-from-in-progress)
+
   ;; Checkout PR
   (defun smile13241324/cherry-pick-pr (id)
     "Take a given PR id and make a new local branch, then cherry pick the commit and print the thanks message"
